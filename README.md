@@ -1,3 +1,5 @@
+[![Build Status](https://travis-ci.org/meshack-mbuvi/Andelabs.svg?branch=develop)](https://travis-ci.org/meshack-mbuvi/Andelabs)
+[![Coverage Status](https://coveralls.io/repos/github/andela/ah-magnificent6/badge.svg?branch=master)](https://coveralls.io/github/andela/ah-magnificent6?branch=develop)
 Authors Haven - A Social platform for the creative at heart.
 =======
 
