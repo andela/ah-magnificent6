@@ -1,3 +1,5 @@
+[![Coverage Status](https://coveralls.io/repos/github/andela/ah-magnificent6/badge.svg?branch=master)](https://coveralls.io/github/andela/ah-magnificent6?branch=develop)
+
 Authors Haven - A Social platform for the creative at heart.
 =======
 
