@@ -12,7 +12,7 @@ https://docs.djangoproject.com/en/1.11/ref/settings/
 
 import os
 import environ
-import dj_database_url
+
 
 root = environ.Path(__file__) - 2  # three folder back (/a/b/c/ - 3 = /)
 env = environ.Env(DEBUG=(bool, False), )  # set default values and casting
