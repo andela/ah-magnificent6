@@ -4,6 +4,8 @@ language: python
  install:
   - pip install -r requirements.txt
   - pip install coveralls
+  - pip install coverage
+  - pip install nose
  services:
   - postgresql
  before_script:
@@ -11,7 +13,6 @@ language: python
   - psql -c "CREATE DATABASE testAuthorsHaven;" -U postgres
  script:
   - coverage erase
-  - coverage run --source='.' manage.py test
-  - coverage report -m
+  - nosetests --with-coverage
  after_success:
   - coveralls
