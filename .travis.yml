@@ -14,5 +14,6 @@ before_script:
 script:
   - coverage erase
   - nosetests --with-coverage
+  - coverage report -m
 after_success:
   - coveralls
