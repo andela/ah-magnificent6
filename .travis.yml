@@ -14,7 +14,7 @@ before_script:
   - export DJANGO_SETTINGS_MODULE=authors.settings
 script:
   - coverage erase
-  - python manage.py test
+  - coverage run --source='.' manage.py test
   - coverage report -m
 after_success:
   - coveralls
