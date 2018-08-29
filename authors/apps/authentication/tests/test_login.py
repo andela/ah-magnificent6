@@ -23,13 +23,6 @@ class AuthenticationTests(APITestCase):
         response = self.client.post(self.login_url, self.user1, format='json')
         self.assertEqual(login_response.status_code, status.HTTP_201_CREATED)
 
-    def test_unsuccessful_login_with_wrong_email(self):
-        """ Test that a user cannot log in with a wrong email """
-        self.user1['email'] = "wrong@user.user"
-        response = self.client.post(self.login_url, self.user1, format='json')
-        self.assertEqual(login_response.status_code,
-                         status.HTTP_400_BAD_REQUEST)
-
     def test_unsuccessful_login_with_wrong_password(self):
         """ Test unsuccessful log in with a wrong email """
         self.user1['password'] = "wrongpassword"
