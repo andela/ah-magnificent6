@@ -14,9 +14,9 @@ class AuthenticationTests(APITestCase):
             "email": "createduser1@user.user",
             "password": "user123user"
         }
-        self.reg_url = reverse('authentication:register')
+        self.registration_url = reverse('authentication:register')
         self.login_url = reverse('authentication:login')
-        reg = self.client.post(self.reg_url, self.user1, format='json')
+        reg = self.client.post(self.registration_url, self.user1, format='json')
 
     def test_successful_login_user(self):
         """ Test that a user successfully logs in """
