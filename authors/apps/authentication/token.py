@@ -9,7 +9,6 @@ def generate_jwt_token(email, username):
     time = datetime.datetime.utcnow() + datetime.timedelta(seconds=86400)
     token = jwt.encode({
         "username": username,
-        "email": email,
         "exp": time,
     }, settings.SECRET_KEY, algorithm='HS256')
 
