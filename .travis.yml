@@ -12,6 +12,7 @@ before_script:
   - psql -c "CREATE DATABASE testAuthorsHaven;" -U postgres
   - export DJANGO_SETTINGS_MODULE=authors.settings
   - export SECRET_KEY="secretkey"
+  - export DATABASE_URL=psql://authorsHaven:authorsHaven@127.0.0.1:5432/testAuthorsHaven
 script:
   - coverage erase
   - coverage run --source='.' manage.py test
