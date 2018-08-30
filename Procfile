@@ -1,1 +1,1 @@
-web: gunicorn authors.wsgi
+web: gunicorn ah-magnificent6.authors.wsgi
