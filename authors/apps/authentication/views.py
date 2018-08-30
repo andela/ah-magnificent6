@@ -12,6 +12,10 @@ from .backends import generate_jwt_token
 
 
 class RegistrationAPIView(APIView):
+    """
+    post:
+    Register new user
+    """
     # Allow any user (authenticated or not) to hit this endpoint.
     permission_classes = (AllowAny,)
     renderer_classes = (UserJSONRenderer,)
@@ -40,6 +44,10 @@ class RegistrationAPIView(APIView):
 
 
 class LoginAPIView(APIView):
+    """
+    post:
+    login existing user.
+    """
     permission_classes = (AllowAny,)
     renderer_classes = (UserJSONRenderer,)
     serializer_class = LoginSerializer
@@ -69,6 +77,13 @@ class LoginAPIView(APIView):
 
 
 class UserRetrieveUpdateAPIView(RetrieveUpdateAPIView):
+    """
+    retrieve:
+    Get single user details.
+
+    update:
+    Update user details.
+    """
     permission_classes = (IsAuthenticated,)
     renderer_classes = (UserJSONRenderer,)
     serializer_class = UserSerializer
