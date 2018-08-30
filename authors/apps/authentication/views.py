@@ -106,16 +106,13 @@ class RegistrationAPIView(generics.CreateAPIView):
             })
 
 
-class LoginAPIView(generics.GenericAPIView):
+class LoginAPIView(APIView):
     """
     post:
-    Login existing user.
-
-    get:
-    Show appropriate error on get.
+    login existing user.
     """
-    permission_classes = (AllowAny, )
-    renderer_classes = (UserJSONRenderer, )
+    permission_classes = (AllowAny,)
+    renderer_classes = (UserJSONRenderer,)
     serializer_class = LoginSerializer
 
     def post(self, request):
@@ -154,8 +151,8 @@ class UserRetrieveUpdateAPIView(RetrieveUpdateAPIView):
     update:
     Update user details.
     """
-    permission_classes = (IsAuthenticated, )
-    renderer_classes = (UserJSONRenderer, )
+    permission_classes = (IsAuthenticated,)
+    renderer_classes = (UserJSONRenderer,)
     serializer_class = UserSerializer
 
     def retrieve(self, request, *args, **kwargs):
