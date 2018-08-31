@@ -10,9 +10,9 @@ services:
 before_script:
   - psql -c "CREATE DATABASE testAuthorsHaven;" -U postgres
 env:
-  - DJANGO_SETTINGS_MODULE=authors.settings
-  - SECRET_KEY=secretkey
-  - DATABASE_URL=psql://postgres:postgres@127.0.0.1:5432/testAuthorsHaven
+  - "DJANGO_SETTINGS_MODULE=authors.settings"
+  - "SECRET_KEY=secretkey"
+  - "DATABASE_URL=psql://postgres:postgres@127.0.0.1:5432/testAuthorsHaven"
 script:
   - coverage erase
   - coverage run --source='.' manage.py test
