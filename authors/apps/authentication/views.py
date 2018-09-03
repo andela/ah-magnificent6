@@ -5,6 +5,9 @@ from rest_framework.generics import RetrieveUpdateAPIView
 from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.views import APIView
+from rest_framework.schemas import ManualSchema
+
+import coreapi, coreschema
 
 from django.contrib.auth.tokens import default_token_generator
 from django.contrib.sites.shortcuts import get_current_site
@@ -35,6 +38,8 @@ from social.backends.oauth import BaseOAuth1, BaseOAuth2
 
 
 class RegistrationAPIView(generics.CreateAPIView):
+    # Use generics.CreateAPIView to show parameters in the API documentation.
+
     """
     post:
     Register new user.
@@ -42,7 +47,7 @@ class RegistrationAPIView(generics.CreateAPIView):
     get:
     Get appropriate error on get.
     """
-    # Use generics.CreateAPIView to show parameters in the API documentation.
+    
     # Allow any user (authenticated or not) to hit this endpoint.
     permission_classes = (AllowAny, )
     renderer_classes = (UserJSONRenderer, )
