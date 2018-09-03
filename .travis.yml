@@ -16,3 +16,11 @@ script:
   - coveralls
 after_success:
   - coveralls
+
+deploy:
+provider: heroku
+app: ah-magnificent6-staging
+run:
+  - "python manage.py makemigrations"
+  - "python manage.py migrate"
+
