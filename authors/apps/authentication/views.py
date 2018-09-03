@@ -1,4 +1,5 @@
 import jwt
+
 from rest_framework import status, generics
 from rest_framework.generics import RetrieveUpdateAPIView
 from rest_framework.permissions import AllowAny, IsAuthenticated
@@ -33,18 +34,7 @@ from social_core.exceptions import MissingBackend
 from social.backends.oauth import BaseOAuth1, BaseOAuth2
 
 
-# social authentication packages
-from requests.exceptions import HTTPError
-
-from social_django.utils import load_strategy, load_backend
-
-from social_core.exceptions import MissingBackend
-
-from social.backends.oauth import BaseOAuth1, BaseOAuth2
-
-
 class RegistrationAPIView(generics.CreateAPIView):
-    # Use generics.CreateAPIView to show parameters in the API documentation.
     """
     post:
     Register new user.
@@ -52,7 +42,7 @@ class RegistrationAPIView(generics.CreateAPIView):
     get:
     Get appropriate error on get.
     """
-
+    # Use generics.CreateAPIView to show parameters in the API documentation.
     # Allow any user (authenticated or not) to hit this endpoint.
     permission_classes = (AllowAny, )
     renderer_classes = (UserJSONRenderer, )
@@ -106,7 +96,7 @@ class RegistrationAPIView(generics.CreateAPIView):
             })
 
 
-class LoginAPIView(APIView):
+class LoginAPIView(generics.GenericAPIView):
     """
     post:
     login existing user.
@@ -229,6 +219,7 @@ class ForgotPasswordAPIView(APIView):
 
         return Response(output, status=status.HTTP_200_OK)
 
+
 class ResetPasswordAPIView(APIView):
     """Reset password view allows any user to access reset password endpoint
         and updates password
@@ -273,6 +264,7 @@ class UserActivationAPIView(APIView):
         return Response(
             data={"message": "Account was verified successfully"},
             status=status.HTTP_200_OK)
+
 
 class SocialLoginView(generics.CreateAPIView):
     """ Allows login through social sites like Google, Twitter and Facebook """
