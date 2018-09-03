@@ -3,6 +3,9 @@ from rest_framework.generics import RetrieveUpdateAPIView
 from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.views import APIView
+from rest_framework.schemas import ManualSchema
+
+import coreapi, coreschema
 
 from .renderers import UserJSONRenderer
 from .serializers import (
@@ -11,11 +14,13 @@ from .serializers import (
 from .backends import generate_jwt_token
 
 class RegistrationAPIView(generics.CreateAPIView):
+    # Use generics.CreateAPIView to show parameters in the API documentation.
+
     """
     post:
     Register new user
     """
-    # Use generics.CreateAPIView to show parameters in the API documentation.
+    
     # Allow any user (authenticated or not) to hit this endpoint.
     permission_classes = (AllowAny,)
     renderer_classes = (UserJSONRenderer,)
