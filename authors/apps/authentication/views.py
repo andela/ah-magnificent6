@@ -1,4 +1,4 @@
-from rest_framework import status
+from rest_framework import status, generics
 from rest_framework.generics import RetrieveUpdateAPIView
 from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework.response import Response
@@ -10,12 +10,12 @@ from .serializers import (
 )
 from .backends import generate_jwt_token
 
-
-class RegistrationAPIView(APIView):
+class RegistrationAPIView(generics.CreateAPIView):
     """
     post:
     Register new user
     """
+    # Use generics.CreateAPIView to show parameters in the API documentation.
     # Allow any user (authenticated or not) to hit this endpoint.
     permission_classes = (AllowAny,)
     renderer_classes = (UserJSONRenderer,)
@@ -43,7 +43,7 @@ class RegistrationAPIView(APIView):
         )
 
 
-class LoginAPIView(APIView):
+class LoginAPIView(generics.GenericAPIView):
     """
     post:
     login existing user.
