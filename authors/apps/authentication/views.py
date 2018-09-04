@@ -7,18 +7,20 @@ from rest_framework.schemas import ManualSchema
 
 import coreapi, coreschema
 
+from .models import User
 from .renderers import UserJSONRenderer
 from .serializers import (
     LoginSerializer, RegistrationSerializer, UserSerializer
 )
 from .backends import generate_jwt_token
 
-class RegistrationAPIView(generics.CreateAPIView):
+class RegistrationAPIView(generics.GenericAPIView):
     # Use generics.CreateAPIView to show parameters in the API documentation.
 
     """
     post:
     Register new user
+
     """
     
     # Allow any user (authenticated or not) to hit this endpoint.
@@ -27,7 +29,17 @@ class RegistrationAPIView(generics.CreateAPIView):
     serializer_class = RegistrationSerializer
 
     def post(self, request):
-        user = request.data.get('user', {})
+        # Separate requests
+        email = request.data.get('email', None)
+        username = request.data.get('username', None)
+        password = request.data.get('password', None)
+
+        user = {
+            "email":email, 
+            "username":username,
+            "password":password
+        }
+
 
         """
         The create serializer, validate serializer, save serializer pattern
@@ -57,8 +69,16 @@ class LoginAPIView(generics.GenericAPIView):
     renderer_classes = (UserJSONRenderer,)
     serializer_class = LoginSerializer
 
+
     def post(self, request):
-        user = request.data.get('user', {})
+
+        email = request.data.get('email',None)
+        password = request.data.get('password',None)
+
+        user = {
+            "email":email,
+            "password":password
+        }
 
         """
         Notice here that we do not call `serializer.save()` like we did for the
