@@ -15,7 +15,7 @@ class UserJSONRenderer(JSONRenderer):
         errors = data.get('errors', None)
 
 
-        if errors is not None:
+        if errors:
             """
             As mentioned about, we will let the default JSONRenderer handle
             rendering errors.
