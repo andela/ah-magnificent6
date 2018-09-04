@@ -2,11 +2,12 @@ from rest_framework import status, generics
 from rest_framework.generics import RetrieveUpdateAPIView
 from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework.response import Response
+from rest_framework.views import APIView
 
 from .models import User
 from .renderers import UserJSONRenderer
 from .serializers import (
-    LoginSerializer, RegistrationSerializer, UserSerializer
+    LoginSerializer, RegistrationSerializer, UserSerializer, ResetPasswordSerializer
 )
 from .backends import generate_jwt_token
 
@@ -136,3 +137,24 @@ class UserRetrieveUpdateAPIView(RetrieveUpdateAPIView):
         serializer.save()
 
         return Response(serializer.data, status=status.HTTP_200_OK)
+
+
+
+class ResetPasswordAPIView(APIView):
+    permission_classes = (AllowAny,)
+    serializer_class = ResetPasswordSerializer
+
+    def post(self, request):
+        email_object = request.data
+        user_email = email_object['email']
+
+        email = User.objects.filter(email=user_email)
+        if email != user_email:
+            return Response({"msg": "The email you entered does not exist"})
+
+        serializer = self.serializer_class(data=email_object)
+
+        serializer.is_valid(raise_exception=True)
+
+        return Response(serializer.data, status=status.HTTP_200_OK)
+

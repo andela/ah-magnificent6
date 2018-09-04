@@ -2,6 +2,7 @@ import json
 
 from rest_framework.renderers import JSONRenderer
 
+
 class UserJSONRenderer(JSONRenderer):
     charset = 'utf-8'
 
@@ -15,11 +16,17 @@ class UserJSONRenderer(JSONRenderer):
         errors = data.get('errors', None)
 
 
+
         if errors:
             """
             As mentioned about, we will let the default JSONRenderer handle
             rendering errors.
             """
+
+        if errors is not None:
+            # As mentioned about, we will let the default JSONRenderer handle
+            # rendering errors.
+
             return super(UserJSONRenderer, self).render(data)
 
         # Finally, we can render our data under the "user" namespace.

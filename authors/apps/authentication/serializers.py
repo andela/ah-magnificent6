@@ -1,8 +1,9 @@
 import re
 from django.contrib.auth import authenticate
-
 from rest_framework import serializers
 from rest_framework.validators import UniqueValidator
+from django.core.mail import send_mail
+
 
 from .models import User
 from .backends import generate_jwt_token
@@ -227,3 +228,18 @@ class UserSerializer(serializers.ModelSerializer):
         instance.save()
 
         return instance
+
+
+class ResetPasswordSerializer(serializers.Serializer):
+    """Serializer request for password reset"""
+
+    email = serializers.CharField(max_length=255)
+
+    def validate(self, data):
+        reset_email = data.get('email')
+
+        if reset_email is None:
+            raise serializers.ValidationError('Please enter an email.')
+
+        send_mail("hello from mike", 'welcome', 'magnificent6ah@gmail.com', [data['email']])
+        return data
