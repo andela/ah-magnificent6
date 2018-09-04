@@ -8,6 +8,7 @@ from .renderers import UserJSONRenderer
 from .serializers import (
     LoginSerializer, RegistrationSerializer, UserSerializer
 )
+from .backends import generate_jwt_token
 
 
 class RegistrationAPIView(APIView):
@@ -19,14 +20,23 @@ class RegistrationAPIView(APIView):
     def post(self, request):
         user = request.data.get('user', {})
 
-        # The create serializer, validate serializer, save serializer pattern
-        # below is common and you will see it a lot throughout this course and
-        # your own work later on. Get familiar with it.
+        """
+        The create serializer, validate serializer, save serializer pattern
+        below is common and you will see it a lot throughout this course and
+        your own work later on. Get familiar with it.
+        """
         serializer = self.serializer_class(data=user)
         serializer.is_valid(raise_exception=True)
         serializer.save()
+        user_data = serializer.data
+        user_data['token'] = generate_jwt_token(user['username'])
 
-        return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response(user_data, status=status.HTTP_201_CREATED)
+
+    def get(self, request):
+        return Response(
+            data={"message": 'Only post requests are allowed to this endpoint.'}
+        )
 
 
 class LoginAPIView(APIView):
@@ -37,14 +47,25 @@ class LoginAPIView(APIView):
     def post(self, request):
         user = request.data.get('user', {})
 
-        # Notice here that we do not call `serializer.save()` like we did for
-        # the registration endpoint. This is because we don't actually have
-        # anything to save. Instead, the `validate` method on our serializer
-        # handles everything we need.
+        """
+        Notice here that we do not call `serializer.save()` like we did for the
+        registration endpoint.
+        This is because we don't actually have anything to save.
+        Instead, the `validate` method on our serializer
+        handles everything we need.
+        """
         serializer = self.serializer_class(data=user)
         serializer.is_valid(raise_exception=True)
+        user_data = serializer.data
 
-        return Response(serializer.data, status=status.HTTP_200_OK)
+        user_data['token'] = generate_jwt_token(user['username'])
+
+        return Response(user_data, status=status.HTTP_200_OK)
+
+    def get(self, request):
+        return Response(
+            data={"message": 'Only post requests are allowed to this endpoint.'}
+        )
 
 
 class UserRetrieveUpdateAPIView(RetrieveUpdateAPIView):
@@ -53,9 +74,11 @@ class UserRetrieveUpdateAPIView(RetrieveUpdateAPIView):
     serializer_class = UserSerializer
 
     def retrieve(self, request, *args, **kwargs):
-        # There is nothing to validate or save here. Instead, we just want the
-        # serializer to handle turning our `User` object into something that
-        # can be JSONified and sent to the client.
+        """
+        There is nothing to validate or save here. Instead, we just want the
+        serializer to handle turning our `User` object into something that
+        can be JSONified and sent to the client.
+        """
         serializer = self.serializer_class(request.user)
 
         return Response(serializer.data, status=status.HTTP_200_OK)
@@ -63,8 +86,7 @@ class UserRetrieveUpdateAPIView(RetrieveUpdateAPIView):
     def update(self, request, *args, **kwargs):
         serializer_data = request.data.get('user', {})
 
-        # Here is that serialize, validate, save pattern we talked about
-        # before.
+        # Here is that serialize, validate, save pattern we talked about before.
         serializer = self.serializer_class(
             request.user, data=serializer_data, partial=True
         )
@@ -72,4 +94,3 @@ class UserRetrieveUpdateAPIView(RetrieveUpdateAPIView):
         serializer.save()
 
         return Response(serializer.data, status=status.HTTP_200_OK)
-
