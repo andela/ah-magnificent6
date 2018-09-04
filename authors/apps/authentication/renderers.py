@@ -1,6 +1,9 @@
 import json
 
 from rest_framework.renderers import JSONRenderer
+from .token import generate_jwt_token
+from .models import User
+
 
 
 class UserJSONRenderer(JSONRenderer):
@@ -25,6 +28,17 @@ class UserJSONRenderer(JSONRenderer):
             # rendering errors.
 
             return super(UserJSONRenderer, self).render(data)
+        try:
+            confirm_user = data['email']
+            user = User.objects.get(email=data['email'])
+            if user.is_active is False:
+                return json.dumps({
+                    "Message":
+                    "Please confirm your email address "
+                    "to complete the registration"
+                    })
+        except KeyError:
+            pass
 
         # Finally, we can render our data under the "user" namespace.
         return json.dumps({
