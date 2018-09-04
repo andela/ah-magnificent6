@@ -2,10 +2,6 @@ from rest_framework import status, generics
 from rest_framework.generics import RetrieveUpdateAPIView
 from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework.response import Response
-from rest_framework.views import APIView
-from rest_framework.schemas import ManualSchema
-
-import coreapi, coreschema
 
 from .models import User
 from .renderers import UserJSONRenderer
@@ -14,7 +10,7 @@ from .serializers import (
 )
 from .backends import generate_jwt_token
 
-class RegistrationAPIView(generics.GenericAPIView):
+class RegistrationAPIView(generics.CreateAPIView):
     # Use generics.CreateAPIView to show parameters in the API documentation.
 
     """
@@ -30,9 +26,9 @@ class RegistrationAPIView(generics.GenericAPIView):
 
     def post(self, request):
         # Separate requests
-        email = request.data.get('email', None)
-        username = request.data.get('username', None)
-        password = request.data.get('password', None)
+        email, username, password = request.data.get('email', None)\
+                                    , request.data.get('username', None)\
+                                    , request.data.get('password', None)
 
         user = {
             "email":email, 
@@ -72,8 +68,7 @@ class LoginAPIView(generics.GenericAPIView):
 
     def post(self, request):
 
-        email = request.data.get('email',None)
-        password = request.data.get('password',None)
+        email, password = request.data.get('email',None), request.data.get('password',None)
 
         user = {
             "email":email,
