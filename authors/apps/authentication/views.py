@@ -1,3 +1,4 @@
+import jwt
 from rest_framework import status, generics
 from rest_framework.generics import RetrieveUpdateAPIView
 from rest_framework.permissions import AllowAny, IsAuthenticated
@@ -6,6 +7,8 @@ from rest_framework.views import APIView
 
 from django.contrib.auth.tokens import default_token_generator
 from django.contrib.sites.shortcuts import get_current_site
+from django.conf import settings
+from django.core.mail import send_mail
 
 from .models import User
 
@@ -15,6 +18,7 @@ from .serializers import (
     LoginSerializer, RegistrationSerializer, UserSerializer, ForgotPasswordSerializer, ResetPasswordSerializer
 )
 from .backends import generate_jwt_token
+from .models import User
 
 
 class RegistrationAPIView(generics.CreateAPIView):
@@ -67,6 +71,15 @@ class RegistrationAPIView(generics.CreateAPIView):
         return Response(
             data={"message": 'Only post requests are allowed to this endpoint.'}
         )
+        # sends email with the activation link with the token
+        token = generate_jwt_token(user['username'])
+        activation_link = 'http://' + request.META['HTTP_HOST'] + '/api/auth/' + token
+        subject = 'Authors Haven activation email'
+
+        send_mail(subject, activation_link, settings.EMAIL_HOST_USER,
+                  [user['email']], fail_silently=False)
+
+        return Response(serializer.data, status=status.HTTP_201_CREATED)
 
 
 class LoginAPIView(generics.GenericAPIView):
@@ -207,3 +220,23 @@ class ResetPasswordAPIView(APIView):
         serializer.is_valid(raise_exception=True)
         output = {"message": "Your password has been successfully changed"}
         return Response(output, status=status.HTTP_200_OK)
+
+
+class UserActivationAPIView(APIView):
+    """
+    Activate account using the link sent to the user's email.
+
+    Decodes the token in the url and confirms whether the user
+    is in the database using the username in the token.
+    If successful, the user is activated.
+    """
+
+    def get(self, request, token):
+        try:
+            data = jwt.decode(token, settings.SECRET_KEY)
+            user = User.objects.get(username=data['username'])
+        except(TypeError, ValueError, User.DoesNotExist):
+            return HttpResponse('Activation link is invalid!')
+        user.is_active = True
+        user.save()
+        return HttpResponse("Account was verified successfully")
