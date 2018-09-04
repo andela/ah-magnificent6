@@ -7,8 +7,6 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework.schemas import ManualSchema
 
-import coreapi, coreschema
-
 from django.contrib.auth.tokens import default_token_generator
 from django.contrib.sites.shortcuts import get_current_site
 from django.conf import settings
@@ -18,6 +16,7 @@ from django.core.mail import send_mail
 from .models import User
 
 from authors.apps.core.mailer import SendMail
+from .models import User
 from .renderers import UserJSONRenderer
 from .serializers import (
     LoginSerializer, RegistrationSerializer, UserSerializer, ForgotPasswordSerializer, 
@@ -37,7 +36,7 @@ from social_core.exceptions import MissingBackend
 from social.backends.oauth import BaseOAuth1, BaseOAuth2
 
 
-class RegistrationAPIView(generics.CreateAPIView):
+class RegistrationAPIView(generics.GenericAPIView):
     # Use generics.CreateAPIView to show parameters in the API documentation.
 
     """
@@ -55,10 +54,8 @@ class RegistrationAPIView(generics.CreateAPIView):
 
     def post(self, request):
         # Separate requests
-        email, username, password = request.data.get(
-            'email', None), request.data.get('username',
-                                             None), request.data.get(
-                                                 'password', None)
+        email, username, password = request.data.get('email', None), request.data.get('username', None),\
+                                    request.data.get('password', None)
 
         user = {"email": email, "username": username, "password": password}
         """
@@ -110,10 +107,10 @@ class LoginAPIView(generics.GenericAPIView):
     renderer_classes = (UserJSONRenderer,)
     serializer_class = LoginSerializer
 
+
     def post(self, request):
 
-        email, password = request.data.get('email', None), request.data.get(
-            'password', None)
+        email, password = request.data.get('email', None), request.data.get('password', None)
 
         user = {"email": email, "password": password}
         """
