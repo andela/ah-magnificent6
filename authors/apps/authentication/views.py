@@ -28,15 +28,12 @@ from .models import User
 
 # social authentication packages
 from requests.exceptions import HTTPError
-
 from social_django.utils import load_strategy, load_backend
-
 from social_core.exceptions import MissingBackend
-
 from social.backends.oauth import BaseOAuth1, BaseOAuth2
 
 
-class RegistrationAPIView(generics.GenericAPIView):
+class RegistrationAPIView(generics.CreateAPIView):
     # Use generics.CreateAPIView to show parameters in the API documentation.
 
     """
