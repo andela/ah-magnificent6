@@ -66,19 +66,17 @@ class RegistrationAPIView(generics.CreateAPIView):
         }
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 >>>>>>> [Feature #159965298] Make documenation root path
 
         user = {"email": email, "username": username, "password": password}
+=======
+>>>>>>> [Feature #159965298] Refactor tests
         """
         The create serializer, validate serializer, save serializer pattern
         below is common and you will see it a lot throughout this course and
         your own work later on. Get familiar with it.
         """
-=======
-        # The create serializer, validate serializer, save serializer pattern
-        # below is common and you will see it a lot throughout this course and
-        # your own work later on. Get familiar with it.
->>>>>>> [Feature #159965298] Make documenation root path
         serializer = self.serializer_class(data=user)
         serializer.is_valid(raise_exception=True)
 
