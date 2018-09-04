@@ -51,8 +51,22 @@ class RegistrationAPIView(generics.CreateAPIView):
 
     def post(self, request):
         # Separate requests
+<<<<<<< HEAD
         email, username, password = request.data.get('email', None), request.data.get('username', None),\
                                     request.data.get('password', None)
+=======
+        email, username, password = request.data.get('email', None)\
+                                    , request.data.get('username', None)\
+                                    , request.data.get('password', None)
+
+        user = {
+            "email":email, 
+            "username":username,
+            "password":password
+        }
+
+<<<<<<< HEAD
+>>>>>>> [Feature #159965298] Make documenation root path
 
         user = {"email": email, "username": username, "password": password}
         """
@@ -60,6 +74,11 @@ class RegistrationAPIView(generics.CreateAPIView):
         below is common and you will see it a lot throughout this course and
         your own work later on. Get familiar with it.
         """
+=======
+        # The create serializer, validate serializer, save serializer pattern
+        # below is common and you will see it a lot throughout this course and
+        # your own work later on. Get familiar with it.
+>>>>>>> [Feature #159965298] Make documenation root path
         serializer = self.serializer_class(data=user)
         serializer.is_valid(raise_exception=True)
 
