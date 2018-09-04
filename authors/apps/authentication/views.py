@@ -36,18 +36,11 @@ class RegistrationAPIView(generics.CreateAPIView):
             "password":password
         }
 
-<<<<<<< HEAD
-
         """
         The create serializer, validate serializer, save serializer pattern
         below is common and you will see it a lot throughout this course and
         your own work later on. Get familiar with it.
         """
-=======
-        # The create serializer, validate serializer, save serializer pattern
-        # below is common and you will see it a lot throughout this course and
-        # your own work later on. Get familiar with it.
->>>>>>> [Feature #159965298] Make documenation root path
         serializer = self.serializer_class(data=user)
         serializer.is_valid(raise_exception=True)
         serializer.save()
@@ -92,7 +85,7 @@ class LoginAPIView(generics.GenericAPIView):
         serializer.is_valid(raise_exception=True)
         user_data = serializer.data
 
-        user_data['token'] = generate_jwt_token(user['username'])
+        user_data['token'] = generate_jwt_token(user_data['username'])
 
         return Response(user_data, status=status.HTTP_200_OK)
 
