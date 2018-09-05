@@ -2,14 +2,10 @@ from django.test import TestCase
 from rest_framework.test import APIClient
 from rest_framework import status
 from authors.apps.authentication.models import User
-# from authors.apps.authentication.verification import SendEmail
 from django.core import mail
 from rest_framework.test import APIRequestFactory
 from django.urls import reverse
-from rest_framework.test import force_authenticate
-# from authors.apps.authentication.views import Activate
 from authors.apps.authentication.backends import generate_jwt_token
-
 
 
 class VerifyTestCase(TestCase):
@@ -19,10 +15,10 @@ class VerifyTestCase(TestCase):
         """Define the test client and other test variables."""
 
         self.user = {
-                "username": "janey",
-                "email": "janet.wairimu@andela.com",
-                "password": "Secretsecret254"
-            }
+            "username": "user1",
+            "email": "user1@user.user",
+            "password": "user123user"
+        }
         self.factory = APIRequestFactory()
         self.client = APIClient()
         self.registration_url = reverse('authentication:register')
@@ -37,7 +33,6 @@ class VerifyTestCase(TestCase):
         )
 
         self.assertEqual(len(mail.outbox), 1)
-        msg = mail.outbox[0]
 
     def test_account_is_verified(self):
         """Test registered user verifying their account from link sent in email"""
