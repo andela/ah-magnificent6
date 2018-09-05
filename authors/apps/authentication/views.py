@@ -241,7 +241,7 @@ class UserActivationAPIView(APIView):
         try:
             data = jwt.decode(token, settings.SECRET_KEY)
             user = User.objects.get(username=data['username'])
-        except(TypeError, ValueError, User.DoesNotExist):
+        except:
             return HttpResponse('Activation link is invalid!')
         user.is_active = True
         user.save()
