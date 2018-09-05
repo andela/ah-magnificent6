@@ -126,15 +126,22 @@ USE_TZ = True
 
 STATIC_URL = '/static/'
 
+# Add STATICFILES_DIRS where Django will search for additional static files.
+STATICFILES_DIRS = (
+    os.path.join(BASE_DIR, "static"),
+)
+
 CORS_ORIGIN_WHITELIST = (
     '0.0.0.0:4000',
     'localhost:4000',
 )
 
-# Tell Django about the custom `User` model we created. The string
-# `authentication.User` tells Django we are referring to the `User` model in
-# the `authentication` module. This module is registered above in a setting
-# called `INSTALLED_APPS`.
+"""
+Tell Django about the custom `User` model we created. The string
+`authentication.User` tells Django we are referring to the `User` model in
+the `authentication` module. This module is registered above in a setting
+called `INSTALLED_APPS`.
+"""
 AUTH_USER_MODEL = 'authentication.User'
 
 REST_FRAMEWORK = {
