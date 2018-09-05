@@ -1,13 +1,15 @@
+import re
 from django.contrib.auth import authenticate
 
 from rest_framework import serializers
+from rest_framework.validators import UniqueValidator
 
 from .models import User
 from .backends import generate_jwt_token
 
 
 class RegistrationSerializer(serializers.ModelSerializer):
-    """Serializers registration requests and creates a new user."""
+    # Serializers registration requests and creates a new user.ß
 
     """
     Ensure passwords are at least 8 characters long, no longer than 128
@@ -16,21 +18,88 @@ class RegistrationSerializer(serializers.ModelSerializer):
     password = serializers.CharField(
         max_length=128,
         min_length=8,
-        write_only=True
+        write_only=True,
+    )
+
+    """
+    Ensure that the email entered is unique and give a descriptive
+    error message if a duplicate email is entered
+    """
+    email = serializers.EmailField(
+        validators=[UniqueValidator(
+            User.objects.all(), 'That email is already used. '
+            'Sign in instead or try another')]
+    )
+
+    """
+    Ensure that the username entered is unique and give a descriptive
+    error message if a duplicate username is entered
+    """
+    username = serializers.CharField(
+        validators=[UniqueValidator(
+            User.objects.all(), 'That username is taken. Please try another')]
     )
 
     """
     The client should not be able to send a token along with a registration
     request. Making `token` read-only handles that for us.
     """
-
     class Meta:
+        # RegistrationSerializer uses User model
         model = User
+
         """
         List all of the fields that could possibly be included in a request
         or response, including fields specified explicitly above.
         """
         fields = ['email', 'username', 'password']
+
+    def validate(self, data):
+        """
+        The `validate` method is where we make sure that the current
+        instance of `RegistrationSerializer` has "valid". In the case of registering
+        a user, this means validating that they've provided an email, username
+        and password.
+        """
+        email = data.get('email', None)
+        username = data.get('username', None)
+        password = data.get('password', None)
+
+        """
+        As mentioned above, an email is required. Raise an exception if an
+        email is not provided.
+        """
+        if email is None:
+            raise serializers.ValidationError(
+                'An email address is required to register.'
+            )
+
+        """
+        As mentioned above, a username is required. Raise an exception if a
+        username is not provided.
+        """
+        if username is None:
+            raise serializers.ValidationError(
+                'A username is required to register.'
+            )
+
+        """
+        As mentioned above, a password is required. Raise an exception if a
+        password is not provided.
+        """
+        if password is None:
+            raise serializers.ValidationError(
+                'A password is required to register.'
+            )
+
+        """
+        Ensure that a password is alphanumeric, that is, it has both numbers and letters
+        """
+        if not re.match('^(?=.*[A-Z])(?=.*[a-z]).*', password):
+            raise serializers.ValidationError(
+                'Invalid password. Please choose a password with at least a '
+                'letter and a number.'
+            )
 
     def create(self, validated_data):
         # Use the `create_user` method we wrote earlier to create a new user.
