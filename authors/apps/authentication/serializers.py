@@ -95,11 +95,13 @@ class RegistrationSerializer(serializers.ModelSerializer):
         """
         Ensure that a password is alphanumeric, that is, it has both numbers and letters
         """
-        if not re.match('^(?=.*[A-Z])(?=.*[a-z]).*', password):
+        if not re.match(r'^(?=.*[a-zA-Z])(?=.*[0-9]).*', password):
             raise serializers.ValidationError(
                 'Invalid password. Please choose a password with at least a '
                 'letter and a number.'
             )
+
+        return data
 
     def create(self, validated_data):
         # Use the `create_user` method we wrote earlier to create a new user.
