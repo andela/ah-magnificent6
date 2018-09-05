@@ -1,7 +1,7 @@
 import json
 
 from rest_framework.renderers import JSONRenderer
-from .token import generate_jwt_token
+from .backends import generate_jwt_token
 from .models import User
 
 

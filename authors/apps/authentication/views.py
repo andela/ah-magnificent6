@@ -8,6 +8,7 @@ from rest_framework.views import APIView
 from django.contrib.auth.tokens import default_token_generator
 from django.contrib.sites.shortcuts import get_current_site
 from django.conf import settings
+from django.contrib.sites.shortcuts import get_current_site
 from django.core.mail import send_mail
 
 from .models import User
@@ -60,26 +61,31 @@ class RegistrationAPIView(generics.CreateAPIView):
         """
         serializer = self.serializer_class(data=user)
         serializer.is_valid(raise_exception=True)
-        serializer.save()
-        user_data = serializer.data
-        user_data['token'] = generate_jwt_token(user['username'])
-        user_data['message'] = 'Welcome, you have successfully registered to Author\'s Haven!'
+        user_data = serializer.validated_data
 
+        # sends email with the activation link with the token
+        subject = 'Authors Haven activation email'
+        message = "Click this link to be activated "
+        current_site = get_current_site(request)
+        token = generate_jwt_token(user['username'])
+
+        activation_link = 'http://' + current_site.domain + '/api/auth/' + token
+
+        try:
+            send_mail(subject, message + activation_link, settings.EMAIL_HOST_USER,
+                  [user['email']], fail_silently=False)
+        except:
+            return Response(
+                    data={"message": "Email activation failed"}
+                )
+
+        serializer.save()
         return Response(user_data, status=status.HTTP_201_CREATED)
 
     def get(self, request):
         return Response(
             data={"message": 'Only post requests are allowed to this endpoint.'}
         )
-        # sends email with the activation link with the token
-        token = generate_jwt_token(user['username'])
-        activation_link = 'http://' + request.META['HTTP_HOST'] + '/api/auth/' + token
-        subject = 'Authors Haven activation email'
-
-        send_mail(subject, activation_link, settings.EMAIL_HOST_USER,
-                  [user['email']], fail_silently=False)
-
-        return Response(serializer.data, status=status.HTTP_201_CREATED)
 
 
 class LoginAPIView(generics.GenericAPIView):
