@@ -7,3 +7,4 @@ gunicorn==19.9.0
 psycopg2==2.7.5
 PyJWT==1.4.2
 six==1.10.0
+django-rest-swagger==2.2.0

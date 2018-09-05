@@ -1,24 +1,40 @@
-from rest_framework import status
+from rest_framework import status, generics
 from rest_framework.generics import RetrieveUpdateAPIView
 from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework.response import Response
-from rest_framework.views import APIView
 
+from .models import User
 from .renderers import UserJSONRenderer
 from .serializers import (
     LoginSerializer, RegistrationSerializer, UserSerializer
 )
 from .backends import generate_jwt_token
 
+class RegistrationAPIView(generics.CreateAPIView):
+    # Use generics.CreateAPIView to show parameters in the API documentation.
 
-class RegistrationAPIView(APIView):
+    """
+    post:
+    Register new user
+
+    """
+    
     # Allow any user (authenticated or not) to hit this endpoint.
     permission_classes = (AllowAny,)
     renderer_classes = (UserJSONRenderer,)
     serializer_class = RegistrationSerializer
 
     def post(self, request):
-        user = request.data.get('user', {})
+        # Separate requests
+        email, username, password = request.data.get('email', None)\
+                                    , request.data.get('username', None)\
+                                    , request.data.get('password', None)
+
+        user = {
+            "email":email, 
+            "username":username,
+            "password":password
+        }
 
         """
         The create serializer, validate serializer, save serializer pattern
@@ -39,13 +55,24 @@ class RegistrationAPIView(APIView):
         )
 
 
-class LoginAPIView(APIView):
+class LoginAPIView(generics.GenericAPIView):
+    """
+    post:
+    login existing user.
+    """
     permission_classes = (AllowAny,)
     renderer_classes = (UserJSONRenderer,)
     serializer_class = LoginSerializer
 
+
     def post(self, request):
-        user = request.data.get('user', {})
+
+        email, password = request.data.get('email',None), request.data.get('password',None)
+
+        user = {
+            "email":email,
+            "password":password
+        }
 
         """
         Notice here that we do not call `serializer.save()` like we did for the
@@ -58,7 +85,7 @@ class LoginAPIView(APIView):
         serializer.is_valid(raise_exception=True)
         user_data = serializer.data
 
-        user_data['token'] = generate_jwt_token(user['username'])
+        user_data['token'] = generate_jwt_token(user_data['username'])
 
         return Response(user_data, status=status.HTTP_200_OK)
 
@@ -69,6 +96,13 @@ class LoginAPIView(APIView):
 
 
 class UserRetrieveUpdateAPIView(RetrieveUpdateAPIView):
+    """
+    retrieve:
+    Get single user details.
+
+    update:
+    Update user details.
+    """
     permission_classes = (IsAuthenticated,)
     renderer_classes = (UserJSONRenderer,)
     serializer_class = UserSerializer

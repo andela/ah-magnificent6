@@ -9,10 +9,10 @@ from authors.apps.authentication.models import User
 class AuthenticationTests(APITestCase):
     def setUp(self):
         """ Setup data for the tests """
-        self.valid_user = {"user": {
+        self.valid_user = {
             "username": "user1",
             "email": "user1@user.user",
-            "password": "user123user"}
+            "password": "user123user"
         }
         self.registration_url = reverse('authentication:register')
         self.login_url = reverse('authentication:login')
@@ -28,7 +28,7 @@ class AuthenticationTests(APITestCase):
 
     def test_unsuccessful_login_with_wrong_password(self):
         """ Test unsuccessful log in with a wrong email """
-        self.valid_user['user']['password'] = "wrongpassword"
+        self.valid_user['password'] = "wrongpassword"
         response = self.client.post(
             self.login_url, self.valid_user, format='json')
         self.assertEqual(response.status_code,
