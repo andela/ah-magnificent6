@@ -126,11 +126,17 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/2.1/howto/static-files/
 
+# Set the absolute project root directory
+PROJECT_ROOT = os.path.dirname(os.path.abspath(__file__))
+
+# Set the absolute path where Django will collect static files
+STATIC_ROOT = os.path.join(PROJECT_ROOT, 'static')
+
 STATIC_URL = '/static/'
 
 # Add STATICFILES_DIRS where Django will search for additional static files.
 STATICFILES_DIRS = (
-    os.path.join(BASE_DIR, "static"),
+    os.path.join(BASE_DIR, 'static'),
 )
 
 # whitenoise serving static files.
