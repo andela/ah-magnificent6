@@ -126,11 +126,8 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/2.1/howto/static-files/
 
-# Set the absolute project root directory
-PROJECT_ROOT = os.path.dirname(os.path.abspath(__file__))
-
-# Set the absolute path where Django will collect static files
-STATIC_ROOT = os.path.join(PROJECT_ROOT, 'static')
+# Set the path where Django will collect static files
+STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 
 STATIC_URL = '/static/'
 
@@ -140,7 +137,7 @@ STATICFILES_DIRS = (
 )
 
 # whitenoise serving static files.
-STATICFILES_STORAGE = 'django.contrib.staticfiles.storage.ManifestStaticFilesStorage'
+STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 
 CORS_ORIGIN_WHITELIST = (
     '0.0.0.0:4000',
