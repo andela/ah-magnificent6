@@ -15,8 +15,10 @@ class RegistrationAPIView(generics.CreateAPIView):
 
     """
     post:
-    Register new user
+    Register new user.
 
+    get:
+    Get appropriate error on get.
     """
     
     # Allow any user (authenticated or not) to hit this endpoint.
@@ -50,6 +52,7 @@ class RegistrationAPIView(generics.CreateAPIView):
         return Response(user_data, status=status.HTTP_201_CREATED)
 
     def get(self, request):
+
         return Response(
             data={"message": 'Only post requests are allowed to this endpoint.'}
         )
@@ -58,7 +61,10 @@ class RegistrationAPIView(generics.CreateAPIView):
 class LoginAPIView(generics.GenericAPIView):
     """
     post:
-    login existing user.
+    Login existing user.
+
+    get:
+    Show appropriate error on get.
     """
     permission_classes = (AllowAny,)
     renderer_classes = (UserJSONRenderer,)
@@ -90,6 +96,7 @@ class LoginAPIView(generics.GenericAPIView):
         return Response(user_data, status=status.HTTP_200_OK)
 
     def get(self, request):
+
         return Response(
             data={"message": 'Only post requests are allowed to this endpoint.'}
         )
