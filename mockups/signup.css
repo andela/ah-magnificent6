@@ -141,3 +141,9 @@ head {
   width: 100px !important;
   display:flex;
 }
+
+/*forgot link*/
+#forgot_password{
+  color: blue;
+  cursor: pointer;
+}
