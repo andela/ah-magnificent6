@@ -8,6 +8,7 @@ from django.core.mail import send_mail
 from django.contrib.auth.tokens import default_token_generator
 from .models import User
 from .backends import generate_jwt_token
+from authors.apps.profiles.serializers import ProfileSerializer
 
 
 class RegistrationSerializer(serializers.ModelSerializer):
@@ -181,9 +182,11 @@ class UserSerializer(serializers.ModelSerializer):
         write_only=True
     )
 
+    profile = ProfileSerializer()
+
     class Meta:
         model = User
-        fields = ('email', 'username', 'password')
+        fields = ('email', 'username', 'password', 'profile')
 
         """
         The `read_only_fields` option is an alternative for explicitly
