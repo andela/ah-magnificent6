@@ -29,13 +29,19 @@ class UserJSONRenderer(JSONRenderer):
 
             return super(UserJSONRenderer, self).render(data)
         try:
+            """
+            Checks whether the user is active and returns a message
+            incase the user is not active.
+            If the user is active, then it will pass.
+            """
             confirm_user = data['email']
             user = User.objects.get(email=data['email'])
             if user.is_active is False:
                 return json.dumps({
                     "Message":
-                    "Please confirm your email address "
-                    "to complete the registration"
+                    "Account is not active. If registering, "
+                    "kindly click the link sent to your email to "
+                    "complete registration."
                     })
         except KeyError:
             pass
