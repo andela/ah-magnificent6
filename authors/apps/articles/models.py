@@ -3,16 +3,6 @@ from django.utils.text import slugify
 from authors.apps.authentication.models import User
 
 
-class Images(models.Model):
-    """
-    Handles images for the Authors Haven. Request to handle images should be
-    handled by other model referencing this class. No requests should be
-    send directly to this model since this model is meant to be referenced.
-    """
-    # save images as filenames in the database. Filenames should be very short
-    name = models.CharField(max_length=30)
-
-
 class Article(models.Model):
     """
     Defines fields for each article.
@@ -30,6 +20,8 @@ class Article(models.Model):
     slug = models.SlugField(unique=True, editable=False, max_length=140)
     favorited = models.BooleanField(default=False, null=True)
     favoritesCount = models.IntegerField(default=0)
+    image = models.ImageField(
+        upload_to='static/images', default='pic_folder/None/no-img.jpg')
 
     def __str__(self):
         return self.title
