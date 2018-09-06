@@ -9,10 +9,14 @@ from authors.apps.authentication.backends import generate_jwt_token
 
 
 class VerifyTestCase(TestCase):
-    """Test suite for registration verification."""
+    """
+    Test suite for registration verification.
+    """
 
     def setUp(self):
-        """Define the test client and other test variables."""
+        """
+        Define the test client and other test variables.
+        """
 
         self.user = {
             "username": "user1",
@@ -24,7 +28,9 @@ class VerifyTestCase(TestCase):
         self.registration_url = reverse('authentication:register')
 
     def test_email_sent(self):
-        """Test if email has been sent and has verification content"""
+        """
+        Test if email has been sent and has verification content
+        """
 
         response = self.client.post(
             '/api/users/signup/',
@@ -35,7 +41,9 @@ class VerifyTestCase(TestCase):
         self.assertEqual(len(mail.outbox), 1)
 
     def test_account_is_verified(self):
-        """Test registered user verifying their account from link sent in email"""
+        """
+        Test registered user verifying their account from link sent in email
+        """
 
         registration = self.client.post(self.registration_url, self.user, format='json')
         token = generate_jwt_token(self.user['username'])
@@ -43,9 +51,12 @@ class VerifyTestCase(TestCase):
             reverse("authentication:activate_user", args=[token]))
         user = User.objects.get(username=self.user['username'])
         self.assertTrue(user.is_active)
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
 
     def test_invalid_activation_link(self):
-        """Test invalid activation link"""
+        """
+        Test invalid activation link
+        """
 
         registration = self.client.post(self.registration_url, self.user, format='json')
         token = generate_jwt_token(self.user['username'])
@@ -54,3 +65,4 @@ class VerifyTestCase(TestCase):
             reverse("authentication:activate_user", args=[wrong_token]))
         user = User.objects.get(username=self.user['username'])
         self.assertFalse(user.is_active)
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
