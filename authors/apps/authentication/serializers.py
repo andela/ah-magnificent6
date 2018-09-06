@@ -5,6 +5,7 @@ from rest_framework.validators import UniqueValidator
 from django.core.mail import send_mail
 
 
+from django.contrib.auth.tokens import default_token_generator
 from .models import User
 from .backends import generate_jwt_token
 
@@ -152,6 +153,8 @@ class LoginSerializer(serializers.Serializer):
             )
         token = generate_jwt_token(email)
 
+
+
         """
         The `validate` method should return a dictionary of validated data.
         This is the data that is passed to the `create` and `update` methods
@@ -230,16 +233,36 @@ class UserSerializer(serializers.ModelSerializer):
         return instance
 
 
-class ResetPasswordSerializer(serializers.Serializer):
-    """Serializer request for password reset"""
+class ForgetPasswordSerializer(serializers.Serializer):
+    """Serializer for forget password"""
 
     email = serializers.CharField(max_length=255)
 
+
+class ResetPasswordSerializer(serializers.Serializer):
+    """Serializer for reset password"""
+
+    token = serializers.CharField(max_length=500)
+    email = serializers.CharField(max_length=200)
+    password = serializers.CharField(max_length=255)
+    confirm_password = serializers.CharField(max_length=255)
+
     def validate(self, data):
-        reset_email = data.get('email')
+        """Validates passwords and token.
+        Token can only be used once"""
 
-        if reset_email is None:
-            raise serializers.ValidationError('Please enter an email.')
+        # Query DB for user email
+        user = User.objects.filter(email=data.get('email', None)).first()
 
-        send_mail("hello from mike", 'welcome', 'magnificent6ah@gmail.com', [data['email']])
+        if data.get('password') != data.get('confirm_password'):
+            raise serializers.ValidationError("Passwords do not match")
+
+        # Checks token generated is valid
+        is_valid_token = default_token_generator.check_token(user, data.get('token', None))
+        if is_valid_token is False:
+            raise serializers.ValidationError("Token is Invalid or it has already expired")
+
+        user.set_password(data.get('password'))
+        user.save()
+
         return data

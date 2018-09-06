@@ -4,10 +4,14 @@ from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
+from django.contrib.auth.tokens import default_token_generator
+from django.contrib.sites.shortcuts import get_current_site
+
 from .models import User
+from authors.apps.core.mailer import SendMail
 from .renderers import UserJSONRenderer
 from .serializers import (
-    LoginSerializer, RegistrationSerializer, UserSerializer, ResetPasswordSerializer
+    LoginSerializer, RegistrationSerializer, UserSerializer, ForgetPasswordSerializer, ResetPasswordSerializer
 )
 from .backends import generate_jwt_token
 
@@ -139,22 +143,58 @@ class UserRetrieveUpdateAPIView(RetrieveUpdateAPIView):
         return Response(serializer.data, status=status.HTTP_200_OK)
 
 
-
-class ResetPasswordAPIView(APIView):
+class ForgetPasswordAPIView(APIView):
+    """Forget password view captures email and generates token that will be.
+    used during reset password. Data that is captures in the view is send to
+    the serializer class
+    """
     permission_classes = (AllowAny,)
-    serializer_class = ResetPasswordSerializer
+    serializer_class = ForgetPasswordSerializer
 
     def post(self, request):
+        """Captures data entered by user and generates token"""
+
         email_object = request.data
         user_email = email_object['email']
 
-        email = User.objects.filter(email=user_email)
-        if email != user_email:
-            return Response({"msg": "The email you entered does not exist"})
+        # Query for email in database
+        user = User.objects.filter(email=user_email).first()
+        if user is None:
+            return Response({"message": "The email you entered does not exist"})
 
         serializer = self.serializer_class(data=email_object)
-
         serializer.is_valid(raise_exception=True)
 
-        return Response(serializer.data, status=status.HTTP_200_OK)
+        # Capture Url of current site and generates token
+        current_site = get_current_site(request).domain
+        token = default_token_generator.make_token(user)
 
+        # Sends mail with url, path of reset password and token
+        domain = 'http://' + current_site + '/api/auth/' + token
+        SendMail(subject="Reset Password",
+                 message=domain,
+                 email_from='magnificent6ah@gmail',
+                 to=user.email).send()
+
+        output = {"message": "Please confirm your email for further instruction"}
+
+        return Response(output, status=status.HTTP_200_OK)
+
+
+class ResetPasswordAPIView(APIView):
+    """Reset password view allows any user to access reset password endpoint
+    and updates password
+    """
+
+    permission_classes = (AllowAny,)
+    serializer_class = ResetPasswordSerializer
+
+    def put(self, request):
+        """Captures user data and apss it to serializer class
+        """
+
+        reset_password_object = request.data
+        serializer = self.serializer_class(data=reset_password_object)
+        serializer.is_valid(raise_exception=True)
+        output = {"message": "Your password has been successfully changed"}
+        return Response(output, status=status.HTTP_200_OK)
