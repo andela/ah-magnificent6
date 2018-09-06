@@ -50,6 +50,7 @@ INSTALLED_APPS = [
     'authors.apps.authentication',
     'authors.apps.core',
     'authors.apps.profiles',
+    'authors.apps.articles'
 ]
 
 MIDDLEWARE = [
@@ -91,6 +92,7 @@ WSGI_APPLICATION = 'authors.wsgi.application'
 DATABASES = {
     'default': env.db()
 }
+print(DATABASES)
 
 # Password validation
 # https://docs.djangoproject.com/en/2.1/ref/settings/#auth-password-validators
