@@ -229,20 +229,28 @@ class ResetPasswordAPIView(APIView):
 
 
 class UserActivationAPIView(APIView):
+class UserActivateAPIView(APIView):
     """
     Activate account using the link sent to the user's email.
 
     Decodes the token in the url and confirms whether the user
     is in the database using the username in the token.
-    If successful, the user is activated.
+    If successful, the user's account is activated.
     """
+    renderer_classes = (UserJSONRenderer,)
 
     def get(self, request, token):
         try:
             data = jwt.decode(token, settings.SECRET_KEY)
             user = User.objects.get(username=data['username'])
         except:
-            return HttpResponse('Activation link is invalid!')
+            return Response(
+                data={"message": "Activation link is invalid."},
+                status=status.HTTP_400_BAD_REQUEST
+            )
         user.is_active = True
         user.save()
-        return HttpResponse("Account was verified successfully")
+        return Response(
+                data={"message": "Account was verified successfully"},
+                status=status.HTTP_200_OK
+            )
