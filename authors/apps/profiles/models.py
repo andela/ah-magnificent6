@@ -4,7 +4,6 @@ from django.db.models.signals import post_save
 
 from authors import settings
 
-
 GENDER_CHOICES = (
     ('Male', 'Male'),
     ('Female', 'Female')
