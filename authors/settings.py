@@ -61,6 +61,8 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    # Django does not support serving static files in production and whitenoise helps
+    'whitenoise.middleware.WhiteNoiseMiddleware',
 ]
 
 ROOT_URLCONF = 'authors.urls'
@@ -124,17 +126,30 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/2.1/howto/static-files/
 
+# Set the path where Django will collect static files
+STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
+
 STATIC_URL = '/static/'
+
+# Add STATICFILES_DIRS where Django will search for additional static files.
+STATICFILES_DIRS = (
+    os.path.join(BASE_DIR, 'static'),
+)
+
+# whitenoise serving static files.
+STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 
 CORS_ORIGIN_WHITELIST = (
     '0.0.0.0:4000',
     'localhost:4000',
 )
 
-# Tell Django about the custom `User` model we created. The string
-# `authentication.User` tells Django we are referring to the `User` model in
-# the `authentication` module. This module is registered above in a setting
-# called `INSTALLED_APPS`.
+"""
+Tell Django about the custom `User` model we created. The string
+`authentication.User` tells Django we are referring to the `User` model in
+the `authentication` module. This module is registered above in a setting
+called `INSTALLED_APPS`.
+"""
 AUTH_USER_MODEL = 'authentication.User'
 
 REST_FRAMEWORK = {
