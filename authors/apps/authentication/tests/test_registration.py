@@ -19,6 +19,9 @@ class AuthenticationTests(APITestCase):
         self.violate_unique_email_message = 'That email is already used. Sign in instead or try another'
         self.violate_unique_username_message = 'That username is taken. Please try another'
         self.violate_password_pattern_message = 'Invalid password. Please choose a password with at least a letter and a number.'
+        self.empty_email_error_message = b'{"errors":{"email":["Please fill in the email"]}}'
+        self.empty_username_error_message = b'{"errors":{"username":["Please fill in the username"]}}'
+        self.empty_password_error_message = b'{"errors":{"password":["Please fill in the password"]}}'
 
     def test_successful_registered_user(self):
         """ Test that a user is successfully registered. """
@@ -104,3 +107,27 @@ class AuthenticationTests(APITestCase):
             self.registration_url, self.valid_user, format='json')
         self.assertEqual(response.data['errors']['error'][0],
                          self.violate_password_pattern_message)
+
+    def test_unsuccessful_registration_with_empty_email(self):
+        """ Test that a user enters empty values for email """
+        self.valid_user['email'] = ""
+        response = self.client.post(
+            self.registration_url, self.valid_user, format='json')
+        self.assertEqual(response.content,
+                         self.empty_email_error_message)
+
+    def test_unsuccessful_registration_with_empty_username(self):
+        """ Test that a user enters empty values for username """
+        self.valid_user['username'] = ""
+        response = self.client.post(
+            self.registration_url, self.valid_user, format='json')
+        self.assertEqual(response.content,
+                         self.empty_username_error_message)
+
+    def test_unsuccessful_registration_with_empty_password(self):
+        """ Test that a user enters empty values for password """
+        self.valid_user['password'] = ""
+        response = self.client.post(
+            self.registration_url, self.valid_user, format='json')
+        self.assertEqual(response.content,
+                         self.empty_password_error_message)

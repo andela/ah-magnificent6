@@ -61,35 +61,7 @@ class RegistrationSerializer(serializers.ModelSerializer):
         a user, this means validating that they've provided an email, username
         and password.
         """
-        email, username, password = data.get(
-            'email', None), data.get('username', None), data.get('password', None)
-
-        """
-        As mentioned above, an email is required. Raise an exception if an
-        email is not provided.
-        """
-        if email is None:
-            raise serializers.ValidationError(
-                'An email address is required to register.'
-            )
-
-        """
-        As mentioned above, a username is required. Raise an exception if a
-        username is not provided.
-        """
-        if username is None:
-            raise serializers.ValidationError(
-                'A username is required to register.'
-            )
-
-        """
-        As mentioned above, a password is required. Raise an exception if a
-        password is not provided.
-        """
-        if password is None:
-            raise serializers.ValidationError(
-                'A password is required to register.'
-            )
+        password = data.get('password', None)
 
         """
         Ensure that a password is alphanumeric, that is, it has both numbers and letters
