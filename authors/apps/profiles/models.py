@@ -28,9 +28,13 @@ class Profile(TimeStampModel):
     def __str__(self):
         return self.user.username
 
+"""
+Signal receiver for 'post_save' signal sent by User model upon saving
+"""
 def create_profile(sender, **kwargs):
     if kwargs.get('created'):
         user_profile = Profile(user=kwargs.get('instance'))
         user_profile.save()
-        
+
+# connect the signal to the handler function   
 post_save.connect(create_profile, sender=settings.AUTH_USER_MODEL)
