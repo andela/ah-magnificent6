@@ -61,9 +61,8 @@ class RegistrationSerializer(serializers.ModelSerializer):
         a user, this means validating that they've provided an email, username
         and password.
         """
-        email = data.get('email', None)
-        username = data.get('username', None)
-        password = data.get('password', None)
+        email, username, password = data.get(
+            'email', None), data.get('username', None), data.get('password', None)
 
         """
         As mentioned above, an email is required. Raise an exception if an
@@ -107,6 +106,16 @@ class RegistrationSerializer(serializers.ModelSerializer):
         # Use the `create_user` method we wrote earlier to create a new user.
         return User.objects.create_user(**validated_data)
 
+    def __init__(self, *args, **kwargs):
+        super(RegistrationSerializer, self).__init__(*args, **kwargs)
+
+        # Override the error_messages of each field with a custom error message
+        for field in self.fields:
+            field_error_messages = self.fields[field].error_messages
+            field_error_messages['null'] = field_error_messages['blank'] \
+                = field_error_messages['required'] \
+                = 'Please fill in the {}'.format(field)
+
 
 class LoginSerializer(serializers.Serializer):
     email = serializers.CharField(max_length=255)
@@ -121,8 +130,7 @@ class LoginSerializer(serializers.Serializer):
         and password and that this combination matches one of the users in
         our database.
         """
-        email = data.get('email', None)
-        password = data.get('password', None)
+        email, password = data.get('email', None), data.get('password', None)
 
         """
         As mentioned above, an email is required. Raise an exception if an
