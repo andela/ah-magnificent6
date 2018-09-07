@@ -209,6 +209,7 @@ class UserSerializer(serializers.ModelSerializer):
         `validated_data` dictionary before iterating over it.
         """
         password = validated_data.pop('password', None)
+        profile_data = validated_data.pop('profile')
 
         for (key, value) in validated_data.items():
             """
@@ -216,6 +217,13 @@ class UserSerializer(serializers.ModelSerializer):
             the current `User` instance one at a time.
             """
             setattr(instance, key, value)
+        
+        for (key, value) in profile_data.items():
+            """
+            For the keys in `profile_data`, we will set them on
+            the current `User` instance one at a time.
+            """
+            setattr(instance.profile, key, value)
 
         if password is not None:
             """
@@ -230,6 +238,11 @@ class UserSerializer(serializers.ModelSerializer):
         save the model.
         """
         instance.save()
+
+        """
+        Save the user profile after update
+        """
+        instance.profile.save()
 
         return instance
 
