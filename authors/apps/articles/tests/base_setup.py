@@ -1,31 +1,31 @@
-from django.test import TestCase
+from rest_framework.test import APITestCase, APIRequestFactory
 from django.urls import reverse
 from ..models import Article
+from authors.apps.authentication.models import User
 
 
-class Base(TestCase):
+class Base(APITestCase):
     def setUp(self):
         """
         We need a logged in user to create an article
+        We register a new user and get authorization token for the user.
         """
         self.user_data = {
-            "username": "user1",
-            "email": "user1@user.user",
-            "password": "user123user"
+            "username": "admin",
+            "email": "admin@gmail.com",
+            "password": "kamila1990",
         }
         self.registration_url = reverse('authentication:register')
         response = self.client.post(self.registration_url, self.user_data,
                                     format='json')
-        self.authorization = {
-            'token': response.data['token']
-        }
+        self.headers = {'HTTP_AUTHORIZATION': 'Bearer {}'.format(
+            response.data['token'])}
         self.article_data = {
-            'title': 'My Journey to Andela',
-            'description': 'This article is about how I learnt about Andela,\
-            started',
-            'body': 'This is my story to Andela'
+            "title": "My Journey to Andela",
+            "description": "This article is about how I joined Andela",
+            "body": "This is my story to Andela"
         }
-        self.article_url = reverse('article:create')
+        self.article_url = reverse('articles:create')
 
     def tearDown(self):
         self.user_data = None
