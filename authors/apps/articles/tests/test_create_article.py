@@ -1,6 +1,5 @@
 from .base_setup import Base
 from rest_framework import status
-from rest_framework.test import force_authenticate
 
 
 class ArticleTests(Base):
@@ -31,9 +30,7 @@ class ArticleTests(Base):
                                     self.article_data,
                                     format='json',
                                     **self.headers)
-        self.assertEqual(response.status, status.HTTP_400_BAD_REQUEST)
-        self.assertEqual(response.data['message'],
-                         'An article must have a title')
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
 
     def test_cannot_create_article_with_missing_a_body(self):
         """
@@ -44,9 +41,7 @@ class ArticleTests(Base):
                                     self.article_data,
                                     format='json',
                                     **self.headers)
-        self.assertEqual(response.status, status.HTTP_400_BAD_REQUEST)
-        self.assertEqual(response.data['message'],
-                         'An article must have a body')
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
 
     def test_cannot_create_article_with_missing_a_description(self):
         """
@@ -57,6 +52,4 @@ class ArticleTests(Base):
                                     self.article_data,
                                     format='json',
                                     **self.headers)
-        self.assertEqual(response.status, status.HTTP_400_BAD_REQUEST)
-        self.assertEqual(response.data['message'],
-                         'An article must have a description')
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
