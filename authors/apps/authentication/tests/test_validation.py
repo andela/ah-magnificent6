@@ -9,15 +9,10 @@ from authors.apps.authentication.backends import generate_jwt_token
 
 
 class VerifyTestCase(TestCase):
-    """
-    Test suite for registration verification.
-    """
+    """Test suite for registration verification."""
 
     def setUp(self):
-        """
-        Define the test client and other test variables.
-        """
-
+        """Define the test client and other test variables."""
         self.user = {
             "username": "user1",
             "email": "user1@user.user",
@@ -28,24 +23,15 @@ class VerifyTestCase(TestCase):
         self.registration_url = reverse('authentication:register')
 
     def test_email_sent(self):
-        """
-        Test if email has been sent and has verification content
-        """
-
+        """Test if email has been sent and has verification content."""
         response = self.client.post(
-            '/api/users/signup/',
-            self.user,
-            format='json'
-        )
-
+            '/api/users/signup/', self.user, format='json')
         self.assertEqual(len(mail.outbox), 1)
 
     def test_account_is_verified(self):
-        """
-        Test registered user verifying their account from link sent in email
-        """
-
-        registration = self.client.post(self.registration_url, self.user, format='json')
+        """Test user verifying their account from link sent in email."""
+        registration = self.client.post(
+            self.registration_url, self.user, format='json')
         token = generate_jwt_token(self.user['username'])
         response = self.client.get(
             reverse("authentication:activate_user", args=[token]))
@@ -54,11 +40,9 @@ class VerifyTestCase(TestCase):
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 
     def test_invalid_activation_link(self):
-        """
-        Test invalid activation link
-        """
-
-        registration = self.client.post(self.registration_url, self.user, format='json')
+        """Test invalid activation link."""
+        registration = self.client.post(
+            self.registration_url, self.user, format='json')
         token = generate_jwt_token(self.user['username'])
         wrong_token = token + "34rhnv"
         response = self.client.get(
