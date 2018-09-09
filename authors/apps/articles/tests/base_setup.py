@@ -1,4 +1,4 @@
-from rest_framework.test import APITestCase, APIRequestFactory
+from rest_framework.test import APITestCase
 from django.urls import reverse
 from ..models import Article
 from authors.apps.authentication.models import User
@@ -26,6 +26,8 @@ class Base(APITestCase):
             "body": "This is my story to Andela"
         }
         self.article_url = reverse('articles:create')
+        self.retrieve_update_delete_url = reverse(
+            'articles:retrieveUpdateDelete', kwargs={'pk': 2})
 
     def tearDown(self):
         self.user_data = None
