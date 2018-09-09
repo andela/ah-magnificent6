@@ -13,7 +13,7 @@ script:
   - python manage.py makemigrations
   - python manage.py migrate
   - coverage erase
-  - coverage run --source='.' manage.py test
+  - coverage run --source=authors/apps manage.py test
   - coverage report -m
   - coveralls
 after_success:
