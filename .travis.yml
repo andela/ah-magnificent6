@@ -10,8 +10,6 @@ services:
 before_script:
   - psql -c "CREATE DATABASE test;" -U postgres
 script:
-  - python manage.py makemigrations
-  - python manage.py migrate
   - coverage erase
   - coverage run --source=authors/apps manage.py test
   - coverage report -m
