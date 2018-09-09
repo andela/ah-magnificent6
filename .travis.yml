@@ -10,6 +10,8 @@ services:
 before_script:
   - psql -c "CREATE DATABASE testAuthorsHaven;" -U postgres
 script:
+  - python manage.py makemigrations
+  - python manage.py migrate
   - coverage erase
   - coverage run --source='.' manage.py test
   - coverage report -m
@@ -17,10 +19,9 @@ script:
 after_success:
   - coveralls
 
-deploy:
+? deploy
 provider: heroku
 app: ah-magnificent6-staging
 run:
   - "python manage.py makemigrations"
   - "python manage.py migrate"
-
