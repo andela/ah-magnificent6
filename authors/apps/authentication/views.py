@@ -173,7 +173,7 @@ class ForgetPasswordAPIView(APIView):
         domain = 'Dear ' + user.username + ',\n\n''We received a request to change your password on Authors Haven.\n\n' \
                                            'Click the link below to set a new password' \
                                            ' \n http://' + current_site + '/api/auth/' + token + '' \
-                                            '\n\nYours\n AuthorsHaven'
+                                            '\n\nYours\n AuthorsHaven.'
         SendMail(subject="Reset Password",
                  message=domain,
                  email_from='magnificent6ah@gmail',
