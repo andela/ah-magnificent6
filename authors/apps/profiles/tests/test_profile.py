@@ -8,14 +8,11 @@ from authors.apps.profiles.models import Profile
 class ProfileTests(APITestCase):
     def setUp(self):
         """ Setup data for the tests """
-        self.user_data = { "user": {
-            "username": "John",
-            "email": "john@company.com",
-            "password": "john1234",
-            "bio": "I am a test user",
-            "image": "image-url",
-            "following": False }
-        }
+        self.user_data = {
+                "username": "John",
+                "email": "john@company.com",
+                "password": "john1234"
+            }
         self.registration_url = reverse('authentication:register')
     
     def test_create_profile(self):
@@ -27,4 +24,3 @@ class ProfileTests(APITestCase):
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
         self.assertEqual(User.objects.count(), (curr_users+1))
         self.assertEqual(Profile.objects.count(), 1)
-        self.assertEqual(Profile.objects.get().bio, 'I am a test user')
