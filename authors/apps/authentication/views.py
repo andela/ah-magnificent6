@@ -12,7 +12,7 @@ from .models import User
 from authors.apps.core.mailer import SendMail
 from .renderers import UserJSONRenderer
 from .serializers import (
-    LoginSerializer, RegistrationSerializer, UserSerializer, ForgetPasswordSerializer, ResetPasswordSerializer
+    LoginSerializer, RegistrationSerializer, UserSerializer, ForgotPasswordSerializer, ResetPasswordSerializer
 )
 from .backends import generate_jwt_token
 
@@ -158,7 +158,7 @@ class ForgetPasswordAPIView(APIView):
     the serializer class
     """
     permission_classes = (AllowAny,)
-    serializer_class = ForgetPasswordSerializer
+    serializer_class = ForgotPasswordSerializer
 
     def post(self, request):
         """Captures data entered by user and generates token"""

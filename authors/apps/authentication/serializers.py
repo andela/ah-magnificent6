@@ -232,7 +232,7 @@ class UserSerializer(serializers.ModelSerializer):
         return instance
 
 
-class ForgetPasswordSerializer(serializers.Serializer):
+class ForgotPasswordSerializer(serializers.Serializer):
     """Serializer for forget password"""
 
     email = serializers.CharField(max_length=255)
