@@ -14,13 +14,13 @@ class ProfileTests(APITestCase):
                 "password": "john1234"
             }
         self.registration_url = reverse('authentication:register')
-    
+
     def test_create_profile(self):
         """
         Ensure we can create a new profile object.
         """
         curr_users = User.objects.count()
-        response = self.client.post(self.registration_url, self.user_data, format='json')
+        response = self.client.post(self.registration_url, self.user_data, format='json')        
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
         self.assertEqual(User.objects.count(), (curr_users+1))
         self.assertEqual(Profile.objects.count(), 1)
