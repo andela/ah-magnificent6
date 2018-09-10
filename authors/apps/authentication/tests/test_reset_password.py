@@ -11,11 +11,11 @@ class ResetPassword(APITestCase):
     def setUp(self):
         """Set the data for test"""
         self.email = {"email": "michael.nthiwa@andela.com"}
-        self.valid_user = {"user": {
+        self.valid_user = {
             "username": "michael",
             "email": "michael.nthiwa@andela.com",
             "password": "123456789"}
-        }
+
         self.client.post(reverse('authentication:register'), self.valid_user, format='json')
         self.forget_password_url = reverse('authentication:forgot')
         self.reset_password_url = reverse('authentication:reset_password')
