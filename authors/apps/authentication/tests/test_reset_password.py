@@ -18,7 +18,6 @@ class ResetPassword(APITestCase):
 
         self.client.post(reverse('authentication:register'), self.valid_user, format='json')
         self.forget_password_url = reverse('authentication:forgot')
-        self.reset_password_url = reverse('authentication:reset_password')
 
     def test_sending_successful_email(self):
         """Test email is sent"""
@@ -41,10 +40,14 @@ class ResetPassword(APITestCase):
         user = get_user_model().objects.create_user(username='leon', email='leon.kioko@andela.com',
                                                     password='123456789')
         token = default_token_generator.make_token(user)
+        reset_password_url = reverse('authentication:reset_password', kwargs={'token': token })
+
         new_password = {"password": "abcdef",
                         "confirm_password": "abcdef",
                         "email": "leon.kioko@andela.com",
                         "token": token}
-        response = self.client.put(self.reset_password_url, data=new_password, format='json')
+        response = self.client.put(reset_password_url, data=new_password, format='json')
         self.assertIn('Your password has been successfully changed', str(response.data))
         self.assertEqual(response.status_code, status.HTTP_200_OK)
+
+
