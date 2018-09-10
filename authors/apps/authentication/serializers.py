@@ -154,7 +154,6 @@ class LoginSerializer(serializers.Serializer):
         token = generate_jwt_token(email)
 
 
-
         """
         The `validate` method should return a dictionary of validated data.
         This is the data that is passed to the `create` and `update` methods
@@ -242,10 +241,10 @@ class ForgetPasswordSerializer(serializers.Serializer):
 class ResetPasswordSerializer(serializers.Serializer):
     """Serializer for reset password"""
 
-    token = serializers.CharField(max_length=500)
     email = serializers.CharField(max_length=200)
     password = serializers.CharField(max_length=255)
     confirm_password = serializers.CharField(max_length=255)
+    token = serializers.CharField(max_length=255)
 
     def validate(self, data):
         """Validates passwords and token.

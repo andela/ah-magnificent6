@@ -8,6 +8,7 @@ from django.contrib.auth.tokens import default_token_generator
 from django.contrib.sites.shortcuts import get_current_site
 
 from .models import User
+
 from authors.apps.core.mailer import SendMail
 from .renderers import UserJSONRenderer
 from .serializers import (
@@ -34,8 +35,14 @@ class RegistrationAPIView(generics.CreateAPIView):
 
     def post(self, request):
         # Separate requests
+
         email, username, password = request.data.get('email', None), request.data.get(
             'username', None), request.data.get('password', None)
+
+        email, username, password = request.data.get('email', None) \
+            , request.data.get('username', None) \
+            , request.data.get('password', None)
+
 
         user = {
             "email": email,
@@ -58,7 +65,6 @@ class RegistrationAPIView(generics.CreateAPIView):
         return Response(user_data, status=status.HTTP_201_CREATED)
 
     def get(self, request):
-
         return Response(
             data={"message": 'Only post requests are allowed to this endpoint.'}
         )
@@ -78,8 +84,12 @@ class LoginAPIView(generics.GenericAPIView):
 
     def post(self, request):
 
+
         email, password = request.data.get(
             'email', None), request.data.get('password', None)
+
+        email, password = request.data.get('email', None), request.data.get('password', None)
+
 
         user = {
             "email": email,
@@ -102,7 +112,6 @@ class LoginAPIView(generics.GenericAPIView):
         return Response(user_data, status=status.HTTP_200_OK)
 
     def get(self, request):
-
         return Response(
             data={"message": 'Only post requests are allowed to this endpoint.'}
         )
@@ -172,8 +181,8 @@ class ForgetPasswordAPIView(APIView):
         # Sends mail with url, path of reset password and token
         domain = 'Dear ' + user.username + ',\n\n''We received a request to change your password on Authors Haven.\n\n' \
                                            'Click the link below to set a new password' \
-                                           ' \n http://' + current_site + '/api/auth/' + token + '' \
-                                            '\n\nYours\n AuthorsHaven.'
+                                           ' \n http://' + current_site + '/api/reset_password/' + token + '/' \
+                                                                                                           '\n\nYours\n AuthorsHaven.'
         SendMail(subject="Reset Password",
                  message=domain,
                  email_from='magnificent6ah@gmail',
@@ -192,12 +201,12 @@ class ResetPasswordAPIView(APIView):
     permission_classes = (AllowAny,)
     serializer_class = ResetPasswordSerializer
 
-    def put(self, request):
-        """Captures user data and apss it to serializer class
+    def put(self, request, token):
+        """Captures user data and pass it to serializer class
         """
-
-        reset_password_object = request.data
-        serializer = self.serializer_class(data=reset_password_object)
+        data = request.data
+        data["token"] = token
+        serializer = self.serializer_class(data=data)
         serializer.is_valid(raise_exception=True)
         output = {"message": "Your password has been successfully changed"}
         return Response(output, status=status.HTTP_200_OK)
