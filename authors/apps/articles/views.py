@@ -121,8 +121,6 @@ class ArticleDetailsView(generics.RetrieveUpdateDestroyAPIView):
         """
         permission_classes = (IsAuthenticated,)
         article = self.get_object(pk)
-        import pdb
-        pdb.set_trace()
         if not article:
             # Tell client we have not found the requested article
             return Response(
