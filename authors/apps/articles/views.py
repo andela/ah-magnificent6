@@ -23,7 +23,7 @@ class ArticleAPIView(generics.ListCreateAPIView):
     """
     queryset = Article.objects.all()
     serializer_class = ArticleSerializer
-    renderer_classes = (JSONRenderer,)
+    renderer_classes = (ArticleJSONRenderer,)
 
     def post(self, request):
         """
@@ -57,7 +57,7 @@ class ArticleDetailsView(generics.RetrieveUpdateDestroyAPIView):
     delete:
     """
     serializer_class = ArticleSerializer
-    renderer_classes = (JSONRenderer,)
+    renderer_classes = (ArticleJSONRenderer,)
 
     def get_object(self, pk):
         try:
@@ -121,6 +121,8 @@ class ArticleDetailsView(generics.RetrieveUpdateDestroyAPIView):
         """
         permission_classes = (IsAuthenticated,)
         article = self.get_object(pk)
+        import pdb
+        pdb.set_trace()
         if not article:
             # Tell client we have not found the requested article
             return Response(
