@@ -169,22 +169,21 @@ class UserRetrieveUpdateAPIView(RetrieveUpdateAPIView):
         return Response(serializer.data, status=status.HTTP_200_OK)
 
     def update(self, request, *args, **kwargs):
-        user_data = request.data.get('user', {})
+        serializer_data = request.data.get('user', {})
 
         serializer_data = {
-            'username': user_data.get('username', request.user.username),
-            'email': user_data.get('email', request.user.email),
+            'username': serializer_data.get('username', request.user.username),
+            'email': serializer_data.get('email', request.user.email),
             'profile': {
-                'first_name': user_data.get('first_name', request.user.profile.first_name),
-                'last_name': user_data.get('last_name', request.user.profile.last_name),
-                'birth_date': user_data.get('birth_date', request.user.profile.birth_date),
-                'bio': user_data.get('bio', request.user.profile.bio),
-                'gender': user_data.get('gender', request.user.profile.gender),
-                'avatar': user_data.get('avatar', request.user.profile.avatar),
-                'city': user_data.get('city', request.user.profile.city),
-                'country': user_data.get('country', request.user.profile.country),
-                'phone': user_data.get('phone', request.user.profile.phone),
-                'website': user_data.get('website', request.user.profile.website),
+                'first_name': serializer_data.get('first_name', request.user.profile.first_name),
+                'last_name': serializer_data.get('last_name', request.user.profile.last_name),
+                'birth_date': serializer_data.get('birth_date', request.user.profile.birth_date),
+                'bio': serializer_data.get('bio', request.user.profile.bio),
+                'avatar': serializer_data.get('avatar', request.user.profile.avatar),
+                'city': serializer_data.get('city', request.user.profile.city),
+                'country': serializer_data.get('country', request.user.profile.country),
+                'phone': serializer_data.get('phone', request.user.profile.phone),
+                'website': serializer_data.get('website', request.user.profile.website),
             }
         }
 
