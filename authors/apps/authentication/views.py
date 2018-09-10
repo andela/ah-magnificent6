@@ -10,6 +10,7 @@ from .serializers import (
 )
 from .backends import generate_jwt_token
 
+
 class RegistrationAPIView(generics.CreateAPIView):
     # Use generics.CreateAPIView to show parameters in the API documentation.
 
@@ -18,7 +19,7 @@ class RegistrationAPIView(generics.CreateAPIView):
     Register new user
 
     """
-    
+
     # Allow any user (authenticated or not) to hit this endpoint.
     permission_classes = (AllowAny,)
     renderer_classes = (UserJSONRenderer,)
@@ -26,14 +27,14 @@ class RegistrationAPIView(generics.CreateAPIView):
 
     def post(self, request):
         # Separate requests
-        email, username, password = request.data.get('email', None)\
-                                    , request.data.get('username', None)\
-                                    , request.data.get('password', None)
+        email, username, password = request.data.get(
+            'email', None), request.data.get(
+            'username', None), request.data.get('password', None)
 
         user = {
-            "email":email, 
-            "username":username,
-            "password":password
+            "email": email,
+            "username": username,
+            "password": password
         }
 
         """
@@ -64,14 +65,14 @@ class LoginAPIView(generics.GenericAPIView):
     renderer_classes = (UserJSONRenderer,)
     serializer_class = LoginSerializer
 
-
     def post(self, request):
 
-        email, password = request.data.get('email',None), request.data.get('password',None)
+        email, password = request.data.get(
+            'email', None), request.data.get('password', None)
 
         user = {
-            "email":email,
-            "password":password
+            "email": email,
+            "password": password
         }
 
         """
