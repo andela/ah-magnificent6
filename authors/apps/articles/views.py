@@ -3,25 +3,27 @@ This module defines views used in CRUD operations on articles.
 """
 from rest_framework import generics, status
 from rest_framework.response import Response
-from rest_framework.permissions import IsAuthenticated
+from rest_framework.permissions import IsAuthenticated, AllowAny
 from django.core.exceptions import ObjectDoesNotExist
 from .serializers import ArticleSerializer
 from django.views.generic import ListView
 from rest_framework.views import APIView
 from .models import Article
 from .renderers import ArticleJSONRenderer
+from rest_framework.renderers import JSONRenderer
+from rest_framework import authentication
 
 
 class ArticleAPIView(generics.ListCreateAPIView):
     """
-    user generics.CreateAPIView to expose parameters to the documentation
-    method: post
+    get:
+    Retrieve all articles
+    post:
     Create a new article
     """
     queryset = Article.objects.all()
     serializer_class = ArticleSerializer
-    permission_classes = (IsAuthenticated,)
-    renderer_classes = (ArticleJSONRenderer,)
+    renderer_classes = (JSONRenderer,)
 
     def post(self, request):
         """
@@ -30,6 +32,7 @@ class ArticleAPIView(generics.ListCreateAPIView):
         to create a new article.
         :return:returns a successfully created article
         """
+        permission_classes = (IsAuthenticated,)
         # Retrieve article data from the request object and convert it
         # to a kwargs object
         # get user data at this point
@@ -47,10 +50,14 @@ class ArticleAPIView(generics.ListCreateAPIView):
         return Response(serializer.data, status.HTTP_201_CREATED)
 
 
-class ArticleRetrieveUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
+class ArticleDetailsView(generics.RetrieveUpdateDestroyAPIView):
+    """
+    get:
+    put:
+    delete:
+    """
     serializer_class = ArticleSerializer
-    renderer_classes = (ArticleJSONRenderer,)
-    permission_classes = (IsAuthenticated,)
+    renderer_classes = (JSONRenderer,)
 
     def get_object(self, pk):
         try:
@@ -77,12 +84,13 @@ class ArticleRetrieveUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
 
     def delete(self, request, pk):
         """
-        This method handles request to delete a given article.
+        Delete a given article.
         :params pk: an id of the article to be deleted
                 request: a request object with authenticated user credentials
         :returns dict: a json object containing message to indicate that the
         article has been deleted
         """
+        permission_classes = (IsAuthenticated,)
         article = self.get_object(pk)
         if not article:
             # return error message for non-existing article
@@ -107,10 +115,11 @@ class ArticleRetrieveUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
 
     def put(self, request, pk):
         """
-        handle request to update a given article
+        Update a single article
         :params pk: an id for the article to be updated
                 request: a request object with new data for the article
         """
+        permission_classes = (IsAuthenticated,)
         article = self.get_object(pk)
         if not article:
             # Tell client we have not found the requested article
