@@ -95,7 +95,7 @@ class ArticleRetrieveUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
             article.delete()
             return Response(
                 {
-                    'message': f"Article with id=%d deleted" % int(pk)
+                    'message': "Article with id={} deleted" .format(int(pk))
                 }, status.HTTP_200_OK)
         else:
             # prevent a user from deleting an article s/he does not own
