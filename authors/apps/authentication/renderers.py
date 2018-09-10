@@ -15,15 +15,12 @@ class UserJSONRenderer(JSONRenderer):
         """
         errors = data.get('errors', None)
 
-
-
         if errors:
             """
             As mentioned about, we will let the default JSONRenderer handle
             rendering errors.
             """
 
-        if errors is not None:
             # As mentioned about, we will let the default JSONRenderer handle
             # rendering errors.
 
