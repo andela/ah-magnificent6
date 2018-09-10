@@ -239,11 +239,6 @@ class UserSerializer(serializers.ModelSerializer):
         """
         instance.save()
 
-        """
-        Save the user profile after update
-        """
-        # instance.profile.save()
-
         return instance
 
 
