@@ -26,6 +26,17 @@ class ArticleTests(Base):
         Tests that a client can retrieve a single article
         """
         response = self.client.get(
-            self.retrieve_update_delete_url, format="json", **self.headers)
+            reverse(
+                'articles:retrieveUpdateDelete', kwargs={'pk': 2}), format="json", **self.headers)
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertTrue(response.data['id'] == 2)
+
+    def test_cannot_retrieve_a_non_existing_article(self):
+        """
+        Tests that a client cannot retrieve an article which does not exist
+        """
+        response = self.client.get(
+            reverse(
+                'articles:retrieveUpdateDelete', kwargs={'pk': -1}),
+            format="json", **self.headers)
+        self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)

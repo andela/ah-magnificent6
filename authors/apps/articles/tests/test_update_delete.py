@@ -19,7 +19,9 @@ class ArticleDeleteUpdateTests(Base):
         Tests that a client can delete a specific article
         """
         response = self.client.delete(
-            self.retrieve_update_delete_url, format="json", **self.headers)
+            reverse(
+                'articles:retrieveUpdateDelete', kwargs={'pk': 5}),
+            format="json", **self.headers)
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 
     def test_cannot_delete_other_users_articles(self):
@@ -39,23 +41,20 @@ class ArticleDeleteUpdateTests(Base):
             response.data['token'])}
         self.client.post(self.article_url, self.article_data,
                          format="json", **headers)
-        response = self.client.get(
-            self.article_url, format="json", **self.headers)
         response = self.client.delete(
             reverse(
-                'articles:retrieveUpdateDelete', kwargs={'pk': 6}),
+                'articles:retrieveUpdateDelete', kwargs={'pk': 8}),
             format="json",
-            **headers)
+            **self.headers)
         self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
 
     def test_can_edit_an_article(self):
         """
         Tests that a client can update details of an article
         """
-        self.article_data['body'] = 'This is another story'
         response = self.client.put(
             reverse(
-                'articles:retrieveUpdateDelete', kwargs={'pk': 5}),
+                'articles:retrieveUpdateDelete', kwargs={'pk': 6}),
             data=self.article_data,
             format="json",
             **self.headers)
