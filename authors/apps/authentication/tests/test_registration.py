@@ -101,7 +101,7 @@ class AuthenticationTests(APITestCase):
                          self.violate_password_pattern_message)
 
     def test_unsuccessful_registration_with_all_letter_password(self):
-        """ Test that a user enters a password with numbers only """
+        """ Test that a user enters a password with letters only """
         self.valid_user['password'] = "ABDCefgtd"
         response = self.client.post(
             self.registration_url, self.valid_user, format='json')
