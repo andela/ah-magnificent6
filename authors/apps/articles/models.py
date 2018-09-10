@@ -1,6 +1,7 @@
 from django.db import models
 from django.utils.text import slugify
 from authors.apps.authentication.models import User
+import uuid
 
 
 class Article(models.Model):
@@ -28,24 +29,9 @@ class Article(models.Model):
         "Returns a string representation of article title."
         return self.title
 
-    def _generate_unique_slug(self):
-        """
-        Generates a unique slug for the new article.
-        :Returns str:slug-a unique string for each article
-        """
-        slug = slugify(self.title)
-        new_slug = slug
-        num = 1
-        while Article.objects.filter(slug=new_slug).exists():
-            new_slug = '{}-{}'.format(slug, num)
-            num += 1
-        return new_slug
-
     def save(self, *args, **kwargs):
         """
-        Checks whether slug has been set and if not calls a method to generate
-        a unique new one before saving a new article
+        Generate a slug for the article before saving it.
         """
-        if not self.slug:
-            self.slug = self._generate_unique_slug()
+        self.slug = slugify(self.title + '-' + uuid.uuid4().hex)
         super().save(*args, **kwargs)
