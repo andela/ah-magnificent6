@@ -8,6 +8,7 @@ class Article(models.Model):
     Defines fields for each article.
     """
     class Meta:
+        # Order article by date published
         ordering = ['-published_at']
 
     title = models.CharField(max_length=255)
@@ -18,23 +19,33 @@ class Article(models.Model):
     updated_at = models.DateTimeField(auto_now=True)
     published_at = models.DateTimeField(auto_now=True)
     slug = models.SlugField(unique=True, editable=False, max_length=140)
-    favorited = models.BooleanField(default=False, null=True)
+    favorited = models.NullBooleanField(default=False)
     favoritesCount = models.IntegerField(default=0)
     image = models.ImageField(
-        upload_to='static/images', default='pic_folder/None/no-img.jpg')
+        upload_to='static/images', default='static/images/no-img.jpg')
 
     def __str__(self):
+        "Returns a string representation of article title."
         return self.title
 
     def _generate_unique_slug(self):
+        """
+        Generates a unique slug for the new article.
+        :Returns str:slug-a unique string for each article
+        """
         slug = slugify(self.title)
+        new_slug = slug
         num = 1
-        while Article.objects.filter(slug=slug).exists():
-            unique_slug = '{}-{}'.format(slug, num)
+        while Article.objects.filter(slug=new_slug).exists():
+            new_slug = '{}-{}'.format(slug, num)
             num += 1
-        return unique_slug
+        return new_slug
 
     def save(self, *args, **kwargs):
+        """
+        Checks whether slug has been set and if not calls a method to generate
+        a unique new one before saving a new article
+        """
         if not self.slug:
             self.slug = self._generate_unique_slug()
         super().save(*args, **kwargs)

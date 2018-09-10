@@ -99,7 +99,6 @@ class LoginSerializer(serializers.Serializer):
                 'This user has been deactivated.'
             )
         token = generate_jwt_token(email)
-        print(token)
 
         """
         The `validate` method should return a dictionary of validated data.
