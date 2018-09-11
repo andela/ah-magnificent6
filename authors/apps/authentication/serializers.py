@@ -152,10 +152,6 @@ class LoginSerializer(serializers.Serializer):
                 'This user has been deactivated.'
             )
         token = generate_jwt_token(email)
-<<<<<<< HEAD
-
-=======
->>>>>>> [Feature #159965304] Add SocialLoginSerializer
 
         """
         The `validate` method should return a dictionary of validated data.

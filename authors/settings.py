@@ -50,14 +50,11 @@ INSTALLED_APPS = [
     'authors.apps.authentication',
     'authors.apps.core',
     'authors.apps.profiles',
-<<<<<<< HEAD
-    'authors.apps.articles'
-=======
+    'authors.apps.articles',
 
     # Include python social auth app django
     'social_django',
 
->>>>>>> [Feature #159965304] Add settings for social-auth-app-django
 ]
 
 MIDDLEWARE = [

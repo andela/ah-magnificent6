@@ -16,11 +16,8 @@ from .models import User
 from authors.apps.core.mailer import SendMail
 from .renderers import UserJSONRenderer
 from .serializers import (
-<<<<<<< HEAD
-    LoginSerializer, RegistrationSerializer, UserSerializer, ForgotPasswordSerializer, ResetPasswordSerializer
-=======
-    LoginSerializer, RegistrationSerializer, UserSerializer, SocialLoginSerializer
->>>>>>> [Feature #159965304] Add url and view to enable social login
+    LoginSerializer, RegistrationSerializer, UserSerializer, 
+    ForgotPasswordSerializer, ResetPasswordSerializer, SocialLoginSerializer
 )
 from .backends import generate_jwt_token
 from .models import User
@@ -236,6 +233,42 @@ class UserActivationAPIView(APIView):
         return Response(
             data={"message": "Account was verified successfully"},
             status=status.HTTP_200_OK)
+
+        # Capture Url of current site and generates token
+        current_site_domain = get_current_site(request).domain
+        token = default_token_generator.make_token(user)
+
+        # Sends mail with url, path of reset password and token
+        mail_message = 'Dear ' + user.username + ',\n\n''We received a request to change your password on Authors Haven.\n\n' \
+                                                 'Click the link below to set a new password' \
+                                                 ' \n http://' + current_site_domain + '/api/reset_password/' + token + '/' \
+                                                                                                                 '\n\nYours\n AuthorsHaven.'
+        SendMail(subject="Reset Password",
+                 message=mail_message,
+                 email_from='magnificent6ah@gmail',
+                 to=user.email).send()
+
+        output = {"message": "Please confirm your email for further instruction"}
+
+        return Response(output, status=status.HTTP_200_OK)
+
+
+class SocialLoginView(generics.CreateAPIView):
+    """ Allows login through social sites like Google, Twitter and Facebook """
+    permission_classes = (AllowAny,)
+    serializer_class = SocialLoginSerializer
+    renderer_classes = (UserJSONRenderer,)
+
+    def create(self, request):
+        """ Receives a provider and token and creates a new user,
+            if the new user does not exist already.
+            The username is retreived and used to generate the JWT token 
+            used to access the apps endpoints.
+        """
+
+        serializer = self.serializer_class(data=request.data)
+        serializer.is_valid(raise_exception=True)
+
         provider = serializer.data.get("provider")
 
         # If request is from authenticated user, associate social account with it
@@ -279,38 +312,3 @@ class UserActivationAPIView(APIView):
         user_data["token"] = generate_jwt_token(user_data["username"])
 
         return Response(user_data, status=status.HTTP_200_OK)
-
-
-class SocialLoginView(generics.CreateAPIView):
-    """ Allows login through social sites like Google, Twitter and Facebook """
-    permission_classes = (AllowAny,)
-    serializer_class = SocialLoginSerializer
-    renderer_classes = (UserJSONRenderer,)
-
-    def create(self, request):
-        """ Receives a provider and token and creates a new user,
-            if the new user does not exist already.
-            The username is retreived and used to generate the JWT token 
-            used to access the apps endpoints.
-        """
-
-        serializer = self.serializer_class(data=request.data)
-        serializer.is_valid(raise_exception=True)
-
-        # Capture Url of current site and generates token
-        current_site_domain = get_current_site(request).domain
-        token = default_token_generator.make_token(user)
-
-        # Sends mail with url, path of reset password and token
-        mail_message = 'Dear ' + user.username + ',\n\n''We received a request to change your password on Authors Haven.\n\n' \
-                                                 'Click the link below to set a new password' \
-                                                 ' \n http://' + current_site_domain + '/api/reset_password/' + token + '/' \
-                                                                                                                 '\n\nYours\n AuthorsHaven.'
-        SendMail(subject="Reset Password",
-                 message=mail_message,
-                 email_from='magnificent6ah@gmail',
-                 to=user.email).send()
-
-        output = {"message": "Please confirm your email for further instruction"}
-
-        return Response(output, status=status.HTTP_200_OK)
