@@ -14,7 +14,7 @@ class ResetPassword(APITestCase):
         self.valid_user = {
             "username": "michael",
             "email": "michael.nthiwa@andela.com",
-            "password": "123456789"}
+            "password": "Bit22150"}
 
         self.client.post(reverse('authentication:register'), self.valid_user, format='json')
         self.forget_password_url = reverse('authentication:forgot')

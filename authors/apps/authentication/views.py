@@ -43,7 +43,6 @@ class RegistrationAPIView(generics.CreateAPIView):
             , request.data.get('username', None) \
             , request.data.get('password', None)
 
-
         user = {
             "email": email,
             "username": username,
@@ -83,13 +82,10 @@ class LoginAPIView(generics.GenericAPIView):
     serializer_class = LoginSerializer
 
     def post(self, request):
-
-
         email, password = request.data.get(
             'email', None), request.data.get('password', None)
 
         email, password = request.data.get('email', None), request.data.get('password', None)
-
 
         user = {
             "email": email,
@@ -163,15 +159,12 @@ class ForgotPasswordAPIView(APIView):
     def post(self, request):
         """Captures data entered by user and generates token"""
 
-        email_object = request.data
-        user_email = email_object['email']
-
         # Query for email in database
-        user = User.objects.filter(email=user_email).first()
+        user = User.objects.filter(email=request.data['email']).first()
         if user is None:
             return Response({"message": "The email you entered does not exist"})
 
-        serializer = self.serializer_class(data=email_object)
+        serializer = self.serializer_class(data=request.data)
         serializer.is_valid(raise_exception=True)
 
         # Capture Url of current site and generates token
@@ -179,12 +172,12 @@ class ForgotPasswordAPIView(APIView):
         token = default_token_generator.make_token(user)
 
         # Sends mail with url, path of reset password and token
-        domain = 'Dear ' + user.username + ',\n\n''We received a request to change your password on Authors Haven.\n\n' \
-                                           'Click the link below to set a new password' \
-                                           ' \n http://' + current_site + '/api/reset_password/' + token + '/' \
-                                                                                                           '\n\nYours\n AuthorsHaven.'
+        mail_message = 'Dear ' + user.username + ',\n\n''We received a request to change your password on Authors Haven.\n\n' \
+                                                 'Click the link below to set a new password' \
+                                                 ' \n http://' + current_site + '/api/reset_password/' + token + '/' \
+                                                                                                                 '\n\nYours\n AuthorsHaven.'
         SendMail(subject="Reset Password",
-                 message=domain,
+                 message=mail_message,
                  email_from='magnificent6ah@gmail',
                  to=user.email).send()
 
