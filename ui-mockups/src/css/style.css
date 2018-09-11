@@ -27,7 +27,7 @@ small a:hover,
 .ah-author-link:hover {
   text-decoration: none;
   color: #000000;
-  background-color: #FFDE00; }
+  font-size: 1.1em; }
 
 .ah-list-content {
   line-height: 1; }
@@ -88,8 +88,8 @@ textarea:focus {
   font-weight: italic;
   font-size: 1.7em; }
 
-h6 a {
+h6 a, h6 a:hover {
   color: #000000; }
 
-.editLink a {
+.editLink a, .footer a {
   color: #999999; }

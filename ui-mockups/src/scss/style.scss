@@ -42,7 +42,7 @@ small a:hover,
 .ah-author-link:hover {
     text-decoration: none;
     color: $ah-primary-color;
-    background-color: $ah-alternate-color;
+    font-size:1.1em;
 }
 
 .ah-list-content {
@@ -122,9 +122,9 @@ textarea:focus {
     font-weight: italic;
     font-size: 1.7em;
 }
-h6 a{
+h6 a,h6 a:hover{
     color: $ah-primary-color;
 }
-.editLink a{
+.editLink a,.footer a{
     color: $ah-secondary-text-color;
 }
