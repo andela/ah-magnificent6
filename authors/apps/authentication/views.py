@@ -15,16 +15,20 @@ from .models import User
 
 from authors.apps.core.mailer import SendMail
 from .renderers import UserJSONRenderer
+<<<<<<< HEAD
 from .serializers import (
     LoginSerializer, RegistrationSerializer, UserSerializer, ForgotPasswordSerializer, ResetPasswordSerializer
 )
+=======
+from .serializers import (LoginSerializer, RegistrationSerializer,
+                          UserSerializer)
+>>>>>>> [Feature #159965302] Implement pull request reviews and update tests after rebase
 from .backends import generate_jwt_token
 from .models import User
 
 
 class RegistrationAPIView(generics.CreateAPIView):
     # Use generics.CreateAPIView to show parameters in the API documentation.
-
     """
     post:
     Register new user.
@@ -34,12 +38,13 @@ class RegistrationAPIView(generics.CreateAPIView):
     """
 
     # Allow any user (authenticated or not) to hit this endpoint.
-    permission_classes = (AllowAny,)
-    renderer_classes = (UserJSONRenderer,)
+    permission_classes = (AllowAny, )
+    renderer_classes = (UserJSONRenderer, )
     serializer_class = RegistrationSerializer
 
     def post(self, request):
         # Separate requests
+<<<<<<< HEAD
 
         email, username, password = request.data.get('email', None), request.data.get(
             'username', None), request.data.get('password', None)
@@ -53,7 +58,14 @@ class RegistrationAPIView(generics.CreateAPIView):
             "username": username,
             "password": password
         }
+=======
+        email, username, password = request.data.get(
+            'email', None), request.data.get('username',
+                                             None), request.data.get(
+                                                 'password', None)
+>>>>>>> [Feature #159965302] Implement pull request reviews and update tests after rebase
 
+        user = {"email": email, "username": username, "password": password}
         """
         The create serializer, validate serializer, save serializer pattern
         below is common and you will see it a lot throughout this course and
@@ -61,31 +73,37 @@ class RegistrationAPIView(generics.CreateAPIView):
         """
         serializer = self.serializer_class(data=user)
         serializer.is_valid(raise_exception=True)
-        user_data = serializer.validated_data
 
         # sends email with the activation link with the token
         subject = 'Authors Haven activation email'
         message = "Click this link to be activated "
-        current_site = get_current_site(request)
+        domain = get_current_site(request).domain
         token = generate_jwt_token(user['username'])
+        protocol = request.META['SERVER_PROTOCOL'][:4]
 
-        activation_link = 'http://' + current_site.domain + '/api/auth/' + token
+        activation_link = protocol + '://' + domain + '/api/auth/' + token
 
         try:
-            send_mail(subject, message + activation_link, settings.EMAIL_HOST_USER,
-                  [user['email']], fail_silently=False)
+            send_mail(
+                subject,
+                message + activation_link,
+                settings.EMAIL_HOST_USER, [user['email']],
+                fail_silently=False)
         except:
-            return Response(
-                    data={"message": "Email activation failed"}
-                )
+            return Response(data={"message": "Email activation failed"})
 
         serializer.save()
-        return Response(user_data, status=status.HTTP_201_CREATED)
+        data = {
+            "message":
+            "Kindly click the link sent to your email to complete registration."
+        }
+        return Response(data, status=status.HTTP_201_CREATED)
 
     def get(self, request):
         return Response(
-            data={"message": 'Only post requests are allowed to this endpoint.'}
-        )
+            data={
+                "message": 'Only post requests are allowed to this endpoint.'
+            })
 
 
 class LoginAPIView(generics.GenericAPIView):
@@ -96,11 +114,12 @@ class LoginAPIView(generics.GenericAPIView):
     get:
     Show appropriate error on get.
     """
-    permission_classes = (AllowAny,)
-    renderer_classes = (UserJSONRenderer,)
+    permission_classes = (AllowAny, )
+    renderer_classes = (UserJSONRenderer, )
     serializer_class = LoginSerializer
 
     def post(self, request):
+<<<<<<< HEAD
         email, password = request.data.get(
             'email', None), request.data.get('password', None)
 
@@ -110,7 +129,15 @@ class LoginAPIView(generics.GenericAPIView):
             "email": email,
             "password": password
         }
+=======
 
+        email, password = request.data.get('email', None), request.data.get(
+            'password', None)
+
+        user = {"email": email, "password": password}
+>>>>>>> [Feature #159965302] Implement pull request reviews and update tests after rebase
+
+        user = {"email": email, "password": password}
         """
         Notice here that we do not call `serializer.save()` like we did for the
         registration endpoint.
@@ -128,8 +155,9 @@ class LoginAPIView(generics.GenericAPIView):
 
     def get(self, request):
         return Response(
-            data={"message": 'Only post requests are allowed to this endpoint.'}
-        )
+            data={
+                "message": 'Only post requests are allowed to this endpoint.'
+            })
 
 
 class UserRetrieveUpdateAPIView(RetrieveUpdateAPIView):
@@ -140,8 +168,8 @@ class UserRetrieveUpdateAPIView(RetrieveUpdateAPIView):
     update:
     Update user details.
     """
-    permission_classes = (IsAuthenticated,)
-    renderer_classes = (UserJSONRenderer,)
+    permission_classes = (IsAuthenticated, )
+    renderer_classes = (UserJSONRenderer, )
     serializer_class = UserSerializer
 
     def retrieve(self, request, *args, **kwargs):
@@ -159,8 +187,7 @@ class UserRetrieveUpdateAPIView(RetrieveUpdateAPIView):
 
         # Here is that serialize, validate, save pattern we talked about before.
         serializer = self.serializer_class(
-            request.user, data=serializer_data, partial=True
-        )
+            request.user, data=serializer_data, partial=True)
         serializer.is_valid(raise_exception=True)
         serializer.save()
 
@@ -228,7 +255,6 @@ class ResetPasswordAPIView(APIView):
         return Response(output, status=status.HTTP_200_OK)
 
 
-class UserActivationAPIView(APIView):
 class UserActivateAPIView(APIView):
     """
     Activate account using the link sent to the user's email.
@@ -237,7 +263,7 @@ class UserActivateAPIView(APIView):
     is in the database using the username in the token.
     If successful, the user's account is activated.
     """
-    renderer_classes = (UserJSONRenderer,)
+    renderer_classes = (UserJSONRenderer, )
 
     def get(self, request, token):
         try:
@@ -246,11 +272,9 @@ class UserActivateAPIView(APIView):
         except:
             return Response(
                 data={"message": "Activation link is invalid."},
-                status=status.HTTP_400_BAD_REQUEST
-            )
+                status=status.HTTP_400_BAD_REQUEST)
         user.is_active = True
         user.save()
         return Response(
-                data={"message": "Account was verified successfully"},
-                status=status.HTTP_200_OK
-            )
+            data={"message": "Account was verified successfully"},
+            status=status.HTTP_200_OK)
