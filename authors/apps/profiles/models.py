@@ -24,6 +24,9 @@ class Profile(TimeStampModel):
     def __str__(self):
         return self.user.username
 
+"""
+Generate gravatar url from a user's email
+"""
 def gravatar_url(email):
     # Get the md5 hash of the email address
     md5 = hashlib.md5(email.encode())
