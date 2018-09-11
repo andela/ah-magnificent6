@@ -16,10 +16,24 @@ from .models import User
 from authors.apps.core.mailer import SendMail
 from .renderers import UserJSONRenderer
 from .serializers import (
+<<<<<<< HEAD
     LoginSerializer, RegistrationSerializer, UserSerializer, ForgotPasswordSerializer, ResetPasswordSerializer
+=======
+    LoginSerializer, RegistrationSerializer, UserSerializer, SocialLoginSerializer
+>>>>>>> [Feature #159965304] Add url and view to enable social login
 )
 from .backends import generate_jwt_token
 from .models import User
+
+
+# social authentication packages
+from requests.exceptions import HTTPError
+
+from social_django.utils import load_strategy, load_backend
+
+from social_core.exceptions import MissingBackend
+
+from social.backends.oauth import BaseOAuth1, BaseOAuth2
 
 
 class RegistrationAPIView(generics.CreateAPIView):
@@ -177,27 +191,6 @@ class ForgotPasswordAPIView(APIView):
         if user is None:
             return Response({"message": "The email you entered does not exist"})
 
-        serializer = self.serializer_class(data=request.data)
-        serializer.is_valid(raise_exception=True)
-
-        # Capture Url of current site and generates token
-        current_site_domain = get_current_site(request).domain
-        token = default_token_generator.make_token(user)
-
-        # Sends mail with url, path of reset password and token
-        mail_message = 'Dear ' + user.username + ',\n\n''We received a request to change your password on Authors Haven.\n\n' \
-                                                 'Click the link below to set a new password' \
-                                                 ' \n http://' + current_site_domain + '/api/reset_password/' + token + '/' \
-                                                                                                                 '\n\nYours\n AuthorsHaven.'
-        SendMail(subject="Reset Password",
-                 message=mail_message,
-                 email_from='magnificent6ah@gmail',
-                 to=user.email).send()
-
-        output = {"message": "Please confirm your email for further instruction"}
-
-        return Response(output, status=status.HTTP_200_OK)
-
 
 class ResetPasswordAPIView(APIView):
     """Reset password view allows any user to access reset password endpoint
@@ -243,3 +236,81 @@ class UserActivationAPIView(APIView):
         return Response(
             data={"message": "Account was verified successfully"},
             status=status.HTTP_200_OK)
+        provider = serializer.data.get("provider")
+
+        # If request is from authenticated user, associate social account with it
+        authentic_user = request.user if not request.user.is_anonymous else None
+
+        # Load Django code to plug into Python Social Auth's functionality
+        strategy = load_strategy(request)
+        try:
+            # Get backend corresponding to provider.
+            backend = load_backend(strategy=strategy, name=provider, redirect_uri=None)
+
+            if isinstance(backend, BaseOAuth1):
+                # Get access_token and access token secret for Oauth1 used by Twitter
+                access_token = {
+                    'oauth_token': request.data['access_token'],
+                    'oauth_token_secret': request.data['access_token_secret']
+                }
+            
+            elif isinstance(backend, BaseOAuth2):
+                # Get access token for OAuth2
+                access_token = serializer.data.get("access_token")
+
+        except MissingBackend:
+            return Response({"error": "Invalid provider"}, status = status.HTTP_400_BAD_REQUEST)
+
+        try:
+            user = backend.do_auth(access_token, user=authentic_user)
+        except BaseException as error:
+            return Response({ "error": str(error) }, status = status.HTTP_400_BAD_REQUEST)
+        
+        # Activate user since they have used social auth so no need for email activation
+        if not user.is_active:
+            user.is_active = True
+            user.save()
+        
+        # Serialize the user.
+        serializer = UserSerializer(user)
+
+        user_data = serializer.data
+        # Grant user app's access_token
+        user_data["token"] = generate_jwt_token(user_data["username"])
+
+        return Response(user_data, status=status.HTTP_200_OK)
+
+
+class SocialLoginView(generics.CreateAPIView):
+    """ Allows login through social sites like Google, Twitter and Facebook """
+    permission_classes = (AllowAny,)
+    serializer_class = SocialLoginSerializer
+    renderer_classes = (UserJSONRenderer,)
+
+    def create(self, request):
+        """ Receives a provider and token and creates a new user,
+            if the new user does not exist already.
+            The username is retreived and used to generate the JWT token 
+            used to access the apps endpoints.
+        """
+
+        serializer = self.serializer_class(data=request.data)
+        serializer.is_valid(raise_exception=True)
+
+        # Capture Url of current site and generates token
+        current_site_domain = get_current_site(request).domain
+        token = default_token_generator.make_token(user)
+
+        # Sends mail with url, path of reset password and token
+        mail_message = 'Dear ' + user.username + ',\n\n''We received a request to change your password on Authors Haven.\n\n' \
+                                                 'Click the link below to set a new password' \
+                                                 ' \n http://' + current_site_domain + '/api/reset_password/' + token + '/' \
+                                                                                                                 '\n\nYours\n AuthorsHaven.'
+        SendMail(subject="Reset Password",
+                 message=mail_message,
+                 email_from='magnificent6ah@gmail',
+                 to=user.email).send()
+
+        output = {"message": "Please confirm your email for further instruction"}
+
+        return Response(output, status=status.HTTP_200_OK)
