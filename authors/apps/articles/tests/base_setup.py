@@ -2,6 +2,8 @@ from rest_framework.test import APITestCase
 from django.urls import reverse
 from ..models import Article
 from authors.apps.authentication.models import User
+from authors.apps.authentication.backends import generate_jwt_token
+
 
 
 class Base(APITestCase):
@@ -16,7 +18,13 @@ class Base(APITestCase):
             "password": "kamila1990",
         }
         self.registration_url = reverse('authentication:register')
-        response = self.client.post(self.registration_url, self.user_data,
+        self.login_url = reverse('authentication:login')
+        register = self.client.post(self.registration_url, self.user_data,
+                                    format='json')
+        token = generate_jwt_token(self.user_data['username'])
+        activate = self.client.get(
+            reverse("authentication:activate_user", args=[token]))
+        response = self.client.post(self.login_url, self.user_data,
                                     format='json')
         self.headers = {'HTTP_AUTHORIZATION': 'Bearer {}'.format(
             response.data['token'])}

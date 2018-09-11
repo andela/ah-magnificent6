@@ -169,6 +169,7 @@ REST_FRAMEWORK = {
     ],
 }
 
+#Email_configuration
 EMAIL_USE_TLS = True
 EMAIL_HOST = env('EMAIL_HOST')
 EMAIL_HOST_USER = env('EMAIL_HOST_USER')

@@ -1,9 +1,15 @@
 import json
 
 from rest_framework.renderers import JSONRenderer
+from .backends import generate_jwt_token
+from .models import User
+
 
 
 class UserJSONRenderer(JSONRenderer):
+    """
+    Renderer which serializes data to JSON.
+    """
     charset = 'utf-8'
 
     def render(self, data, media_type=None, renderer_context=None):
@@ -26,7 +32,6 @@ class UserJSONRenderer(JSONRenderer):
 
             return super(UserJSONRenderer, self).render(data)
 
-        # Finally, we can render our data under the "user" namespace.
         return json.dumps({
-            'user': data
+            'response': data
         })
