@@ -16,8 +16,8 @@ from .models import User
 from authors.apps.core.mailer import SendMail
 from .renderers import UserJSONRenderer
 from .serializers import (
-    LoginSerializer, RegistrationSerializer, UserSerializer, 
-    ForgotPasswordSerializer, ResetPasswordSerializer, SocialLoginSerializer,
+    LoginSerializer, RegistrationSerializer, UserSerializer, ForgotPasswordSerializer, 
+    ResetPasswordSerializer, SocialLoginSerializer
 )
 from .backends import generate_jwt_token
 from .models import User
@@ -197,7 +197,24 @@ class ForgotPasswordAPIView(APIView):
         user = User.objects.filter(email=request.data['email']).first()
         if user is None:
             return Response({"message": "The email you entered does not exist"})
+        
+        # Capture Url of current site and generates token
+        current_site_domain = get_current_site(request).domain
+        token = default_token_generator.make_token(user)
 
+        # Sends mail with url, path of reset password and token
+        mail_message = 'Dear ' + user.username + ',\n\n''We received a request to change your password on Authors Haven.\n\n' \
+                                                 'Click the link below to set a new password' \
+                                                 ' \n http://' + current_site_domain + '/api/reset_password/' + token + '/' \
+                                                                                                                 '\n\nYours\n AuthorsHaven.'
+        SendMail(subject="Reset Password",
+                 message=mail_message,
+                 email_from='magnificent6ah@gmail',
+                 to=user.email).send()
+
+        output = {"message": "Please confirm your email for further instruction"}
+
+        return Response(output, status=status.HTTP_200_OK)
 
 class ResetPasswordAPIView(APIView):
     """Reset password view allows any user to access reset password endpoint
@@ -244,25 +261,6 @@ class UserActivationAPIView(APIView):
             data={"message": "Account was verified successfully"},
             status=status.HTTP_200_OK)
 
-        # Capture Url of current site and generates token
-        current_site_domain = get_current_site(request).domain
-        token = default_token_generator.make_token(user)
-
-        # Sends mail with url, path of reset password and token
-        mail_message = 'Dear ' + user.username + ',\n\n''We received a request to change your password on Authors Haven.\n\n' \
-                                                 'Click the link below to set a new password' \
-                                                 ' \n http://' + current_site_domain + '/api/reset_password/' + token + '/' \
-                                                                                                                 '\n\nYours\n AuthorsHaven.'
-        SendMail(subject="Reset Password",
-                 message=mail_message,
-                 email_from='magnificent6ah@gmail',
-                 to=user.email).send()
-
-        output = {"message": "Please confirm your email for further instruction"}
-
-        return Response(output, status=status.HTTP_200_OK)
-
-
 class SocialLoginView(generics.CreateAPIView):
     """ Allows login through social sites like Google, Twitter and Facebook """
     permission_classes = (AllowAny,)
@@ -292,10 +290,15 @@ class SocialLoginView(generics.CreateAPIView):
 
             if isinstance(backend, BaseOAuth1):
                 # Get access_token and access token secret for Oauth1 used by Twitter
-                access_token = {
-                    'oauth_token': request.data['access_token'],
-                    'oauth_token_secret': request.data['access_token_secret']
-                }
+                if "access_token_secret" in request.data:
+                    access_token = {
+                        'oauth_token': request.data['access_token'],
+                        'oauth_token_secret': request.data['access_token_secret']
+                    }
+                else:
+                    return Response(
+                        {"error": "Provide access token secret"}, status = status.HTTP_400_BAD_REQUEST
+                    )
             
             elif isinstance(backend, BaseOAuth2):
                 # Get access token for OAuth2

@@ -230,7 +230,6 @@ class UserSerializer(serializers.ModelSerializer):
 
         return instance
 
-<<<<<<< HEAD
 
 class ForgotPasswordSerializer(serializers.Serializer):
     """Serializer for forget password"""
@@ -266,8 +265,6 @@ class ResetPasswordSerializer(serializers.Serializer):
 
         return data
         
-=======
->>>>>>> a15d319b2e3c1140cd793ec22613afcabf069f79
 class SocialLoginSerializer(serializers.Serializer):
     """ Accept OAUTH access token and provider.
         Oauth produces its own access token.

@@ -1,9 +1,8 @@
 from django.urls import path, include
 
 from .views import (
-    LoginAPIView, RegistrationAPIView, UserRetrieveUpdateAPIView,
-    ForgotPasswordAPIView, ResetPasswordAPIView, UserActivationAPIView, 
-    SocialLoginView,
+    LoginAPIView, RegistrationAPIView, UserRetrieveUpdateAPIView, 
+    ForgotPasswordAPIView, ResetPasswordAPIView, UserActivationAPIView, SocialLoginView
 )
 
 app_name = 'authentication'
