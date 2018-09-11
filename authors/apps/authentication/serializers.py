@@ -152,7 +152,10 @@ class LoginSerializer(serializers.Serializer):
                 'This user has been deactivated.'
             )
         token = generate_jwt_token(email)
+<<<<<<< HEAD
 
+=======
+>>>>>>> [Feature #159965304] Add SocialLoginSerializer
 
         """
         The `validate` method should return a dictionary of validated data.
@@ -265,3 +268,17 @@ class ResetPasswordSerializer(serializers.Serializer):
         user.save()
 
         return data
+        
+class SocialLoginSerializer(serializers.Serializer):
+    """ Accept OAUTH access token and provider.
+        Oauth produces its own access token.
+        "provider" is used to determine the source of the social login.
+    """
+
+    provider = serializers.CharField(max_length=255, required=True)
+    access_token = serializers.CharField(max_length=4096, required=True, trim_whitespace=True)
+    access_token_secret = serializers.CharField(max_length=4096, required=False, trim_whitespace=True)
+
+
+
+
