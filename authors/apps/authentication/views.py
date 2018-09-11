@@ -15,14 +15,9 @@ from .models import User
 
 from authors.apps.core.mailer import SendMail
 from .renderers import UserJSONRenderer
-<<<<<<< HEAD
 from .serializers import (
     LoginSerializer, RegistrationSerializer, UserSerializer, ForgotPasswordSerializer, ResetPasswordSerializer
 )
-=======
-from .serializers import (LoginSerializer, RegistrationSerializer,
-                          UserSerializer)
->>>>>>> [Feature #159965302] Implement pull request reviews and update tests after rebase
 from .backends import generate_jwt_token
 from .models import User
 
@@ -44,26 +39,10 @@ class RegistrationAPIView(generics.CreateAPIView):
 
     def post(self, request):
         # Separate requests
-<<<<<<< HEAD
-
-        email, username, password = request.data.get('email', None), request.data.get(
-            'username', None), request.data.get('password', None)
-
-        email, username, password = request.data.get('email', None) \
-            , request.data.get('username', None) \
-            , request.data.get('password', None)
-
-        user = {
-            "email": email,
-            "username": username,
-            "password": password
-        }
-=======
         email, username, password = request.data.get(
             'email', None), request.data.get('username',
                                              None), request.data.get(
                                                  'password', None)
->>>>>>> [Feature #159965302] Implement pull request reviews and update tests after rebase
 
         user = {"email": email, "username": username, "password": password}
         """
@@ -119,23 +98,9 @@ class LoginAPIView(generics.GenericAPIView):
     serializer_class = LoginSerializer
 
     def post(self, request):
-<<<<<<< HEAD
-        email, password = request.data.get(
-            'email', None), request.data.get('password', None)
-
-        email, password = request.data.get('email', None), request.data.get('password', None)
-
-        user = {
-            "email": email,
-            "password": password
-        }
-=======
 
         email, password = request.data.get('email', None), request.data.get(
             'password', None)
-
-        user = {"email": email, "password": password}
->>>>>>> [Feature #159965302] Implement pull request reviews and update tests after rebase
 
         user = {"email": email, "password": password}
         """
@@ -255,7 +220,7 @@ class ResetPasswordAPIView(APIView):
         return Response(output, status=status.HTTP_200_OK)
 
 
-class UserActivateAPIView(APIView):
+class UserActivationAPIView(APIView):
     """
     Activate account using the link sent to the user's email.
 
