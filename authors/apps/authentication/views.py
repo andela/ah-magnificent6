@@ -29,8 +29,7 @@ class RegistrationAPIView(generics.CreateAPIView):
 
     def post(self, request):
         # Separate requests
-        email, username, password = request.data.get(
-            'email', None), request.data.get(
+        email, username, password = request.data.get('email', None), request.data.get(
             'username', None), request.data.get('password', None)
 
         user = {
@@ -49,6 +48,7 @@ class RegistrationAPIView(generics.CreateAPIView):
         serializer.save()
         user_data = serializer.data
         user_data['token'] = generate_jwt_token(user['username'])
+        user_data['message'] = 'Welcome, you have successfully registered to Author\'s Haven!'
 
         return Response(user_data, status=status.HTTP_201_CREATED)
 
