@@ -98,4 +98,4 @@ db.sqlite3
 .vscode
 
 # node
-node_modules/
+ui-mockups/node_modules/
