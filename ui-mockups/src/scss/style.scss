@@ -5,84 +5,126 @@ $ah-alternate-color: #FFDE00;
 $ah-secondary-text-color: #999999;
 
 
-body{
+body {
     background: $bg-color;
 }
 
-.btn-link{
+.btn-link {
     color: $ah-primary-color;
 }
 
-.btn-link:hover{
+.btn-link:hover {
     color: $ah-primary-color;
     text-decoration: none;
 }
 
 // Card
-.card-body{
+.card-body {
     background-color: $bg-color;
 }
 
-.card{
+.card {
     border: none;
 }
 
-.card-text{
+.card-text {
     color: $ah-secondary-text-color;
     font-size: 10pt;
 }
 
-small a, .ah-author-link{
+small a,
+.ah-author-link {
     color: $ah-primary-color;
     text-decoration: underline;
 }
-small a:hover, .ah-author-link:hover{
+
+small a:hover,
+.ah-author-link:hover {
     text-decoration: none;
     color: $ah-primary-color;
     background-color: $ah-alternate-color;
 }
-.ah-list-content{
+
+.ah-list-content {
     line-height: 1;
 }
 
 // Jumbotron
-.ah-jumbotron{
+.ah-jumbotron {
     background-color: $ah-secondary-color;
     padding: 0px;
 }
 
 // Navbar
-.ah-jumbotron h1, .navbar-brand{
+.ah-jumbotron h1,
+.navbar-brand {
     font-size: 3.5rem;
     font-family: 'Vidaloka', serif;
 }
 
 // Modal
-.modal-content{
+.modal-content {
     background-color: $ah-secondary-color;
     border: none;
     border-radius: 0;
 }
-.modal-header{
+
+.modal-header {
     border-bottom: none;
 }
 
-.modal-title{
+.modal-title {
     font-family: 'Vidaloka', serif;
     font-size: 2.5rem;
 }
 
 // Twitter
-.fa-twitter{
+.fa-twitter {
     color: #1da1f2;
 }
 
 // Facebook
-.fa-facebook{
+.fa-facebook {
     color: #3b5998;
 }
 
 // Google
-.fa-google{
+.fa-google {
     color: #ea4335;
+}
+
+.form-group,
+.form-control {
+    background-color: $bg-color !important;
+    border: none;
+    margin-top: 5px;
+    padding: 5px;
+}
+
+.form-group input:focus,
+textarea:focus {
+    background-color: $bg-color;
+}
+
+.custom-file-label {
+    background-color: transparent;
+}
+.form-control:focus{
+    border-bottom: solid #green 10px;
+    box-shadow:None;
+}
+
+.title {
+    font-weight: bold;
+    font-size: 2em;
+}
+.description {
+    font-weight: italic;
+    font-size: 1.7em;
+}
+h6 a{
+    color: $ah-primary-color;
+}
+.editLink a{
+    color: $ah-secondary-text-color;
 }

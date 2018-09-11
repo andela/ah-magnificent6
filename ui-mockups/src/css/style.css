@@ -18,11 +18,13 @@ body {
   color: #999999;
   font-size: 10pt; }
 
-small a, .ah-author-link {
+small a,
+.ah-author-link {
   color: #000000;
   text-decoration: underline; }
 
-small a:hover, .ah-author-link:hover {
+small a:hover,
+.ah-author-link:hover {
   text-decoration: none;
   color: #000000;
   background-color: #FFDE00; }
@@ -34,7 +36,8 @@ small a:hover, .ah-author-link:hover {
   background-color: #e0e0d4;
   padding: 0px; }
 
-.ah-jumbotron h1, .navbar-brand {
+.ah-jumbotron h1,
+.navbar-brand {
   font-size: 3.5rem;
   font-family: 'Vidaloka', serif; }
 
@@ -58,3 +61,35 @@ small a:hover, .ah-author-link:hover {
 
 .fa-google {
   color: #ea4335; }
+
+.form-group,
+.form-control {
+  background-color: #f9f8f3 !important;
+  border: none;
+  margin-top: 5px;
+  padding: 5px; }
+
+.form-group input:focus,
+textarea:focus {
+  background-color: #f9f8f3; }
+
+.custom-file-label {
+  background-color: transparent; }
+
+.form-control:focus {
+  border-bottom: solid #green 10px;
+  box-shadow: None; }
+
+.title {
+  font-weight: bold;
+  font-size: 2em; }
+
+.description {
+  font-weight: italic;
+  font-size: 1.7em; }
+
+h6 a {
+  color: #000000; }
+
+.editLink a {
+  color: #999999; }
