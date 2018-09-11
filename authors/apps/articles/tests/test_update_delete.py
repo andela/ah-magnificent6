@@ -1,6 +1,7 @@
 from .base_setup import Base
 from rest_framework import status
 from django.urls import reverse
+from authors.apps.authentication.backends import generate_jwt_token
 
 
 class ArticleDeleteUpdateTests(Base):
@@ -35,7 +36,12 @@ class ArticleDeleteUpdateTests(Base):
             "email": "user@gmail.com",
             "password": "kamila1990",
         }
-        response = self.client.post(self.registration_url, user_data,
+        user_register = self.client.post(self.registration_url, user_data,
+                                    format='json')
+        token = generate_jwt_token(user_data['username'])
+        activate = self.client.get(
+            reverse("authentication:activate_user", args=[token]))
+        response = self.client.post(self.login_url, user_data,
                                     format='json')
         headers = {'HTTP_AUTHORIZATION': 'Bearer {}'.format(
             response.data['token'])}
