@@ -152,7 +152,7 @@ class UserRetrieveUpdateAPIView(RetrieveUpdateAPIView):
         return Response(serializer.data, status=status.HTTP_200_OK)
 
 
-class ForgetPasswordAPIView(APIView):
+class ForgotPasswordAPIView(APIView):
     """Forget password view captures email and generates token that will be.
     used during reset password. Data that is captures in the view is send to
     the serializer class
