@@ -1,9 +1,11 @@
 import re
 from django.contrib.auth import authenticate
-
 from rest_framework import serializers
 from rest_framework.validators import UniqueValidator
+from django.core.mail import send_mail
 
+
+from django.contrib.auth.tokens import default_token_generator
 from .models import User
 from .backends import generate_jwt_token
 
@@ -151,6 +153,7 @@ class LoginSerializer(serializers.Serializer):
             )
         token = generate_jwt_token(email)
 
+
         """
         The `validate` method should return a dictionary of validated data.
         This is the data that is passed to the `create` and `update` methods
@@ -227,3 +230,38 @@ class UserSerializer(serializers.ModelSerializer):
         instance.save()
 
         return instance
+
+
+class ForgotPasswordSerializer(serializers.Serializer):
+    """Serializer for forget password"""
+
+    email = serializers.CharField(max_length=255)
+
+
+class ResetPasswordSerializer(serializers.Serializer):
+    """Serializer for reset password"""
+
+    email = serializers.CharField(max_length=200)
+    password = serializers.CharField(max_length=255)
+    confirm_password = serializers.CharField(max_length=255)
+    token = serializers.CharField(max_length=255)
+
+    def validate(self, data):
+        """Validates passwords and token.
+        Token can only be used once"""
+
+        # Query DB for user email
+        user = User.objects.filter(email=data.get('email', None)).first()
+
+        if data.get('password') != data.get('confirm_password'):
+            raise serializers.ValidationError("Passwords do not match")
+
+        # Checks token generated is valid
+        is_valid_token = default_token_generator.check_token(user, data.get('token', None))
+        if is_valid_token is False:
+            raise serializers.ValidationError("Token is Invalid or it has already expired")
+
+        user.set_password(data.get('password'))
+        user.save()
+
+        return data
