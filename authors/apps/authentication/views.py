@@ -16,11 +16,25 @@ from .models import User
 from authors.apps.core.mailer import SendMail
 from .renderers import UserJSONRenderer
 from .serializers import (
+<<<<<<< HEAD
     LoginSerializer, RegistrationSerializer, UserSerializer, 
     ForgotPasswordSerializer, ResetPasswordSerializer, SocialLoginSerializer
+=======
+    LoginSerializer, RegistrationSerializer, UserSerializer, SocialLoginSerializer
+>>>>>>> a15d319b2e3c1140cd793ec22613afcabf069f79
 )
 from .backends import generate_jwt_token
 from .models import User
+
+
+# social authentication packages
+from requests.exceptions import HTTPError
+
+from social_django.utils import load_strategy, load_backend
+
+from social_core.exceptions import MissingBackend
+
+from social.backends.oauth import BaseOAuth1, BaseOAuth2
 
 
 # social authentication packages

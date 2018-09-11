@@ -50,7 +50,10 @@ INSTALLED_APPS = [
     'authors.apps.authentication',
     'authors.apps.core',
     'authors.apps.profiles',
+<<<<<<< HEAD
     'authors.apps.articles',
+=======
+>>>>>>> a15d319b2e3c1140cd793ec22613afcabf069f79
 
     # Include python social auth app django
     'social_django',
@@ -178,6 +181,7 @@ REST_FRAMEWORK = {
     ],
 }
 
+<<<<<<< HEAD
 #Email_configuration
 EMAIL_USE_TLS = True
 EMAIL_HOST = env('EMAIL_HOST')
@@ -185,6 +189,8 @@ EMAIL_HOST_USER = env('EMAIL_HOST_USER')
 EMAIL_HOST_PASSWORD = env('EMAIL_PASSWORD')
 EMAIL_PORT = env('EMAIL_PORT')
 EMAIL_USE_SSL = False
+=======
+>>>>>>> a15d319b2e3c1140cd793ec22613afcabf069f79
 AUTHENTICATION_BACKENDS = (
     # For Facebook authentication
     'social.backends.facebook.FacebookAppOAuth2',
@@ -192,9 +198,15 @@ AUTHENTICATION_BACKENDS = (
     # For Google authentication
     'social_core.backends.google.GoogleOAuth2',
     # For Twitter authentication 
+<<<<<<< HEAD
     'social_core.backends.twitter.TwitterOAuth',
     # Ensures user will still be able to login via Django auth Model backend.
     'django.contrib.auth.backends.ModelBackend',
+=======
+    'social_core.backends.twitter.TwitterOAuth', 
+    # Ensures user will still be able to login via Django auth Model backend.
+    'django.contrib.auth.backends.ModelBackend', 
+>>>>>>> a15d319b2e3c1140cd793ec22613afcabf069f79
 )
 
 # Get Google configs from env file
