@@ -16,12 +16,8 @@ from .models import User
 from authors.apps.core.mailer import SendMail
 from .renderers import UserJSONRenderer
 from .serializers import (
-<<<<<<< HEAD
     LoginSerializer, RegistrationSerializer, UserSerializer, 
-    ForgotPasswordSerializer, ResetPasswordSerializer, SocialLoginSerializer
-=======
-    LoginSerializer, RegistrationSerializer, UserSerializer, SocialLoginSerializer
->>>>>>> a15d319b2e3c1140cd793ec22613afcabf069f79
+    ForgotPasswordSerializer, ResetPasswordSerializer, SocialLoginSerializer,
 )
 from .backends import generate_jwt_token
 from .models import User
