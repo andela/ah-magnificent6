@@ -152,6 +152,8 @@ class ForgotPasswordAPIView(APIView):
     """Forget password view captures email and generates token that will be.
     used during reset password. Data that is captures in the view is send to
     the serializer class
+    Post:
+    Forgot password
     """
     permission_classes = (AllowAny,)
     serializer_class = ForgotPasswordSerializer
@@ -188,7 +190,9 @@ class ForgotPasswordAPIView(APIView):
 
 class ResetPasswordAPIView(APIView):
     """Reset password view allows any user to access reset password endpoint
-    and updates password
+        and updates password
+        put:
+        Reset user password
     """
 
     permission_classes = (AllowAny,)
