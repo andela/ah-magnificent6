@@ -8,10 +8,10 @@ install:
 services:
   - postgresql
 before_script:
-  - psql -c "CREATE DATABASE testAuthorsHaven;" -U postgres
+  - psql -c "CREATE DATABASE test;" -U postgres
 script:
   - coverage erase
-  - coverage run --source='.' manage.py test
+  - coverage run --source=authors/apps manage.py test
   - coverage report -m
   - coveralls
 after_success:
@@ -23,4 +23,3 @@ app: ah-magnificent6-staging
 run:
   - "python manage.py makemigrations"
   - "python manage.py migrate"
-
