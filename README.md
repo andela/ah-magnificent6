@@ -10,11 +10,13 @@ by leveraging the modern web.
 ---
 
 
-### Setup
+#### Setup
+```
 $ cd ui-mockups
 $ brew install node
 $ npm install
 $ gulp
+```
 
 
 
