@@ -168,13 +168,13 @@ class ForgotPasswordAPIView(APIView):
         serializer.is_valid(raise_exception=True)
 
         # Capture Url of current site and generates token
-        current_site = get_current_site(request).domain
+        current_site_domain = get_current_site(request).domain
         token = default_token_generator.make_token(user)
 
         # Sends mail with url, path of reset password and token
         mail_message = 'Dear ' + user.username + ',\n\n''We received a request to change your password on Authors Haven.\n\n' \
                                                  'Click the link below to set a new password' \
-                                                 ' \n http://' + current_site + '/api/reset_password/' + token + '/' \
+                                                 ' \n http://' + current_site_domain + '/api/reset_password/' + token + '/' \
                                                                                                                  '\n\nYours\n AuthorsHaven.'
         SendMail(subject="Reset Password",
                  message=mail_message,
