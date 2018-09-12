@@ -35,3 +35,20 @@ class Article(models.Model):
         """
         self.slug = slugify(self.title + '-' + uuid.uuid4().hex)
         super().save(*args, **kwargs)
+
+
+class ArticleRating(models.Model):
+    """
+    Article schema
+    """
+
+    article_id = models.ForeignKey(Article, on_delete=models.CASCADE)
+    user_id = models.ForeignKey(User, on_delete=models.CASCADE)
+    rating = models.IntegerField(default=0)
+
+    class Meta:
+        """
+        Make the article and user id combination unique so that a user can only
+        rate an article once
+        """
+        unique_together = ('article_id', 'user_id')
