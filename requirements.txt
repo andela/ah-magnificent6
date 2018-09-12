@@ -33,10 +33,7 @@ six==1.10.0
 uritemplate==3.0.0
 urllib3==1.23
 whitenoise==4.0
-<<<<<<< HEAD
 python-social-auth==0.3.6
-=======
->>>>>>> [Feature #160445583] Downgrade django_rest_framework_swagger
 six==1.10.0
 social-auth-app-django==2.1.0
 social-auth-core==1.7.0
