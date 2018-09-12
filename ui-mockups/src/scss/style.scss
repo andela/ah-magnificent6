@@ -3,8 +3,6 @@ $ah-primary-color: #000000;
 $ah-secondary-color: #e0e0d4;
 $ah-alternate-color: #FFDE00;
 $ah-secondary-text-color: #999999;
-
-
 body {
     background: $bg-color;
 }
@@ -42,7 +40,7 @@ small a:hover,
 .ah-author-link:hover {
     text-decoration: none;
     color: $ah-primary-color;
-    font-size:1.1em;
+    background-color: $ah-alternate-color;
 }
 
 .ah-list-content {
@@ -109,22 +107,28 @@ textarea:focus {
 .custom-file-label {
     background-color: transparent;
 }
-.form-control:focus{
-    border-bottom: solid #green 10px;
-    box-shadow:None;
+
+.form-control:focus {
+    border-bottom: solid 10px;
+    box-shadow: None;
 }
 
 .title {
     font-weight: bold;
     font-size: 2em;
 }
+
 .description {
     font-weight: italic;
     font-size: 1.7em;
 }
-h6 a,h6 a:hover{
+
+h6 a,
+h6 a:hover {
     color: $ah-primary-color;
 }
-.editLink a,.footer a{
+
+.editLink a,
+.footer a {
     color: $ah-secondary-text-color;
 }
