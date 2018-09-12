@@ -18,5 +18,5 @@ urlpatterns = [
     path('articles/<str:pk>', ArticleDetailsView.as_view(),
          name='retrieveUpdateDelete'),
     path('articles/<str:slug>/rate/', ArticleRatingAPIView.as_view(),
-         name='create'),
+         name='rate'),
 ]
