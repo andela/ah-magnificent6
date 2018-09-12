@@ -7,6 +7,10 @@ install:
   - pip install coverage
 services:
   - postgresql
+  
+addons:
+  postgresql: "9.4"
+
 before_script:
   - psql -c "CREATE DATABASE test;" -U postgres
 script:
