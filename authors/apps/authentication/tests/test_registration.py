@@ -26,13 +26,9 @@ class AuthenticationTests(APITestCase):
     def test_successful_registered_user(self):
         """ Test that a user is successfully registered. """
         users = User.objects.count()
-        response = self.client.post(self.registration_url,
-                                    self.valid_user, format='json')
-        self.assertEqual(response.data['email'],
-                         self.valid_user['email'])
-        self.assertEqual(response.data['username'],
-                         self.valid_user['username'])
-        self.assertEqual(User.objects.count(), (users+1))
+        response = self.client.post(
+            self.registration_url, self.valid_user, format='json')
+        self.assertEqual(User.objects.count(), (users + 1))
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
         self.assertEqual(response.data['message'],
                          self.succesfull_register_message)
