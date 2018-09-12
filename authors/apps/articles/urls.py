@@ -17,6 +17,6 @@ urlpatterns = [
     path('articles/', ArticleAPIView.as_view(), name='create'),
     path('articles/<str:pk>', ArticleDetailsView.as_view(),
          name='retrieveUpdateDelete'),
-    path('articles/rate/<str:slug>', ArticleRatingAPIView.as_view(),
+    path('articles/<str:slug>/rate/', ArticleRatingAPIView.as_view(),
          name='create'),
 ]
