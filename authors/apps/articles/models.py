@@ -21,7 +21,9 @@ class Article(models.Model):
     published_at = models.DateTimeField(auto_now=True)
     slug = models.SlugField(unique=True, editable=False, max_length=140)
     favourited = models.ManyToManyField(User, related_name='favourited',
-                                       blank=True)
+                                        blank=True)
+    rating_average = models.DecimalField(
+        max_digits=3, decimal_places=2, blank=True, null=True)
     image = models.ImageField(
         upload_to='static/images', default='static/images/no-img.jpg')
 
