@@ -13,8 +13,6 @@ from django.conf import settings
 from django.contrib.sites.shortcuts import get_current_site
 from django.core.mail import send_mail
 
-from .models import User
-
 from authors.apps.core.mailer import SendMail
 from .models import User
 from .renderers import UserJSONRenderer
@@ -22,15 +20,15 @@ from .serializers import (
     LoginSerializer, RegistrationSerializer, UserSerializer, ForgotPasswordSerializer, 
     ResetPasswordSerializer, SocialLoginSerializer
 )
-from .backends import generate_jwt_token
-from .models import User
-
 
 # social authentication packages
 from requests.exceptions import HTTPError
 from social_django.utils import load_strategy, load_backend
 from social_core.exceptions import MissingBackend
 from social.backends.oauth import BaseOAuth1, BaseOAuth2
+
+from .backends import generate_jwt_token
+from .models import User
 
 
 class RegistrationAPIView(generics.CreateAPIView):
@@ -51,27 +49,11 @@ class RegistrationAPIView(generics.CreateAPIView):
 
     def post(self, request):
         # Separate requests
-<<<<<<< HEAD
         email, username, password = request.data.get('email', None), request.data.get('username', None),\
                                     request.data.get('password', None)
-=======
-        email, username, password = request.data.get('email', None)\
-                                    , request.data.get('username', None)\
-                                    , request.data.get('password', None)
-
-        user = {
-            "email":email, 
-            "username":username,
-            "password":password
-        }
-
-<<<<<<< HEAD
-<<<<<<< HEAD
->>>>>>> [Feature #159965298] Make documenation root path
 
         user = {"email": email, "username": username, "password": password}
-=======
->>>>>>> [Feature #159965298] Refactor tests
+
         """
         The create serializer, validate serializer, save serializer pattern
         below is common and you will see it a lot throughout this course and
