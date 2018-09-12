@@ -22,6 +22,9 @@ class ArticleDeleteUpdateTests(Base):
         """
         Tests that a client can delete a specific article
         """
+        res = self.client.post(
+            self.article_url, self.article_data, format="json", **self.headers)
+        id = res.data['id']
         response = self.client.delete(
             self.retrieve_update_delete_url,
             format="json", **self.headers)
@@ -47,7 +50,7 @@ class ArticleDeleteUpdateTests(Base):
                                     format='json')
         headers = {'HTTP_AUTHORIZATION': 'Bearer {}'.format(
             response.data['token'])}
-        self.client.post(self.article_url, self.article_data,
+        res = self.client.post(self.article_url, self.article_data,
                          format="json", **headers)
         response = self.client.delete(self.retrieve_update_delete_url,
                                       format="json",
