@@ -8,7 +8,7 @@ Django==2.1
 django-cors-middleware==1.3.1
 django-environ==0.4.5
 django-extensions==2.1.2
-django-rest-swagger==2.2.0
+django-rest-swagger==2.1.0
 djangorestframework==3.8.2
 gunicorn==19.9.0
 idna==2.7
@@ -33,7 +33,10 @@ six==1.10.0
 uritemplate==3.0.0
 urllib3==1.23
 whitenoise==4.0
+<<<<<<< HEAD
 python-social-auth==0.3.6
+=======
+>>>>>>> [Feature #160445583] Downgrade django_rest_framework_swagger
 six==1.10.0
 social-auth-app-django==2.1.0
 social-auth-core==1.7.0
