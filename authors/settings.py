@@ -148,6 +148,9 @@ STATICFILES_DIRS = (
 
 # whitenoise serving static files.
 STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
+MEDIA_URL = '/media/'
+
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
 CORS_ORIGIN_WHITELIST = (
     '0.0.0.0:4000',

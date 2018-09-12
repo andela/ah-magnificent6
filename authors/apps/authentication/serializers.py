@@ -8,6 +8,7 @@ from django.core.mail import send_mail
 from django.contrib.auth.tokens import default_token_generator
 from .models import User
 from .backends import generate_jwt_token
+from authors.apps.profiles.serializers import ProfileSerializer
 
 
 class RegistrationSerializer(serializers.ModelSerializer):
@@ -181,9 +182,11 @@ class UserSerializer(serializers.ModelSerializer):
         write_only=True
     )
 
+    profile = ProfileSerializer()
+
     class Meta:
         model = User
-        fields = ('email', 'username', 'password')
+        fields = ('email', 'username', 'password', 'profile')
 
         """
         The `read_only_fields` option is an alternative for explicitly
@@ -206,6 +209,7 @@ class UserSerializer(serializers.ModelSerializer):
         `validated_data` dictionary before iterating over it.
         """
         password = validated_data.pop('password', None)
+        profile_data = validated_data.pop('profile')
 
         for (key, value) in validated_data.items():
             """
@@ -213,6 +217,13 @@ class UserSerializer(serializers.ModelSerializer):
             the current `User` instance one at a time.
             """
             setattr(instance, key, value)
+        
+        for (key, value) in profile_data.items():
+            """
+            For the keys in `profile_data`, we will set them on
+            the current `User` instance one at a time.
+            """
+            setattr(instance.profile, key, value)
 
         if password is not None:
             """
