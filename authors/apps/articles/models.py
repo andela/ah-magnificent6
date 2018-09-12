@@ -1,5 +1,7 @@
 from django.db import models
 from django.utils.text import slugify
+from django.core.validators import MinValueValidator, MaxValueValidator
+
 from authors.apps.authentication.models import User
 import uuid
 
@@ -44,13 +46,7 @@ class ArticleRating(models.Model):
     Article schema
     """
 
-    article_id = models.ForeignKey(Article, on_delete=models.CASCADE)
-    user_id = models.ForeignKey(User, on_delete=models.CASCADE)
-    rating = models.IntegerField(default=0)
-
-    class Meta:
-        """
-        Make the article and user id combination unique so that a user can only
-        rate an article once
-        """
-        unique_together = ('article_id', 'user_id')
+    article = models.ForeignKey(Article, on_delete=models.CASCADE)
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    rating = models.IntegerField(
+        validators=[MinValueValidator(1), MaxValueValidator(5)])
