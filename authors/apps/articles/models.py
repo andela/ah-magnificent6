@@ -20,8 +20,8 @@ class Article(models.Model):
     updated_at = models.DateTimeField(auto_now=True)
     published_at = models.DateTimeField(auto_now=True)
     slug = models.SlugField(unique=True, editable=False, max_length=140)
-    favorited = models.NullBooleanField(default=False)
-    favoritesCount = models.IntegerField(default=0)
+    favorited = models.ManyToManyField(User, related_name='favorited',
+                                       blank=True)
     image = models.ImageField(
         upload_to='static/images', default='static/images/no-img.jpg')
 
