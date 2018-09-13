@@ -10,7 +10,7 @@ urlpatterns = [
         ArticleDetailsView.as_view(),
         name='retrieveUpdateDelete'),
     path(
-        '<str:slug>/favorite/',
+        '<str:slug>/favourite/',
         FavoriteArticle.as_view(),
         name='favourite_article'),
 ]

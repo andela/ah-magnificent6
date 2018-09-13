@@ -141,8 +141,8 @@ class ArticleDetailsView(generics.RetrieveUpdateDestroyAPIView):
 
 class FavoriteArticle(generics.ListCreateAPIView):
     """
-    A user is able to favourite an article if had not favourited it.
-    If they had favourited it, thearticle becomes unfavourited.
+    A user is able to favourite an article if thay had not favourited it.
+    If they had favourited it, the article becomes unfavourited.
     """
     permission_classes = (IsAuthenticated, )
     queryset = Article.objects.all()
@@ -150,13 +150,14 @@ class FavoriteArticle(generics.ListCreateAPIView):
 
     def post(self, request, slug):
         """
+        This method handles favouriting and unfavouriting of articles.
         Checks whether the article exists.
         Checks whether the user has favourited the article in order to favourite
         it or unfavourite it if the user had already favourited it.
         """
         try:
             article = Article.objects.get(slug=slug)
-        except Exception:
+        except ObjectDoesNotExist:
             response = {
                 "message": "The article does not exist",
             }
@@ -166,14 +167,15 @@ class FavoriteArticle(generics.ListCreateAPIView):
         if user in article.favorited.all():
             # User has already favourited it, unfavourites the article
             article.favorited.remove(user.id)
-
             serializer = self.get_serializer(article)
-            response = {"article": serializer.data}
+            message = "You have successfully unfavourited this article"
+            response = {"message": message, "article": serializer.data}
             return Response(response, status=status.HTTP_200_OK)
 
         else:
             # Favourites the article
             article.favorited.add(user.id)
             serializer = self.get_serializer(article)
-            response = {"article": serializer.data}
+            message = "You have successfully favourited this article"
+            response = {"message": message, "article": serializer.data}
             return Response(response, status=status.HTTP_200_OK)
