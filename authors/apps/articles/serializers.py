@@ -41,4 +41,4 @@ class ArticleSerializer(serializers.ModelSerializer):
 
     def get_favorites_count(self, instance):
         """Return the number of users who have favourited the atricle."""
-        return instance.favorited.count()
+        return instance.favourited.count()

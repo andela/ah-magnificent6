@@ -164,9 +164,9 @@ class FavoriteArticle(generics.ListCreateAPIView):
             return Response(response, status=status.HTTP_404_NOT_FOUND)
         user = request.user
 
-        if user in article.favorited.all():
+        if user in article.favourited.all():
             # User has already favourited it, unfavourites the article
-            article.favorited.remove(user.id)
+            article.favourited.remove(user.id)
             serializer = self.get_serializer(article)
             message = "You have successfully unfavourited this article"
             response = {"message": message, "article": serializer.data}
@@ -174,7 +174,7 @@ class FavoriteArticle(generics.ListCreateAPIView):
 
         else:
             # Favourites the article
-            article.favorited.add(user.id)
+            article.favourited.add(user.id)
             serializer = self.get_serializer(article)
             message = "You have successfully favourited this article"
             response = {"message": message, "article": serializer.data}
