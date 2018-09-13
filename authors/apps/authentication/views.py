@@ -6,12 +6,10 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 
 from django.contrib.auth.tokens import default_token_generator
-from django.contrib.sites.shortcuts import get_current_site
 from django.conf import settings
 from django.contrib.sites.shortcuts import get_current_site
 from django.core.mail import send_mail
 
-from .models import User
 
 from authors.apps.core.mailer import SendMail
 from .renderers import UserJSONRenderer
