@@ -64,6 +64,3 @@ class ArticleDeleteUpdateTests(Base):
                                    **self.headers)
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(response.data['body'], self.article_data['body'])
-
-    def test(self):
-        pass
