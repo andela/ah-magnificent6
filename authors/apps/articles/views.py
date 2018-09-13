@@ -221,7 +221,7 @@ class ArticleRatingAPIView(generics.ListCreateAPIView):
                 'We see what you did there {}. Sorry, but you cannot rate your '
                 'own article.'.format(wink_emoji)
             }
-            return Response(data, status.HTTP_201_CREATED)
+            return Response(data, status.HTTP_403_FORBIDDEN)
 
         article_rating = {
             'article': article.id,

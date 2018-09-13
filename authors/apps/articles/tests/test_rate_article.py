@@ -11,8 +11,26 @@ class ArticleRatingTests(Base):
     def setUp(self):
         """ Set up test environment"""
         super().setUp()
+        # Log in/ register a new user and use this user's credentials to
+        # post an article.
+        user_data = {
+            "username": "new_user",
+            "email": "user@gmail.com",
+            "password": "kamila1990",
+        }
+        user_register = self.client.post(self.registration_url, user_data,
+                                         format='json')
+        token = generate_jwt_token(user_data['username'])
+        self.client.get(
+            reverse("authentication:activate_user", args=[token]))
+        response = self.client.post(self.login_url, user_data,
+                                    format='json')
+        self.author_headers = {'HTTP_AUTHORIZATION': 'Bearer {}'.format(
+            response.data['token'])}
+
         self.res = self.client.post(self.article_url, self.article_data,
-                                    format="json", **self.headers)
+                                    format="json", **self.author_headers)
+
         self.slug = self.res.data['slug']
 
         self.violate_max_value_error_message = \
@@ -26,6 +44,10 @@ class ArticleRatingTests(Base):
 
         self.non_existent_article_message = \
             'That article does not exist'
+
+        wink_emoji = u"\U0001F609"
+        self.rate_own_article_error_message = \
+            f'We see what you did there {wink_emoji}. Sorry, but you cannot rate your own article.'
 
     def tearDown(self):
         """ Tear dowm test environment"""
@@ -116,3 +138,16 @@ class ArticleRatingTests(Base):
         self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
         self.assertEqual(response.data['message'],
                          self.non_existent_article_message)
+
+    def test_unsuccessful_rating_of_own_article(self):
+        """
+        Tests if a user can rate a non existent article
+        """
+        response = self.client.post(
+            reverse('articles:rate', kwargs={'slug': self.slug}),
+            {'rating': None},
+            format="json",
+            **self.author_headers)
+        self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
+        self.assertEqual(response.data['message'],
+                         self.rate_own_article_error_message)
