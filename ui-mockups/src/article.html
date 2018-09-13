@@ -62,13 +62,13 @@
                             "There is no one who loves pain itself, who seeks after it and wants to have it, simply because it is pain..."
                             "There is no one who loves pain itself, who seeks after it and wants to have it, simply because it is pain..."
                             "There is no one who loves pain itself, who seeks after it and wants to have it, simply because it is pain..."
-                            
+
                             "There is no one who loves pain itself, who seeks after it and wants to have it, simply because it is pain..."
                             "There is no one who loves pain itself, who seeks after it and wants to have it, simply because it is pain..."
                             "There is no one who loves pain itself, who seeks after it and wants to have it, simply because it is pain..."
                             "There is no one who loves pain itself, who seeks after it and wants to have it, simply because it is pain..."
                             "There is no one who loves pain itself, who seeks after it and wants to have it, simply because it is pain..."
-                            
+
                             "There is no one who loves pain itself, who seeks after it and wants to have it, simply because it is pain..."
                             "There is no one who loves pain itself, who seeks after it and wants to have it, simply because it is pain..."
                             "There is no one who loves pain itself, who seeks after it and wants to have it, simply because it is pain..."
@@ -77,6 +77,10 @@
                         </div>
 
                     </div>
+                    <div class="clear"></div>
+                        <div id=favourite>
+                            <i id=fav class="far fa-heart far-w-15 far-2x"> Favourite this article </i>
+                        </div>
                 </div>
             </div>
         </div>
@@ -155,16 +159,26 @@
         </div>
     </div>
     <script>
-    let followUnfollowBtn = document.getElementById('ah-follow-unfollow-btn')
-    followUnfollowBtn.addEventListener('click', function(){
-            if (followUnfollowBtn.innerText === 'Follow'){
-                followUnfollowBtn.innerText = 'Unfollow'
-            }
-            else{
-                followUnfollowBtn.innerText = 'Follow'
-            }
+        let followUnfollowBtn = document.getElementById('ah-follow-unfollow-btn')
+        followUnfollowBtn.addEventListener('click', function(){
+                if (followUnfollowBtn.innerText === 'Follow'){
+                    followUnfollowBtn.innerText = 'Unfollow'
+                }
+                else{
+                    followUnfollowBtn.innerText = 'Follow'
+                }
 
-        })
+            })
+        let fav = document.getElementById('fav')
+        let button = document.getElementById('favourite')
+            button.addEventListener('click', function () {
+                if (fav.innerText === 'Favourite this article') {
+                    fav.innerText = 'Unfavourite this article'
+                }
+                else {
+                    fav.innerText = 'Favourite this article'
+                }
+            })
     </script>
     <script src="https://use.fontawesome.com/11.4875c9fa.js"></script>
     <script src="js/jquery.min.js" async defer></script>
