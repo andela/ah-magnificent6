@@ -5,7 +5,7 @@ from authors.apps.authentication.models import User
 from django.core import mail
 from rest_framework.test import APIRequestFactory
 from django.urls import reverse
-from authors.apps.authentication.backends import generate_jwt_token
+from authors.apps.authentication.backends import generate_jwt_token, JWTAuthentication
 
 
 class VerifyTestCase(TestCase):
@@ -38,6 +38,13 @@ class VerifyTestCase(TestCase):
         user = User.objects.get(username=self.user['username'])
         self.assertTrue(user.is_active)
         self.assertEqual(response.status_code, status.HTTP_200_OK)
+
+    def test_non_existing_user_token(self):
+        """Test unsuccessful token verification."""
+        token = generate_jwt_token('username')
+        response = JWTAuthentication()
+        self.assertEqual(
+            response.authenticate_credentials(token), (None, None))
 
     def test_invalid_activation_link(self):
         """Test invalid activation link."""
