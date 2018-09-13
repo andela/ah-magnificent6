@@ -283,9 +283,7 @@ class ArticleLikes(generics.ListCreateAPIView):
         likes = None
         # Let's check whether the article requested exists in our
         # database and retrieve it
-        print("article here")
-        article = self.get_object(slug=slug)
-        print("article")
+        article = self.get_object(slug)
         try:
             likes = Likes.objects.get(user=request.user.id, article=article)
         except ObjectDoesNotExist:
