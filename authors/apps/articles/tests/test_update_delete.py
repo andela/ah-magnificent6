@@ -7,13 +7,13 @@ from authors.apps.authentication.backends import generate_jwt_token
 class ArticleDeleteUpdateTests(Base):
     def setUp(self):
         super().setUp()
+
         response = self.client.post(
             self.article_url, self.article_data, format="json", **self.headers)
         self.article_id = response.data['id']
+
         self.retrieve_update_delete_url = reverse(
             'articles:retrieveUpdateDelete', kwargs={'pk': self.article_id})
-        self.non_existing_article_url = reverse(
-            'articles:retrieveUpdateDelete', kwargs={'pk': -1})
 
     def tearDown(self):
         super().tearDown()
