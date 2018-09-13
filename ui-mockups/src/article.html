@@ -36,7 +36,7 @@
                     <div class="card-body">
                         <h1 class="card-title">Article title: Some quick example text to build on the card title</h1>
                         <small>
-                            <a class="ah-author-link" href="#">Meshack Mbuvi</a>
+                            <a class="ah-author-link" href="#">Meshack Mbuvi</a> <button id="ah-follow-unfollow-btn" class="btn btn-sm btn-outline-success ml-2 mb-2">Follow</button>
                         </small>
                         <p class="card-text d-flex justify-content-between">
                             <span class="text-muted">Article description: Some quick example text to build on the article description.
@@ -161,3 +161,15 @@
 </body>
 
 </html>
+<script>
+    let followUnfollowBtn = document.getElementById('ah-follow-unfollow-btn')
+    followUnfollowBtn.addEventListener('click', function(){
+            if (followUnfollowBtn.innerText === 'Follow'){
+                followUnfollowBtn.innerText = 'Unfollow'
+            }
+            else{
+                followUnfollowBtn.innerText = 'Follow'
+            }
+
+        })
+</script>
