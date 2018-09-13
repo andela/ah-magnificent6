@@ -43,7 +43,9 @@ class Article(models.Model):
 
 class ArticleRating(models.Model):
     """
-    Article schema
+    Article schema.
+    Article rating is done on a scale of 1-5 thus, the rating field will have a
+    minimum value validator of 1 and a maximum value validator of 5
     """
 
     article = models.ForeignKey(Article, on_delete=models.CASCADE)
