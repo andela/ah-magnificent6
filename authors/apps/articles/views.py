@@ -231,4 +231,9 @@ class ArticleRatingAPIView(generics.ListCreateAPIView):
         article.rating_average = q['rating__avg']
         article.save(update_fields=['rating_average'])
 
-        return Response(serializer.data, status.HTTP_201_CREATED)
+        data = {
+            "message":
+            "Thank you for taking time to rate this article."
+        }
+
+        return Response(data, status.HTTP_201_CREATED)
