@@ -34,7 +34,7 @@ class Base(APITestCase):
         }
         self.article_url = reverse('articles:create')
         self.retrieve_update_delete_url = reverse(
-            'articles:retrieveUpdateDelete', kwargs={'pk': 1})
+            'articles:retrieveUpdateDelete', kwargs={'slug': 'bkjgjkgkgk'})
 
     def tearDown(self):
         self.user_data = None

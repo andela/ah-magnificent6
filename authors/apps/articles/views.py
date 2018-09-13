@@ -3,7 +3,10 @@ This module defines views used in CRUD operations on articles.
 """
 from rest_framework import generics, status
 from rest_framework.response import Response
-from rest_framework.permissions import AllowAny, IsAuthenticatedOrReadOnly, IsAuthenticated
+from rest_framework.permissions import (
+    AllowAny, IsAuthenticatedOrReadOnly, IsAuthenticated
+)
+from rest_framework.views import APIView
 from django.db.models import Avg
 from django.core.exceptions import ObjectDoesNotExist
 from django.views.generic import ListView
@@ -13,10 +16,12 @@ from rest_framework import authentication
 
 # Add pagination
 from rest_framework.pagination import PageNumberPagination
-
 from .renderers import ArticleJSONRenderer
-from .serializers import ArticleSerializer, ArticleRatingSerializer
-from .models import Article, ArticleRating
+from .serializers import (
+    ArticleSerializer, ArticleRatingSerializer, LikesSerializer
+)
+from .models import Article, ArticleRating, Likes
+
 
 class ArticleAPIView(generics.ListCreateAPIView):
     """
@@ -37,7 +42,7 @@ class ArticleAPIView(generics.ListCreateAPIView):
         Creates an article
         :params HttpRequest: a post request with article data sent by clients
         to create a new article.
-        :return:returns a successfully created article
+        :return aricleObject:returns a successfully created article
         """
         # Retrieve article data from the request object and convert it
         # to a kwargs object
@@ -66,19 +71,19 @@ class ArticleDetailsView(generics.RetrieveUpdateDestroyAPIView):
     renderer_classes = (ArticleJSONRenderer,)
     permission_classes = (IsAuthenticatedOrReadOnly,)
 
-    def get_object(self, pk):
+    def get_object(self, slug):
         try:
-            return Article.objects.get(pk=pk)
+            return Article.objects.get(slug=slug)
         except ObjectDoesNotExist:
             return None
 
-    def get(self, request, pk):
+    def get(self, request, slug):
         """
         Retrieve a specific article from the database given it's article id.
         :params pk: an id of the article to retrieve
         :returns article: a json data for requested article
         """
-        article = self.get_object(pk)
+        article = self.get_object(slug)
         if article:
             serializer = self.serializer_class(article)
             return Response(serializer.data, status.HTTP_200_OK)
@@ -88,7 +93,7 @@ class ArticleDetailsView(generics.RetrieveUpdateDestroyAPIView):
                 'error': 'Article with given id does not exist'
             }, status.HTTP_404_NOT_FOUND)
 
-    def delete(self, request, pk):
+    def delete(self, request, slug):
         """
         Delete a given article.
         :params pk: an id of the article to be deleted
@@ -96,7 +101,8 @@ class ArticleDetailsView(generics.RetrieveUpdateDestroyAPIView):
         :returns dict: a json object containing message to indicate that the
         article has been deleted
         """
-        article = self.get_object(pk)
+        permission_classes = (IsAuthenticated, )
+        article = self.get_object(slug)
         if not article:
             # return error message for non-existing article
             return Response({
@@ -107,7 +113,7 @@ class ArticleDetailsView(generics.RetrieveUpdateDestroyAPIView):
             article.delete()
             return Response(
                 {
-                    'message': "Article with id={} deleted".format(int(pk))
+                    'message': "Article deleted successfully"
                 }, status.HTTP_200_OK)
         else:
             # prevent a user from deleting an article s/he does not own
@@ -117,31 +123,32 @@ class ArticleDetailsView(generics.RetrieveUpdateDestroyAPIView):
                 to other users.'
             }, status.HTTP_403_FORBIDDEN)
 
-    def put(self, request, pk):
+    def put(self, request, slug):
         """
         Update a single article
-        :params pk: an id for the article to be updated
+        :params str slug: a slug for the article to be updated
                 request: a request object with new data for the article
         """
-        article = self.get_object(pk)
-        if not article:
+    permission_classes = (IsAuthenticated, )
+    article = self.get_object(slug)
+    if not article:
             # Tell client we have not found the requested article
-            return Response({
-                'error': 'Article with given id does not exist'
-            }, status.HTTP_404_NOT_FOUND)
-        # check whether user owns this article and proceed if they do
-        if article.author.id == request.user.id:
-            request.data['author'] = request.user.id
-            serializer = self.serializer_class(article, data=request.data)
-            serializer.is_valid(raise_exception=True)
-            serializer.save()
-            return Response(serializer.data, status.HTTP_200_OK)
-        else:
-            # prevent a user from updating an article s/he does not own
-            return Response(
-                {
-                    'error': 'You cannot edit an article you do not own. '
-                }, status.HTTP_403_FORBIDDEN)
+        return Response({
+            'error': 'Article with given id does not exist'
+        }, status.HTTP_404_NOT_FOUND)
+    # check whether user owns this article and proceed if they do
+    if article.author.id == request.user.id:
+        request.data['author'] = request.user.id
+        serializer = self.serializer_class(article, data=request.data)
+        serializer.is_valid(raise_exception=True)
+        serializer.save()
+        return Response(serializer.data, status.HTTP_200_OK)
+    else:
+        # prevent a user from updating an article s/he does not own
+        return Response(
+            {
+                'error': 'You cannot edit an article you do not own. '
+            }, status.HTTP_403_FORBIDDEN)
 
 
 class FavoriteArticle(generics.CreateAPIView):
@@ -248,3 +255,95 @@ class ArticleRatingAPIView(generics.ListCreateAPIView):
         }
 
         return Response(data, status.HTTP_201_CREATED)
+
+
+class ArticleLikes(generics.ListCreateAPIView):
+    serializer_class = LikesSerializer
+
+    def get_object(self, slug):
+        try:
+            return Article.objects.get(slug=slug)
+        except ObjectDoesNotExist:
+            return None
+
+    def post(self, request, slug):
+        # Let's check whether we have the correct payload before doing any
+        # database transaction since they are very expensive to us.
+        # This variable, `like`, holds user intention which can be a
+        # like or dislike
+        like = request.data.get('like', None)
+        if like is None or type(like) != type(True):
+            return Response(
+                {'message':
+                 'You must indicate whether you like or dislike the article'
+                 },
+                status.HTTP_400_BAD_REQUEST)
+        # we continue now since we are sure we have a valid payload
+        # Check whether user has already like or dislike this article
+        likes = None
+        # Let's check whether the article requested exists in our
+        # database and retrieve it
+        print("article here")
+        article = self.get_object(slug=slug)
+        print("article")
+        try:
+            likes = Likes.objects.get(user=request.user.id, article=article)
+        except ObjectDoesNotExist:
+            # let's do nothing here since we are only checking whether user has
+            # liked or disliked this article
+            pass
+        # Alert user if article does not exist
+        if not article:
+            return Response(
+                {
+                    'message': 'Article requested does not exist'
+                }, status.HTTP_404_NOT_FOUND
+            )
+        new_like = {
+            'article': article.id,
+            'user': request.user.id,
+            'like': like
+        }
+        # If there is a record for this article and the current user in the
+        # system, we modify it instead of creating a new one.
+        if likes:
+            # user had liked the article but now wants to dislike it
+            if likes.like and not like:
+                article.likesCount = article.likesCount - 1
+                article.DislikesCount = article.DislikesCount + 1
+            # user had disliked this article but now wants to like it
+            elif not likes.like and like:
+                article.likesCount = article.likesCount + 1
+                article.DislikesCount = article.DislikesCount - 1
+            # elif likes.like and like
+            else:
+                # User can only like an article once
+                return Response(
+                    {
+                        'message': 'You can only like an article once'
+                    }, status.HTTP_403_FORBIDDEN
+                )
+            # save the new value/state of the article
+            article.save()
+            # There is no need to create a new record; edit the existing one
+            likes.like = like
+            likes.save()
+        else:
+            # We don't need to do any more operations here
+            # because this is user's first time to see this article
+            serializer = self.serializer_class(data=new_like)
+            serializer.is_valid(raise_exception=True)
+            serializer.save()
+            # update likes count or dislikes count for the article
+            if like:
+                article.likesCount = article.likesCount + 1
+            else:
+                article.DislikesCount = article.DislikesCount + 1
+            # save the new state of our article
+            article.save()
+        # Tell user we are successful
+        return Response(
+            {
+                'message': 'Operation succeded'
+            }, status.HTTP_201_CREATED
+        )

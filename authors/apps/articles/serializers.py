@@ -1,8 +1,12 @@
 from rest_framework import serializers
 from rest_framework.validators import UniqueTogetherValidator
+<<<<<<< HEAD
 
 
 from .models import Article, ArticleRating
+=======
+from .models import Article, Likes
+>>>>>>> [feat]: like or dislike an article
 from ..authentication.models import User
 from ..authentication.serializers import UserSerializer
 
@@ -45,6 +49,7 @@ class ArticleSerializer(serializers.ModelSerializer):
     def get_favorites_count(self, instance):
         """Return the number of users who have favourited the atricle."""
         return instance.favourited.count()
+<<<<<<< HEAD
 
 
 class ArticleRatingSerializer(serializers.ModelSerializer):
@@ -93,3 +98,22 @@ class ArticleRatingSerializer(serializers.ModelSerializer):
                         validated_data=validated_data)
 
         return article_rating_object
+=======
+        """
+        Declare all fields we need to be returned from the model of articles
+        """
+        fields = '__all__'
+
+
+class LikesSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Likes
+        fields = '__all__'
+        validators = [
+            UniqueTogetherValidator(
+                queryset=Likes.objects.all(),
+                fields=('article', 'user'),
+                message='Sorry, you have already liked this article'
+            )
+        ]
+>>>>>>> [feat]: like or dislike an article
