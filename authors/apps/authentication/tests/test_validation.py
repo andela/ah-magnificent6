@@ -25,7 +25,7 @@ class VerifyTestCase(TestCase):
     def test_email_sent(self):
         """Test if email has been sent and has verification content."""
         response = self.client.post(
-            '/api/users/signup/', self.user, format='json')
+            self.registration_url, self.user, format='json')
         self.assertEqual(len(mail.outbox), 1)
 
     def test_account_is_verified(self):
