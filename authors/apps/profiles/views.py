@@ -8,8 +8,6 @@ from rest_framework.response import Response
 from .models import Profile
 from .renderers import ProfileJSONRenderer
 from .serializers import ProfileSerializer
-from authors.apps.authentication.serializers import UserSerializer
-from authors.apps.authentication.models import User
 
 
 class FollowAPIView(APIView):
@@ -28,7 +26,7 @@ class FollowAPIView(APIView):
     serializer_class = ProfileSerializer
 
     def post(self, request, username):
-        """ This method enables a user to follow another user """
+        """ Follow  """
 
         # current user
         follower = request.user.profile
@@ -50,7 +48,7 @@ class FollowAPIView(APIView):
         return Response(data=serialize.data, status=status.HTTP_200_OK)
 
     def delete(self, request, username):
-        """ This method enables a user to un-follow another user """
+        """ un-follow """
 
         # current user
         follower = request.user.profile
@@ -72,7 +70,7 @@ class FollowAPIView(APIView):
 
 
 class FollowersAPIView(APIView):
-    """ This class contains method that retrieve all following users
+    """ This class contains a method to get all followers
     Get:
     Followers
 
@@ -81,7 +79,7 @@ class FollowersAPIView(APIView):
     serializer_class = ProfileSerializer
 
     def get(self, request, username):
-        """ This method get a user followers"""
+        """ Followers """
 
         user = request.user.profile
         profile = Profile.objects.get(user__username=username)
@@ -93,13 +91,17 @@ class FollowersAPIView(APIView):
 
 
 class FollowingAPIView(APIView):
-    """ This class contains method that retrieve all following user"""
+    """ This class contains a method to get all following users
+    Get:
+    Following
+     """
+
     permission_classes = (IsAuthenticated,)
 
     serializer_class = ProfileSerializer
 
     def get(self, request, username):
-        """ This method gets all following users"""
+        """ Following """
 
         user = request.user.profile
         profile = Profile.objects.get(user__username=username)
