@@ -81,6 +81,9 @@ class ProfileTests(APITestCase):
         self.assertEqual(len(follow_response.data), 12)
         self.assertEqual(follow_response.status_code, status.HTTP_200_OK)
 
+        follow_self_response = self.client.post(reverse('profiles:follow', kwargs={"username": self.user_data["username"]}), **headers)
+        self.assertIn("You cannot follow yourself", str(follow_self_response.data))
+
     def test_unfollow_user(self):
         """
         Ensure user can unfollow another user
