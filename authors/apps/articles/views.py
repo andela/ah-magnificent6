@@ -139,9 +139,9 @@ class ArticleDetailsView(generics.RetrieveUpdateDestroyAPIView):
                 }, status.HTTP_403_FORBIDDEN)
 
 
-class FavoriteArticle(generics.ListCreateAPIView):
+class FavoriteArticle(generics.CreateAPIView):
     """
-    A user is able to favourite an article if thay had not favourited it.
+    A user is able to favourite an article if they had not favourited it.
     If they had favourited it, the article becomes unfavourited.
     """
     permission_classes = (IsAuthenticated, )
