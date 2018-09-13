@@ -6,8 +6,15 @@ from django.urls import reverse
 class ArticleTests(Base):
     def setUp(self):
         super().setUp()
-        self.client.post(self.article_url, self.article_data,
-                         format="json", **self.headers)
+        response = self.client.get(
+            self.article_url, format="json", **self.headers)
+        self.initial_count = len(response.data)
+        response = self.client.post(self.article_url, self.article_data,
+                                    format="json", **self.headers)
+        self.article_id = response.data['id']
+        self.retrieve_update_delete_url = reverse(
+            'articles:retrieveUpdateDelete', kwargs={'pk': self.article_id})
+        self.non_existing_article_id = -1
 
     def tearDown(self):
         super().tearDown()
@@ -19,17 +26,16 @@ class ArticleTests(Base):
         response = self.client.get(
             self.article_url, format="json", **self.headers)
         self.assertEqual(response.status_code, status.HTTP_200_OK)
-        self.assertTrue(len(response.data) > 0)
+        self.assertTrue(len(response.data) > self.initial_count)
 
     def test_can_retrieve_a_single_article(self):
         """
         Tests that a client can retrieve a single article
         """
-        response = self.client.get(
-            reverse(
-                'articles:retrieveUpdateDelete', kwargs={'pk': 2}), format="json", **self.headers)
+        response = self.client.get(self.retrieve_update_delete_url,
+                                   format="json", **self.headers)
         self.assertEqual(response.status_code, status.HTTP_200_OK)
-        self.assertTrue(response.data['id'] == 2)
+        self.assertTrue(response.data['id'] == self.article_id)
 
     def test_cannot_retrieve_a_non_existing_article(self):
         """
@@ -37,6 +43,7 @@ class ArticleTests(Base):
         """
         response = self.client.get(
             reverse(
-                'articles:retrieveUpdateDelete', kwargs={'pk': -1}),
+                'articles:retrieveUpdateDelete',
+                kwargs={'pk': self.non_existing_article_id}),
             format="json", **self.headers)
         self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
