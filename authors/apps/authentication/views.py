@@ -205,7 +205,7 @@ class ForgotPasswordAPIView(APIView):
     serializer_class = ForgotPasswordSerializer
 
     def post(self, request):
-        """Captures data entered by user and generates token"""
+        """Forgot password"""
 
         # Query for email in database
         user = User.objects.filter(email=request.data['email']).first()
@@ -241,7 +241,7 @@ class ResetPasswordAPIView(APIView):
     serializer_class = ResetPasswordSerializer
 
     def put(self, request, token):
-        """Captures user data and pass it to serializer class
+        """Reset password
         """
         data = request.data
         data["token"] = token

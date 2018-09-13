@@ -26,7 +26,7 @@ class FollowAPIView(APIView):
     serializer_class = ProfileSerializer
 
     def post(self, request, username):
-        """ Follow  """
+        """Follow"""
 
         # current user
         follower = request.user.profile
@@ -48,7 +48,7 @@ class FollowAPIView(APIView):
         return Response(data=serialize.data, status=status.HTTP_200_OK)
 
     def delete(self, request, username):
-        """ un-follow """
+        """Un-follow"""
 
         # current user
         follower = request.user.profile
@@ -79,7 +79,7 @@ class FollowersAPIView(APIView):
     serializer_class = ProfileSerializer
 
     def get(self, request, username):
-        """ Followers """
+        """Followers"""
 
         user = request.user.profile
         profile = Profile.objects.get(user__username=username)
@@ -101,7 +101,7 @@ class FollowingAPIView(APIView):
     serializer_class = ProfileSerializer
 
     def get(self, request, username):
-        """ Following """
+        """Following"""
 
         user = request.user.profile
         profile = Profile.objects.get(user__username=username)
