@@ -181,6 +181,20 @@ REST_FRAMEWORK = {
     ],
 }
 
+# Swagger settings
+SWAGGER_SETTINGS = {
+    # Not in use so OK to disable on view
+    'USE_SESSION_AUTH': False,
+    # Add JWT authentication support
+    'SECURITY_DEFINITIONS': {
+        'api_key': {
+            'type': 'apiKey',
+            'in': 'header',
+            'name': 'Authorization'
+        }
+    }
+}
+
 #Email_configuration
 EMAIL_USE_TLS = True
 EMAIL_HOST = env('EMAIL_HOST')
