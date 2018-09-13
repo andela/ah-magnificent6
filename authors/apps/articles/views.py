@@ -214,6 +214,15 @@ class ArticleRatingAPIView(generics.ListCreateAPIView):
             }
             return Response(response, status=status.HTTP_404_NOT_FOUND)
 
+        if article.author.id == request.user.id:
+            wink_emoji = u"\U0001F609"
+            data = {
+                'message':
+                'We see what you did there {}. Sorry, but you cannot rate your '
+                'own article.'.format(wink_emoji)
+            }
+            return Response(data, status.HTTP_201_CREATED)
+
         article_rating = {
             'article': article.id,
             'user': request.user.id,
