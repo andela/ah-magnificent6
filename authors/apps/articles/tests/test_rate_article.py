@@ -46,7 +46,7 @@ class ArticleRatingTests(Base):
 
     def test_successful_article_rate_update(self):
         """
-        Tests that a user can rate a specific article
+        Tests that a user can update the rating a specific article
         """
 
         self.client.post(
@@ -66,7 +66,7 @@ class ArticleRatingTests(Base):
 
     def test_unsuccessful_rating_with_negative_rate_value(self):
         """
-        Tests that a user can rate a specific article
+        Tests if a user can rate a specific article with a negative value
         """
         response = self.client.post(
             reverse('articles:rate', kwargs={'slug': self.slug}),
@@ -79,7 +79,7 @@ class ArticleRatingTests(Base):
 
     def test_unsuccessful_rating_with_rate_value_more_than_five(self):
         """
-        Tests that a user can rate a specific article
+        Tests if a user can rate a specific article with a value more than 5
         """
         response = self.client.post(
             reverse('articles:rate', kwargs={'slug': self.slug}),
@@ -92,7 +92,7 @@ class ArticleRatingTests(Base):
 
     def test_unsuccessful_rating_with_empty_rate_value(self):
         """
-        Tests that a user can rate a specific article
+        Tests if a user can rate a specific article with an empty value
         """
         response = self.client.post(
             reverse('articles:rate', kwargs={'slug': self.slug}),
@@ -105,7 +105,7 @@ class ArticleRatingTests(Base):
 
     def test_unsuccessful_rating_of_nonexistent_article(self):
         """
-        Tests that a user can rate a specific article
+        Tests if a user can rate a non existent article
         """
         self.slug = 'fake-slug'
         response = self.client.post(

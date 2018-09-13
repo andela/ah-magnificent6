@@ -5,7 +5,7 @@ from rest_framework.utils.serializer_helpers import ReturnDict
 
 
 class ArticleJSONRenderer(JSONRenderer):
-    """JSONRenderClass for formating Article model data into JSON."""
+    """JSONRenderClass for formatting Article model data into JSON."""
 
     charset = 'utf-8'
 
