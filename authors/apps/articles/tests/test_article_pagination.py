@@ -30,7 +30,7 @@ class PaginationTests(Base):
 
         response = self.client.get(
             self.article_url+'?page=1', format="json", **self.headers)
-        next_url = f"http://testserver{self.article_url}?page=2"
+        next_url = "http://testserver{}?page=2".format(self.article_url)
 
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(response.data['next'], next_url)
