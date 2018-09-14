@@ -14,7 +14,7 @@ from rest_framework import authentication
 from rest_framework.pagination import PageNumberPagination
 
 from .renderers import ArticleJSONRenderer
-from .serializers import ArticleSerializer
+from .serializers import ArticleSerializer, ArticleRatingSerializer
 from .models import Article
 
 class ArticleAPIView(generics.ListCreateAPIView):
@@ -27,7 +27,7 @@ class ArticleAPIView(generics.ListCreateAPIView):
     queryset = Article.objects.all()
     serializer_class = ArticleSerializer
     renderer_classes = (ArticleJSONRenderer,)
-    permission_classes = (AllowAny,)
+    permission_classes = (IsAuthenticatedOrReadOnly,)
     # Apply pagination to view
     pagination_class = PageNumberPagination
 
@@ -63,7 +63,7 @@ class ArticleDetailsView(generics.RetrieveUpdateDestroyAPIView):
     """
     serializer_class = ArticleSerializer
     renderer_classes = (ArticleJSONRenderer,)
-    permission_classes = (IsAuthenticated,)
+    permission_classes = (IsAuthenticatedOrReadOnly,)
 
     def get_object(self, pk):
         try:
