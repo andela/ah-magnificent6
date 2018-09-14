@@ -6,22 +6,18 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 
 from django.contrib.auth.tokens import default_token_generator
-from django.contrib.sites.shortcuts import get_current_site
 from django.conf import settings
 from django.contrib.sites.shortcuts import get_current_site
 from django.core.mail import send_mail
 
-from .models import User
-
 from authors.apps.core.mailer import SendMail
 from .renderers import UserJSONRenderer
 from .serializers import (
-    LoginSerializer, RegistrationSerializer, UserSerializer, ForgotPasswordSerializer, 
+    LoginSerializer, RegistrationSerializer, UserSerializer, ForgotPasswordSerializer,
     ResetPasswordSerializer, SocialLoginSerializer
 )
 from .backends import generate_jwt_token
 from .models import User
-
 
 # social authentication packages
 from requests.exceptions import HTTPError
@@ -31,7 +27,6 @@ from social_django.utils import load_strategy, load_backend
 from social_core.exceptions import MissingBackend
 
 from social.backends.oauth import BaseOAuth1, BaseOAuth2
-
 
 # social authentication packages
 from requests.exceptions import HTTPError
@@ -54,8 +49,8 @@ class RegistrationAPIView(generics.CreateAPIView):
     """
 
     # Allow any user (authenticated or not) to hit this endpoint.
-    permission_classes = (AllowAny, )
-    renderer_classes = (UserJSONRenderer, )
+    permission_classes = (AllowAny,)
+    renderer_classes = (UserJSONRenderer,)
     serializer_class = RegistrationSerializer
 
     def post(self, request):
@@ -63,7 +58,7 @@ class RegistrationAPIView(generics.CreateAPIView):
         email, username, password = request.data.get(
             'email', None), request.data.get('username',
                                              None), request.data.get(
-                                                 'password', None)
+            'password', None)
 
         user = {"email": email, "username": username, "password": password}
         """
@@ -95,7 +90,7 @@ class RegistrationAPIView(generics.CreateAPIView):
         serializer.save()
         data = {
             "message":
-            "Kindly click the link sent to your email to complete registration."
+                "Kindly click the link sent to your email to complete registration."
         }
         return Response(data, status=status.HTTP_201_CREATED)
 
@@ -114,12 +109,11 @@ class LoginAPIView(generics.GenericAPIView):
     get:
     Show appropriate error on get.
     """
-    permission_classes = (AllowAny, )
-    renderer_classes = (UserJSONRenderer, )
+    permission_classes = (AllowAny,)
+    renderer_classes = (UserJSONRenderer,)
     serializer_class = LoginSerializer
 
     def post(self, request):
-
         email, password = request.data.get('email', None), request.data.get(
             'password', None)
 
@@ -154,8 +148,8 @@ class UserRetrieveUpdateAPIView(RetrieveUpdateAPIView):
     update:
     Update user details.
     """
-    permission_classes = (IsAuthenticated, )
-    renderer_classes = (UserJSONRenderer, )
+    permission_classes = (IsAuthenticated,)
+    renderer_classes = (UserJSONRenderer,)
     serializer_class = UserSerializer
 
     def retrieve(self, request, *args, **kwargs):
@@ -207,13 +201,13 @@ class ForgotPasswordAPIView(APIView):
     serializer_class = ForgotPasswordSerializer
 
     def post(self, request):
-        """Captures data entered by user and generates token"""
+        """Forgot password"""
 
         # Query for email in database
         user = User.objects.filter(email=request.data['email']).first()
         if user is None:
             return Response({"message": "The email you entered does not exist"})
-        
+
         # Capture Url of current site and generates token
         current_site_domain = get_current_site(request).domain
         token = default_token_generator.make_token(user)
@@ -222,7 +216,7 @@ class ForgotPasswordAPIView(APIView):
         mail_message = 'Dear ' + user.username + ',\n\n''We received a request to change your password on Authors Haven.\n\n' \
                                                  'Click the link below to set a new password' \
                                                  ' \n http://' + current_site_domain + '/api/reset_password/' + token + '/' \
-                                                                                                                 '\n\nYours\n AuthorsHaven.'
+                                                                                                                        '\n\nYours\n AuthorsHaven.'
         SendMail(subject="Reset Password",
                  message=mail_message,
                  email_from='magnificent6ah@gmail',
@@ -231,6 +225,7 @@ class ForgotPasswordAPIView(APIView):
         output = {"message": "Please confirm your email for further instruction"}
 
         return Response(output, status=status.HTTP_200_OK)
+
 
 class ResetPasswordAPIView(APIView):
     """Reset password view allows any user to access reset password endpoint
@@ -243,7 +238,7 @@ class ResetPasswordAPIView(APIView):
     serializer_class = ResetPasswordSerializer
 
     def put(self, request, token):
-        """Captures user data and pass it to serializer class
+        """Reset password
         """
         data = request.data
         data["token"] = token
@@ -261,7 +256,7 @@ class UserActivationAPIView(APIView):
     is in the database using the username in the token.
     If successful, the user's account is activated.
     """
-    renderer_classes = (UserJSONRenderer, )
+    renderer_classes = (UserJSONRenderer,)
 
     def get(self, request, token):
         try:
@@ -276,6 +271,7 @@ class UserActivationAPIView(APIView):
         return Response(
             data={"message": "Account was verified successfully"},
             status=status.HTTP_200_OK)
+
 
 class SocialLoginView(generics.CreateAPIView):
     """ Allows login through social sites like Google, Twitter and Facebook """
@@ -313,26 +309,26 @@ class SocialLoginView(generics.CreateAPIView):
                     }
                 else:
                     return Response(
-                        {"error": "Provide access token secret"}, status = status.HTTP_400_BAD_REQUEST
+                        {"error": "Provide access token secret"}, status=status.HTTP_400_BAD_REQUEST
                     )
-            
+
             elif isinstance(backend, BaseOAuth2):
                 # Get access token for OAuth2
                 access_token = serializer.data.get("access_token")
 
         except MissingBackend:
-            return Response({"error": "Invalid provider"}, status = status.HTTP_400_BAD_REQUEST)
+            return Response({"error": "Invalid provider"}, status=status.HTTP_400_BAD_REQUEST)
 
         try:
             user = backend.do_auth(access_token, user=authentic_user)
         except BaseException as error:
-            return Response({ "error": str(error) }, status = status.HTTP_400_BAD_REQUEST)
-        
+            return Response({"error": str(error)}, status=status.HTTP_400_BAD_REQUEST)
+
         # Activate user since they have used social auth so no need for email activation
         if not user.is_active:
             user.is_active = True
             user.save()
-        
+
         # Serialize the user.
         serializer = UserSerializer(user)
 
