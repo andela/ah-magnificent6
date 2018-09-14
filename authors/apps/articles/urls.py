@@ -12,9 +12,8 @@ urlpatterns = [
     path('<str:slug>/favourite/',
          FavoriteArticle.as_view(),
          name='favourite_article'),
-    path('articles/', ArticleAPIView.as_view(), name='create'),
-    path('articles/<str:pk>', ArticleDetailsView.as_view(),
+    path('<str:pk>', ArticleDetailsView.as_view(),
          name='retrieveUpdateDelete'),
-    path('articles/<str:slug>/rate/', ArticleRatingAPIView.as_view(),
+    path('<str:slug>/rate/', ArticleRatingAPIView.as_view(),
          name='rate'),
 ]
