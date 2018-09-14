@@ -15,7 +15,7 @@ from rest_framework.pagination import PageNumberPagination
 
 from .renderers import ArticleJSONRenderer
 from .serializers import ArticleSerializer, ArticleRatingSerializer
-from .models import Article
+from .models import Article, ArticleRating
 
 class ArticleAPIView(generics.ListCreateAPIView):
     """
