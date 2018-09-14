@@ -97,5 +97,5 @@ db.sqlite3
 .DS_Store
 .vscode
 
-# node
-ui-mockups/node_modules/
+
+
