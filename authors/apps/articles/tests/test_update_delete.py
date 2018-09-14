@@ -10,18 +10,11 @@ class ArticleDeleteUpdateTests(Base):
 
         response = self.client.post(
             self.article_url, self.article_data, format="json", **self.headers)
-<<<<<<< HEAD
-        self.article_id = response.data['id']
-
-        self.retrieve_update_delete_url = reverse(
-            'articles:retrieveUpdateDelete', kwargs={'pk': self.article_id})
-=======
         self.article_slug = response.data['slug']
         self.retrieve_update_delete_url = reverse(
             'articles:retrieveUpdateDelete', kwargs={'slug': self.article_slug})
         self.non_existing_article_url = reverse(
             'articles:retrieveUpdateDelete', kwargs={'slug': 'afbkjhlhlih'})
->>>>>>> [feat]: like or dislike an article
 
     def tearDown(self):
         super().tearDown()
