@@ -1,5 +1,7 @@
 import jwt
 
+from requests.exceptions import HTTPError
+
 from rest_framework import status, generics
 from rest_framework.generics import RetrieveUpdateAPIView
 from rest_framework.permissions import AllowAny, IsAuthenticated
@@ -11,10 +13,6 @@ from django.conf import settings
 from django.contrib.sites.shortcuts import get_current_site
 from django.core.mail import send_mail
 
-<<<<<<< HEAD
-from authors.apps.core.mailer import SendMail
-=======
->>>>>>> [Feature #159965316] Remove double entry in imports
 from .renderers import UserJSONRenderer
 from .serializers import (
     LoginSerializer, RegistrationSerializer, UserSerializer, ForgotPasswordSerializer,
@@ -23,23 +21,9 @@ from .serializers import (
 
 from .backends import generate_jwt_token
 from .models import User
-<<<<<<< HEAD
-
-# social authentication packages
-from requests.exceptions import HTTPError
-
-from social_django.utils import load_strategy, load_backend
-
-from social_core.exceptions import MissingBackend
-
-from social.backends.oauth import BaseOAuth1, BaseOAuth2
-=======
 from authors.apps.core.mailer import SendMail
->>>>>>> [Feature #159965316] Remove double entry in imports
 
 # social authentication packages
-from requests.exceptions import HTTPError
-
 from social_django.utils import load_strategy, load_backend
 
 from social_core.exceptions import MissingBackend
