@@ -8,7 +8,6 @@ class ArticleTests(Base):
         super().setUp()
         response = self.client.get(
             self.article_url, format="json", **self.headers)
-        print(response)
         self.initial_count = len(response.data["results"])
         response = self.client.post(self.article_url, self.article_data,
                                     format="json", **self.headers)
@@ -26,7 +25,6 @@ class ArticleTests(Base):
         """
         response = self.client.get(
             self.article_url, format="json", **self.headers)
-        print(response.data)
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertTrue(len(response.data["results"]) > self.initial_count)
 
