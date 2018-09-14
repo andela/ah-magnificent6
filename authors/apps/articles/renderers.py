@@ -5,12 +5,13 @@ from rest_framework.utils.serializer_helpers import ReturnDict
 
 
 class ArticleJSONRenderer(JSONRenderer):
+    """JSONRenderClass for formatting Article model data into JSON."""
+
     charset = 'utf-8'
 
     def render(self, data, media_type=None, renderer_context=None):
-        """
-        Return data in json format
-        """
+        """Return data in json format."""
+
         if type(data) == ReturnDict:
             # single article
             return json.dumps({

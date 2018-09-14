@@ -5,7 +5,6 @@ from authors.apps.authentication.models import User
 from authors.apps.authentication.backends import generate_jwt_token
 
 
-
 class Base(APITestCase):
     def setUp(self):
         """

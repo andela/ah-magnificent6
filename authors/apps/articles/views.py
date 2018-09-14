@@ -4,14 +4,17 @@ This module defines views used in CRUD operations on articles.
 from rest_framework import generics, status
 from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated, AllowAny
-from django.core.exceptions import ObjectDoesNotExist
-from .serializers import ArticleSerializer
-from django.views.generic import ListView
-from rest_framework.views import APIView
-from .models import Article
-from .renderers import ArticleJSONRenderer
 from rest_framework.renderers import JSONRenderer
 from rest_framework import authentication
+from rest_framework.views import APIView
+
+from django.core.exceptions import ObjectDoesNotExist
+from django.views.generic import ListView
+from django.db.models import Avg
+
+from .serializers import ArticleSerializer, ArticleRatingSerializer
+from .models import Article, ArticleRating
+from .renderers import ArticleJSONRenderer
 
 
 class ArticleAPIView(generics.ListCreateAPIView):
@@ -179,3 +182,67 @@ class FavoriteArticle(generics.CreateAPIView):
             message = "You have successfully favourited this article"
             response = {"message": message, "article": serializer.data}
             return Response(response, status=status.HTTP_200_OK)
+
+
+class ArticleRatingAPIView(generics.ListCreateAPIView):
+    """
+    get:
+    Retrieve all article ratings
+    post:
+    Create a new article rating
+    """
+    permission_classes = (IsAuthenticated,)
+    queryset = ArticleRating.objects.all()
+    serializer_class = ArticleRatingSerializer
+    renderer_classes = (ArticleJSONRenderer,)
+
+    def post(self, request, slug):
+        """
+        Creates an article rating
+        :params HttpRequest: A post request with article rating data sent by
+        clients to create a new article rating.
+        :return: Returns a successfully created article rating
+        """
+        # Retrieve article rating data from the request object and convert it
+        # to a kwargs object
+        # get user data at this point
+        try:
+            article = Article.objects.get(slug=slug)
+        except Exception:
+            response = {
+                'message': 'That article does not exist'
+            }
+            return Response(response, status=status.HTTP_404_NOT_FOUND)
+
+        if article.author.id == request.user.id:
+            wink_emoji = u"\U0001F609"
+            data = {
+                'message':
+                'We see what you did there {}. Sorry, but you cannot rate your '
+                'own article.'.format(wink_emoji)
+            }
+            return Response(data, status.HTTP_403_FORBIDDEN)
+
+        article_rating = {
+            'article': article.id,
+            'user': request.user.id,
+            'rating': request.data.get('rating', None),
+        }
+        # pass article data to the serializer class, check whether the data is
+        # valid and if valid, save it.
+        serializer = self.serializer_class(data=article_rating)
+        serializer.is_valid(raise_exception=True)
+        serializer.save()
+
+        # Save the average article rating to the Article model
+        q = ArticleRating.objects.filter(
+            article_id=article.id).aggregate(Avg('rating'))
+        article.rating_average = q['rating__avg']
+        article.save(update_fields=['rating_average'])
+
+        data = {
+            "message":
+            "Thank you for taking time to rate this article."
+        }
+
+        return Response(data, status.HTTP_201_CREATED)
