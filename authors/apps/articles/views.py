@@ -3,19 +3,20 @@ This module defines views used in CRUD operations on articles.
 """
 from rest_framework import generics, status
 from rest_framework.response import Response
-from rest_framework.permissions import IsAuthenticated, AllowAny
-from rest_framework.renderers import JSONRenderer
-from rest_framework import authentication
-from rest_framework.views import APIView
-
+from rest_framework.permissions import AllowAny, IsAuthenticatedOrReadOnly, IsAuthenticated
+from django.db.models import Avg
 from django.core.exceptions import ObjectDoesNotExist
 from django.views.generic import ListView
-from django.db.models import Avg
+from rest_framework.views import APIView
+from rest_framework.renderers import JSONRenderer
+from rest_framework import authentication
 
+# Add pagination
+from rest_framework.pagination import PageNumberPagination
+
+from .renderers import ArticleJSONRenderer
 from .serializers import ArticleSerializer, ArticleRatingSerializer
 from .models import Article, ArticleRating
-from .renderers import ArticleJSONRenderer
-
 
 class ArticleAPIView(generics.ListCreateAPIView):
     """
@@ -26,7 +27,10 @@ class ArticleAPIView(generics.ListCreateAPIView):
     """
     queryset = Article.objects.all()
     serializer_class = ArticleSerializer
-    renderer_classes = (ArticleJSONRenderer, )
+    renderer_classes = (ArticleJSONRenderer,)
+    permission_classes = (IsAuthenticatedOrReadOnly,)
+    # Apply pagination to view
+    pagination_class = PageNumberPagination
 
     def post(self, request):
         """
@@ -35,7 +39,6 @@ class ArticleAPIView(generics.ListCreateAPIView):
         to create a new article.
         :return:returns a successfully created article
         """
-        permission_classes = (IsAuthenticated, )
         # Retrieve article data from the request object and convert it
         # to a kwargs object
         # get user data at this point
@@ -60,7 +63,8 @@ class ArticleDetailsView(generics.RetrieveUpdateDestroyAPIView):
     delete:
     """
     serializer_class = ArticleSerializer
-    renderer_classes = (ArticleJSONRenderer, )
+    renderer_classes = (ArticleJSONRenderer,)
+    permission_classes = (IsAuthenticatedOrReadOnly,)
 
     def get_object(self, pk):
         try:
@@ -92,7 +96,6 @@ class ArticleDetailsView(generics.RetrieveUpdateDestroyAPIView):
         :returns dict: a json object containing message to indicate that the
         article has been deleted
         """
-        permission_classes = (IsAuthenticated, )
         article = self.get_object(pk)
         if not article:
             # return error message for non-existing article
@@ -120,7 +123,6 @@ class ArticleDetailsView(generics.RetrieveUpdateDestroyAPIView):
         :params pk: an id for the article to be updated
                 request: a request object with new data for the article
         """
-        permission_classes = (IsAuthenticated, )
         article = self.get_object(pk)
         if not article:
             # Tell client we have not found the requested article
