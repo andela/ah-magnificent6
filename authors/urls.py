@@ -16,9 +16,17 @@ Including another URLconf
 from django.urls import include, path
 from django.contrib import admin
 
+from rest_framework_swagger.views import get_swagger_view
+
+# Create schema view.
+# Responsible for generating and rendering the JSON spec and rendering the UI
+schema_view = get_swagger_view(title="Authors Haven API Documentation")
+
 urlpatterns = [
     path('admin/', admin.site.urls),
-
-    path('api/', include('authors.apps.authentication.urls', namespace='authentication')),
+    path('api/', include('authors.apps.authentication.urls',
+                         namespace='authentication')),
+    path('api/articles/', include('authors.apps.articles.urls', namespace='articles')),
+    path('', schema_view),
+    path('api/profiles/', include('authors.apps.profiles.urls', namespace='profiles')),
 ]
-
