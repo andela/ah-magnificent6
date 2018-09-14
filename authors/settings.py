@@ -46,7 +46,6 @@ INSTALLED_APPS = [
     'django_extensions',
     'rest_framework',
     'rest_framework_swagger',
-    'django_readonly_field',
 
     'authors.apps.authentication',
     'authors.apps.core',
