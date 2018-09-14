@@ -3,11 +3,7 @@ This module defines views used in CRUD operations on articles.
 """
 from rest_framework import generics, status
 from rest_framework.response import Response
-from rest_framework.permissions import IsAuthenticated, AllowAny
-from rest_framework.renderers import JSONRenderer
-from rest_framework import authentication
-from rest_framework.views import APIView
-
+from rest_framework.permissions import AllowAny, IsAuthenticatedOrReadOnly, IsAuthenticated
 from django.core.exceptions import ObjectDoesNotExist
 from django.views.generic import ListView
 from rest_framework.views import APIView
