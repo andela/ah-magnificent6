@@ -23,7 +23,7 @@ class ArticleAPIView(generics.ListCreateAPIView):
     """
     queryset = Article.objects.all()
     serializer_class = ArticleSerializer
-    renderer_classes = (ArticleJSONRenderer,)
+    renderer_classes = (ArticleJSONRenderer, )
 
     def post(self, request):
         """
@@ -32,7 +32,7 @@ class ArticleAPIView(generics.ListCreateAPIView):
         to create a new article.
         :return:returns a successfully created article
         """
-        permission_classes = (IsAuthenticated,)
+        permission_classes = (IsAuthenticated, )
         # Retrieve article data from the request object and convert it
         # to a kwargs object
         # get user data at this point
@@ -57,7 +57,7 @@ class ArticleDetailsView(generics.RetrieveUpdateDestroyAPIView):
     delete:
     """
     serializer_class = ArticleSerializer
-    renderer_classes = (ArticleJSONRenderer,)
+    renderer_classes = (ArticleJSONRenderer, )
 
     def get_object(self, pk):
         try:
@@ -77,10 +77,9 @@ class ArticleDetailsView(generics.RetrieveUpdateDestroyAPIView):
             return Response(serializer.data, status.HTTP_200_OK)
         else:
             # return error message indicating article requested is not found.
-            return Response(
-                {
-                    'error': 'Article with given id does not exist'
-                }, status.HTTP_404_NOT_FOUND)
+            return Response({
+                'error': 'Article with given id does not exist'
+            }, status.HTTP_404_NOT_FOUND)
 
     def delete(self, request, pk):
         """
@@ -90,28 +89,27 @@ class ArticleDetailsView(generics.RetrieveUpdateDestroyAPIView):
         :returns dict: a json object containing message to indicate that the
         article has been deleted
         """
-        permission_classes = (IsAuthenticated,)
+        permission_classes = (IsAuthenticated, )
         article = self.get_object(pk)
         if not article:
             # return error message for non-existing article
-            return Response(
-                {
-                    'error': 'Article with given id does not exist'
-                }, status.HTTP_404_NOT_FOUND)
+            return Response({
+                'error': 'Article with given id does not exist'
+            }, status.HTTP_404_NOT_FOUND)
         # check whether user owns this article before attempting to delete it
         if article.author.id == request.user.id:
             article.delete()
             return Response(
                 {
-                    'message': "Article with id={} deleted" .format(int(pk))
+                    'message': "Article with id={} deleted".format(int(pk))
                 }, status.HTTP_200_OK)
         else:
             # prevent a user from deleting an article s/he does not own
-            return Response(
-                {
-                    'error': 'You cannot delete articles belonging\
+            return Response({
+                'error':
+                'You cannot delete articles belonging\
                 to other users.'
-                }, status.HTTP_403_FORBIDDEN)
+            }, status.HTTP_403_FORBIDDEN)
 
     def put(self, request, pk):
         """
@@ -119,13 +117,13 @@ class ArticleDetailsView(generics.RetrieveUpdateDestroyAPIView):
         :params pk: an id for the article to be updated
                 request: a request object with new data for the article
         """
-        permission_classes = (IsAuthenticated,)
+        permission_classes = (IsAuthenticated, )
         article = self.get_object(pk)
         if not article:
             # Tell client we have not found the requested article
-            return Response(
-                {'error': 'Article with given id does not exist'},
-                status.HTTP_404_NOT_FOUND)
+            return Response({
+                'error': 'Article with given id does not exist'
+            }, status.HTTP_404_NOT_FOUND)
         # check whether user owns this article and proceed if they do
         if article.author.id == request.user.id:
             request.data['author'] = request.user.id
@@ -139,3 +137,45 @@ class ArticleDetailsView(generics.RetrieveUpdateDestroyAPIView):
                 {
                     'error': 'You cannot edit an article you do not own. '
                 }, status.HTTP_403_FORBIDDEN)
+
+
+class FavoriteArticle(generics.CreateAPIView):
+    """
+    A user is able to favourite an article if they had not favourited it.
+    If they had favourited it, the article becomes unfavourited.
+    """
+    permission_classes = (IsAuthenticated, )
+    queryset = Article.objects.all()
+    serializer_class = ArticleSerializer
+
+    def post(self, request, slug):
+        """
+        This method handles favouriting and unfavouriting of articles.
+        Checks whether the article exists.
+        Checks whether the user has favourited the article in order to favourite
+        it or unfavourite it if the user had already favourited it.
+        """
+        try:
+            article = Article.objects.get(slug=slug)
+        except ObjectDoesNotExist:
+            response = {
+                "message": "The article does not exist",
+            }
+            return Response(response, status=status.HTTP_404_NOT_FOUND)
+        user = request.user
+
+        if user in article.favourited.all():
+            # User has already favourited it, unfavourites the article
+            article.favourited.remove(user.id)
+            serializer = self.get_serializer(article)
+            message = "You have successfully unfavourited this article"
+            response = {"message": message, "article": serializer.data}
+            return Response(response, status=status.HTTP_200_OK)
+
+        else:
+            # Favourites the article
+            article.favourited.add(user.id)
+            serializer = self.get_serializer(article)
+            message = "You have successfully favourited this article"
+            response = {"message": message, "article": serializer.data}
+            return Response(response, status=status.HTTP_200_OK)
