@@ -46,6 +46,7 @@ INSTALLED_APPS = [
     'django_extensions',
     'rest_framework',
     'rest_framework_swagger',
+    'django_readonly_field',
 
     'authors.apps.authentication',
     'authors.apps.core',
@@ -101,6 +102,8 @@ WSGI_APPLICATION = 'authors.wsgi.application'
 DATABASES = {
     'default': env.db()
 }
+
+
 
 # Password validation
 # https://docs.djangoproject.com/en/2.1/ref/settings/#auth-password-validators

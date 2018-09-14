@@ -2,12 +2,13 @@ from rest_framework.views import APIView
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.exceptions import NotFound
 from rest_framework.serializers import ValidationError
-from rest_framework import status
+from rest_framework import status, generics
 from rest_framework.response import Response
 
 from .models import Profile
 from .renderers import ProfileJSONRenderer
 from .serializers import ProfileSerializer
+from authors.apps.authentication.serializers import UserSerializer
 
 
 class FollowAPIView(APIView):
@@ -69,7 +70,7 @@ class FollowAPIView(APIView):
         return Response(data=serialize.data, status=status.HTTP_200_OK)
 
 
-class FollowersAPIView(APIView):
+class FollowersAPIView(generics.RetrieveAPIView):
     """ This class contains a method to get all followers
     Get:
     Followers

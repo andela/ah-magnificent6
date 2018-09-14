@@ -20,7 +20,7 @@ class Profile(TimeStampModel):
     phone = models.IntegerField(_('phone'), blank=True, null=True, default=0)
     website = models.URLField(_('website'), blank=True, null=True, default='')
     follows = models.ManyToManyField('self', related_name='followed_by', symmetrical=False)
-    username = models.CharField(_('username'), max_length=100, blank=True, null=True)
+
 
     def __str__(self):
         return self.user.username
@@ -36,6 +36,10 @@ class Profile(TimeStampModel):
 
     def following(self, profile):
         return profile.follows.all()
+
+    @property
+    def get_username(self):
+        return self.user.username
 
 
 """
@@ -59,7 +63,7 @@ def create_profile(sender, **kwargs):
     if kwargs.get('created'):
         user_profile = Profile(user=kwargs.get('instance'))
         user_profile.avatar = gravatar_url(user_profile.user.email)
-        user_profile.username = kwargs.get('instance').username
+        # user_profile.username = kwargs.get('instance').username
         user_profile.save()
 
 
