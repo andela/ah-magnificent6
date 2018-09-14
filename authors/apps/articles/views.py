@@ -10,17 +10,9 @@ from rest_framework.views import APIView
 
 from django.core.exceptions import ObjectDoesNotExist
 from django.views.generic import ListView
-<<<<<<< HEAD
-from django.db.models import Avg
-
-from .serializers import ArticleSerializer, ArticleRatingSerializer
-from .models import Article, ArticleRating
-from .renderers import ArticleJSONRenderer
-=======
 from rest_framework.views import APIView
 from rest_framework.renderers import JSONRenderer
 from rest_framework import authentication
->>>>>>> [Feature #159965316] Add pagination to articles
 
 # Add pagination
 from rest_framework.pagination import PageNumberPagination
