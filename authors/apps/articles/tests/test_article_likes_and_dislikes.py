@@ -33,18 +33,16 @@ class ArticleLikeTests(Base):
         """
         Tests that a user cannot like/dislike an article more than once
         """
-        res = self.client.post(self.likes_dislikes_url,
-                               format="json",
-                               data=self.like,
-                               **self.headers
-                               )
-        print(res.data)
+        self.client.post(self.likes_dislikes_url,
+                         format="json",
+                         data=self.like,
+                         **self.headers
+                         )
         response = self.client.post(self.likes_dislikes_url,
                                     format="json",
                                     data=self.like,
                                     **self.headers
                                     )
-        print(response.data)
         self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
 
     def test_cannot_like_non_existing_article(self):
@@ -82,35 +80,35 @@ class ArticleLikeTests(Base):
                                     )
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
 
-    # def test_user_change_a_like_to_a_dislike(self):
-    #     """
-    #     Tests that a user who likes an article but changes mind to dislike it
-    #     can do so.
-    #     """
-    #     self.client.post(self.likes_dislikes_url,
-    #                      format="json",
-    #                      data=self.like,
-    #                      **self.headers
-    #                      )
-    #     response = self.client.post(self.likes_dislikes_url,
-    #                                 format="json",
-    #                                 data=self.dislike,
-    #                                 **self.headers
-    #                                 )
-    #     self.assertEqual(response.status_code, status.HTTP_201_CREATED)
+    def test_user_change_a_like_to_a_dislike(self):
+        """
+        Tests that a user who likes an article but changes mind to dislike it
+        can do so.
+        """
+        self.client.post(self.likes_dislikes_url,
+                         format="json",
+                         data=self.like,
+                         **self.headers
+                         )
+        response = self.client.post(self.likes_dislikes_url,
+                                    format="json",
+                                    data=self.dislike,
+                                    **self.headers
+                                    )
+        self.assertEqual(response.status_code, status.HTTP_201_CREATED)
 
-    # def test_user_change_a_dislike_to_a_like(self):
-    #     """
-    #     Tests that a user who dislikes an article but changes mind to like it
-    #     can do so.
-    #     """
-    #     self.client.post(self.likes_dislikes_url,
-    #                      format="json",
-    #                      data=self.dislike,
-    #                      **self.headers)
-    #     response = self.client.post(self.likes_dislikes_url,
-    #                                 format="json",
-    #                                 data=self.like,
-    #                                 **self.headers
-    #                                 )
-    #     self.assertEqual(response.status_code, status.HTTP_201_CREATED)
+    def test_user_change_a_dislike_to_a_like(self):
+        """
+        Tests that a user who dislikes an article but changes mind to like it
+        can do so.
+        """
+        self.client.post(self.likes_dislikes_url,
+                         format="json",
+                         data=self.dislike,
+                         **self.headers)
+        response = self.client.post(self.likes_dislikes_url,
+                                    format="json",
+                                    data=self.like,
+                                    **self.headers
+                                    )
+        self.assertEqual(response.status_code, status.HTTP_201_CREATED)

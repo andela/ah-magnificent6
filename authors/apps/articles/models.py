@@ -40,7 +40,9 @@ class Article(models.Model):
         """
         Generate a slug for the article before saving it.
         """
-        self.slug = slugify(self.title + '-' + uuid.uuid4().hex)
+        if not self.slug:
+            self.slug = slugify(self.title + '-' +
+                                uuid.uuid4().hex)
         super().save(*args, **kwargs)
 
 

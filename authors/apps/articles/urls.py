@@ -31,8 +31,8 @@ urlpatterns = [
         '<str:slug>/favourite/',
         FavoriteArticle.as_view(),
         name='favourite_article'),
-    path('articles/', ArticleAPIView.as_view(), name='create'),
-    path('articles/<str:slug>/likes', ArticleLikes.as_view(),
+    path('', ArticleAPIView.as_view(), name='create'),
+    path('<str:slug>/likes', ArticleLikes.as_view(),
          name='likeArticles'),
 >>>>>>> [feat]: like or dislike an article
 ]
