@@ -63,7 +63,6 @@ def create_profile(sender, **kwargs):
     if kwargs.get('created'):
         user_profile = Profile(user=kwargs.get('instance'))
         user_profile.avatar = gravatar_url(user_profile.user.email)
-        # user_profile.username = kwargs.get('instance').username
         user_profile.save()
 
 
