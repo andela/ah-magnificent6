@@ -367,8 +367,8 @@ class ArticleLikes(generics.ListCreateAPIView):
         return Response(
             {
                 'message': (
-                    'Thank you {} for taking time to give your opinion on this'
-                    + 'article.'.format(request.user.username)
+                    'Thank you {} for giving your opinion on this '.format(
+                        request.user.username) + 'article.'
                 )
             }, status.HTTP_201_CREATED
         )
