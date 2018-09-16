@@ -80,8 +80,8 @@ class ArticleDetailsView(generics.RetrieveUpdateDestroyAPIView):
     def get(self, request, slug):
         """
         Retrieve a specific article from the database given it's article id.
-        :params pk: an id of the article to retrieve
-        :returns article: a json data for requested article
+        :params str slug: a slug of an article you want to retrieve
+        :returns article: a json data for the requested article
         """
         article = self.get_object(slug)
         if article:
@@ -96,12 +96,11 @@ class ArticleDetailsView(generics.RetrieveUpdateDestroyAPIView):
     def delete(self, request, slug):
         """
         Delete a given article.
-        :params pk: an id of the article to be deleted
+        :params slug: a slug of the article to be deleted
                 request: a request object with authenticated user credentials
-        :returns dict: a json object containing message to indicate that the
-        article has been deleted
+        :returns json message: a json object containing message to indicate
+            that the article has been deleted
         """
-        permission_classes = (IsAuthenticated, )
         article = self.get_object(slug)
         if not article:
             # return error message for non-existing article
@@ -119,8 +118,7 @@ class ArticleDetailsView(generics.RetrieveUpdateDestroyAPIView):
             # prevent a user from deleting an article s/he does not own
             return Response({
                 'error':
-                'You cannot delete articles belonging\
-                to other users.'
+                'You cannot delete articles belonging to other users.'
             }, status.HTTP_403_FORBIDDEN)
 
     def put(self, request, slug):
@@ -128,27 +126,27 @@ class ArticleDetailsView(generics.RetrieveUpdateDestroyAPIView):
         Update a single article
         :params str slug: a slug for the article to be updated
                 request: a request object with new data for the article
+        :returns article: An updated article in json format
         """
-    permission_classes = (IsAuthenticated, )
-    article = self.get_object(slug)
-    if not article:
+        article = self.get_object(slug)
+        if not article:
             # Tell client we have not found the requested article
-        return Response({
-            'error': 'Article with given id does not exist'
-        }, status.HTTP_404_NOT_FOUND)
-    # check whether user owns this article and proceed if they do
-    if article.author.id == request.user.id:
-        request.data['author'] = request.user.id
-        serializer = self.serializer_class(article, data=request.data)
-        serializer.is_valid(raise_exception=True)
-        serializer.save()
-        return Response(serializer.data, status.HTTP_200_OK)
-    else:
-        # prevent a user from updating an article s/he does not own
-        return Response(
-            {
-                'error': 'You cannot edit an article you do not own. '
-            }, status.HTTP_403_FORBIDDEN)
+            return Response({
+                'error': 'Article requested does not exist'
+            }, status.HTTP_404_NOT_FOUND)
+        # check whether user owns this article and proceed if they do
+        if article.author.id == request.user.id:
+            request.data['author'] = request.user.id
+            serializer = self.serializer_class(article, data=request.data)
+            serializer.is_valid(raise_exception=True)
+            serializer.save()
+            return Response(serializer.data, status.HTTP_200_OK)
+        else:
+            # prevent a user from updating an article s/he does not own
+            return Response(
+                {
+                    'error': 'You cannot edit an article you do not own.'
+                }, status.HTTP_403_FORBIDDEN)
 
 
 class FavoriteArticle(generics.CreateAPIView):
@@ -258,6 +256,10 @@ class ArticleRatingAPIView(generics.ListCreateAPIView):
 
 
 class ArticleLikes(generics.ListCreateAPIView):
+    """
+    post:
+    like or dislike an article
+    """
     serializer_class = LikesSerializer
 
     def get_object(self, slug):
@@ -267,6 +269,18 @@ class ArticleLikes(generics.ListCreateAPIView):
             return None
 
     def post(self, request, slug):
+        """
+        creates an article like or a dislike
+        :params HttpRequest: this request contains a user authorization token
+                            and a json payload in the form{
+                                "like": True/False
+                            }. True is a like while False is a dislike
+                slug: a slug for the article user wants to like or dislike
+        :returns str:message thanking user for taking time to give their
+                    opinion on this article
+                status code 201: Indicates the a new record has been created
+                for a lik or dislike
+        """
         # Let's check whether we have the correct payload before doing any
         # database transaction since they are very expensive to us.
         # This variable, `like`, holds user intention which can be a
@@ -275,7 +289,7 @@ class ArticleLikes(generics.ListCreateAPIView):
         if like is None or type(like) != type(True):
             return Response(
                 {'message':
-                 'You must indicate whether you like or dislike the article'
+                 'You must indicate whether you like or dislike this article'
                  },
                 status.HTTP_400_BAD_REQUEST)
         # we continue now since we are sure we have a valid payload
@@ -307,18 +321,28 @@ class ArticleLikes(generics.ListCreateAPIView):
         if likes:
             # user had liked the article but now wants to dislike it
             if likes.like and not like:
-                article.likesCount = article.likesCount - 1
-                article.DislikesCount = article.DislikesCount + 1
+                article.userLikes.remove(request.user)
+                article.userDisLikes.add(request.user)
             # user had disliked this article but now wants to like it
             elif not likes.like and like:
-                article.likesCount = article.likesCount + 1
-                article.DislikesCount = article.DislikesCount - 1
+                article.userLikes.add(request.user)
+                article.userDisLikes.remove(request.user)
             # elif likes.like and like
-            else:
-                # User can only like an article once
+            elif like:
+                # User can only like an article once or dislike an article once
+                msg = '{}, you already liked this article.'.format(
+                    request.user.username)
                 return Response(
                     {
-                        'message': 'You can only like an article once'
+                        'message': msg
+                    }, status.HTTP_403_FORBIDDEN
+                )
+            else:
+                msg = '{}, you already disliked this article.'.format(
+                    request.user.username)
+                return Response(
+                    {
+                        'message': msg
                     }, status.HTTP_403_FORBIDDEN
                 )
             # save the new value/state of the article
@@ -334,14 +358,17 @@ class ArticleLikes(generics.ListCreateAPIView):
             serializer.save()
             # update likes count or dislikes count for the article
             if like:
-                article.likesCount = article.likesCount + 1
+                article.userLikes.add(request.user)
             else:
-                article.DislikesCount = article.DislikesCount + 1
+                article.userDisLikes.add(request.user)
             # save the new state of our article
             article.save()
         # Tell user we are successful
         return Response(
             {
-                'message': 'Operation succeded'
+                'message': (
+                    'Thank you {} for taking time to give your opinion on this'
+                    + 'article.'.format(request.user.username)
+                )
             }, status.HTTP_201_CREATED
         )

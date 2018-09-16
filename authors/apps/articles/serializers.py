@@ -30,8 +30,8 @@ class ArticleSerializer(serializers.ModelSerializer):
             "favourited",
             "favourite",
             "favouritesCount",
-            "likesCount",
-            "DislikesCount",
+            "userLikes",
+            "userDisLikes",
             "rating_average"
         )
 

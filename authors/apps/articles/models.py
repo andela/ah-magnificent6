@@ -28,9 +28,11 @@ class Article(models.Model):
         max_digits=3, decimal_places=2, blank=True, null=True)
     image = models.ImageField(
         upload_to='static/images', default='static/images/no-img.jpg')
-    # store the number of likes here
-    likesCount = models.IntegerField(default=0)
-    DislikesCount = models.IntegerField(default=0)
+    # store users who have liked/disliked this article here
+    userLikes = models.ManyToManyField(
+        User, blank=True, related_name='Likes.user+')
+    userDisLikes = models.ManyToManyField(
+        User, blank=True, related_name='Likes.user+')
 
     def __str__(self):
         "Returns a string representation of article title."
