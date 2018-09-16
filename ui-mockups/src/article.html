@@ -14,8 +14,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link href="https://fonts.googleapis.com/css?family=Raleway" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css?family=Vidaloka" rel="stylesheet">
-    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.3.1/css/all.css" integrity="sha384-mzrmE5qonljUremFsqc01SB46JvROS7bZs3IO2EmfFsd15uHvIt+Y8vEf7N7fWAU"
-        crossorigin="anonymous">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.3.1/css/all.css" integrity="sha384-mzrmE5qonljUremFsqc01SB46JvROS7bZs3IO2EmfFsd15uHvIt+Y8vEf7N7fWAU" crossorigin="anonymous">
     <link rel="stylesheet" href="css/bootstrap.css">
     <link rel="stylesheet" href="css/style.css">
 
@@ -24,9 +23,34 @@
 <body>
     <nav class="navbar navbar-expand-lg navbar-light">
         <div class="container">
-            <div></div>
-            <a class="navbar-brand font-weight-bold" href="#">Authors' Haven</a>
-            <div></div>
+            <div class="header"></div>
+            <div>
+                <a class="navbar-brand font-weight-bold" href="#">Authors' Haven</a>
+            </div>
+
+            <div class="collapse navbar-collapse">
+                <ul class="navbar-nav mr-auto">
+                    <li class="nav-item active">
+                        <a class="nav-link" href="index.html">Home <span class="sr-only">(current)</span></a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="articles.html">Articles</a>
+                    </li>
+                </ul>
+            </div>
+            <div class="navbar-text">
+                <ul class="navbar-nav mr-auto">
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            user profile
+                        </a>
+                        <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+                            <a class="dropdown-item" href="new-article.html">New article</a>
+                            <a class="dropdown-item" href="myarticles.html">Articles</a>
+                        </div>
+                    </li>
+                </ul>
+            </div>
         </div>
     </nav>
     <div class="container">
@@ -49,35 +73,34 @@
                                 "There is no one who loves pain itself, who seeks after it and wants to have it, simply
                                 because it is pain..."
                             </span>
-                            <div class="d-flex justify-content-start">
-                                <!-- Rating stars -->
-                                <fieldset class="rating">
-                                    <input type="radio" id="star5" name="rating" value="5" /><label class="full" for="star5"
-                                        title="Awesome - 5 stars"></label>
-                                    <input type="radio" id="star4half" name="rating" value="4 and a half" /><label
-                                        class="half" for="star4half" title="Pretty good - 4.5 stars"></label>
-                                    <input type="radio" id="star4" name="rating" value="4" /><label class="full" for="star4"
-                                        title="Pretty good - 4 stars"></label>
-                                    <input type="radio" id="star3half" name="rating" value="3 and a half" /><label
-                                        class="half" for="star3half" title="Meh - 3.5 stars"></label>
-                                    <input type="radio" id="star3" name="rating" value="3" /><label class="full" for="star3"
-                                        title="Meh - 3 stars"></label>
-                                    <input type="radio" id="star2half" name="rating" value="2 and a half" /><label
-                                        class="half" for="star2half" title="Kinda bad - 2.5 stars"></label>
-                                    <input type="radio" id="star2" name="rating" value="2" /><label class="full" for="star2"
-                                        title="Kinda bad - 2 stars"></label>
-                                    <input type="radio" id="star1half" name="rating" value="1 and a half" /><label
-                                        class="half" for="star1half" title="Meh - 1.5 stars"></label>
-                                    <input type="radio" id="star1" name="rating" value="1" /><label class="full" for="star1"
-                                        title="Sucks big time - 1 star"></label>
-                                    <input type="radio" id="starhalf" name="rating" value="half" /><label class="half"
-                                        for="starhalf" title="Sucks big time - 0.5 stars"></label>
-                                </fieldset>
-                                <div class="p-2 ml-3" id=favourite>
-                                    <i id=fav class="fas fa-heart far-w-15 far-2x"></i>
-                                </div>
-                            </div>
+
                         </p>
+                        <hr>
+                        <div class="d-flex justify-content-between">
+                            <!-- Rating stars -->
+                            <fieldset class="rating">
+                                <input type="radio" id="star5" name="rating" value="5" /><label class="full" for="star5" title="Awesome - 5 stars"></label>
+                                <input type="radio" id="star4half" name="rating" value="4 and a half" /><label class="half" for="star4half" title="Pretty good - 4.5 stars"></label>
+                                <input type="radio" id="star4" name="rating" value="4" /><label class="full" for="star4" title="Pretty good - 4 stars"></label>
+                                <input type="radio" id="star3half" name="rating" value="3 and a half" /><label class="half" for="star3half" title="Meh - 3.5 stars"></label>
+                                <input type="radio" id="star3" name="rating" value="3" /><label class="full" for="star3" title="Meh - 3 stars"></label>
+                                <input type="radio" id="star2half" name="rating" value="2 and a half" /><label class="half" for="star2half" title="Kinda bad - 2.5 stars"></label>
+                                <input type="radio" id="star2" name="rating" value="2" /><label class="full" for="star2" title="Kinda bad - 2 stars"></label>
+                                <input type="radio" id="star1half" name="rating" value="1 and a half" /><label class="half" for="star1half" title="Meh - 1.5 stars"></label>
+                                <input type="radio" id="star1" name="rating" value="1" /><label class="full" for="star1" title="Sucks big time - 1 star"></label>
+                                <input type="radio" id="starhalf" name="rating" value="half" /><label class="half" for="starhalf" title="Sucks big time - 0.5 stars"></label>
+                            </fieldset>
+                            <div class="p-2 ml-3" id=favourite>
+                                <i id=fav class="fas fa-heart far-w-15 far-2x"></i>
+                            </div>
+                            <div class="card-text d-flex justify-content-end">
+                                <span>
+                                    <small><a href="" class="text-success"> <i class="fas fa-thumbs-up"></i>Like</a></small>
+                                    <small><a href="" class="text-warning"> <i class="fas fa-thumbs-down"></i>Dislike</a></small>
+                                </span>
+                            </div>
+                        </div>
+
                     </div>
                 </div>
             </div>
@@ -94,38 +117,30 @@
                 <div class="list-group">
                     <div class=" d-flex justify-content-between ">
                         <div class="ml-2">
-                            "There is no one who loves pain itself, who seeks after it and wants to have it, simply
-                            because it is pain..."
-                            "There is no one who loves pain itself, who seeks after it and wants to have it, simply
-                            because it is pain..."
-                            "There is no one who loves pain itself, who seeks after it and wants to have it, simply
-                            because it is pain..."
-
-                            "There is no one who loves pain itself, who seeks after it and wants to have it, simply
-                            because it is pain..."
-                            "There is no one who loves pain itself, who seeks after it and wants to have it, simply
-                            because it is pain..."
-                            "There is no one who loves pain itself, who seeks after it and wants to have it, simply
-                            because it is pain..."
-                            "There is no one who loves pain itself, who seeks after it and wants to have it, simply
-                            because it is pain..."
-                            "There is no one who loves pain itself, who seeks after it and wants to have it, simply
-                            because it is pain..."
-
-                            "There is no one who loves pain itself, who seeks after it and wants to have it, simply
-                            because it is pain..."
-                            "There is no one who loves pain itself, who seeks after it and wants to have it, simply
-                            because it is pain..."
-                            "There is no one who loves pain itself, who seeks after it and wants to have it, simply
-                            because it is pain..."
-                            "There is no one who loves pain itself, who seeks after it and wants to have it, simply
-                            because it is pain..."
-                            "There is no one who loves pain itself, who seeks after it and wants to have it, simply
-                            because it is pain..."
+                            "There is no one who loves pain itself, who seeks after it and wants to have it, simply because it is pain..." "There is no one who loves pain itself, who seeks after it and wants to have it, simply because it is pain..." "There is no one who loves pain
+                            itself, who seeks after it and wants to have it, simply because it is pain..." "There is no one who loves pain itself, who seeks after it and wants to have it, simply because it is pain..." "There is no one who loves pain itself,
+                            who seeks after it and wants to have it, simply because it is pain..." "There is no one who loves pain itself, who seeks after it and wants to have it, simply because it is pain..." "There is no one who loves pain itself, who
+                            seeks after it and wants to have it, simply because it is pain..." "There is no one who loves pain itself, who seeks after it and wants to have it, simply because it is pain..." "There is no one who loves pain itself, who seeks
+                            after it and wants to have it, simply because it is pain..." "There is no one who loves pain itself, who seeks after it and wants to have it, simply because it is pain..." "There is no one who loves pain itself, who seeks after
+                            it and wants to have it, simply because it is pain..." "There is no one who loves pain itself, who seeks after it and wants to have it, simply because it is pain..." "There is no one who loves pain itself, who seeks after it
+                            and wants to have it, simply because it is pain...There is no one who loves pain itself, who seeks after it and wants to have it, simply because it is pain..." "There is no one who loves pain itself, who seeks after it and
+                            wants to have it, simply because it is pain..." "There is no one who loves pain itself, who seeks after it and wants to have it, simply because it is pain..." "There is no one who loves pain itself, who seeks after it and wants
+                            to have it, simply because it is pain..." "There is no one who loves pain itself, who seeks after it and wants to have it, simply because it is pain..." "There is no one who loves pain itself, who seeks after it and wants to
+                            have it, simply because it is pain..." "There is no one who loves pain itself, who seeks after it and wants to have it, simply because it is pain..." "There is no one who loves pain itself, who seeks after it and wants to have
+                            it, simply because it is pain..." "There is no one who loves pain itself, who seeks after it and wants to have it, simply because it is pain..." "There is no one who loves pain itself, who seeks after it and wants to have it,
+                            simply because it is pain..." "There is no one who loves pain itself, who seeks after it and wants to have it, simply because it is pain..." "There is no one who loves pain itself, who seeks after it and wants to have it, simply
+                            because it is pain..." "There is no one who loves pain itself, who seeks after it and wants to have it, simply because it is pain..."
                         </div>
 
                     </div>
                     <div class="clear"></div>
+                    <div id=favourite>
+                        <i id=fav class="far fa-heart far-w-15 far-2x"> Favourite this article </i>
+                        <span class=" d-flex justify-content-end ">
+                            <small><a href="" class="text-success"> <i class="fas fa-thumbs-up"></i>Like</a></small>
+                            <small><a href="" class="text-warning"> <i class="fas fa-thumbs-down"></i>Dislike</a></small>
+                        </span>
+                    </div>
                 </div>
             </div>
         </div>
@@ -133,8 +148,7 @@
         <div class="container">
             <div class="row">
                 <div class="col-sm-4">
-                    <img src="assets/annie-spratt-558900-unsplash.jpg" class="rounded float-left mr-2" alt="post image"
-                        width="120" height="120">
+                    <img src="assets/annie-spratt-558900-unsplash.jpg" class="rounded float-left mr-2" alt="post image" width="120" height="120">
                     <div class="ml-2">
                         <h6><a href="">Donec id elit non mi porta</a></h6>
                         <p>
@@ -149,12 +163,15 @@
                         <p class="d-flex justify-content-between">
                             <small class="text-muted">July 15.</small>
                             <small class="text-muted">9 min read</small>
+                            <span class=" d-flex justify-content-end ">
+                                <small><a href="" class="text-success"> <i class="fas fa-thumbs-up"></i>Like</a></small>
+                                <small><a href="" class="text-warning"> <i class="fas fa-thumbs-down"></i>Dislike</a></small>
+                            </span>
                         </p>
                     </div>
                 </div>
                 <div class="col-sm-4">
-                    <img src="assets/alisa-anton-632369-unsplash.jpg" class="rounded float-left mr-2" alt="post image"
-                        width="120" height="120">
+                    <img src="assets/alisa-anton-632369-unsplash.jpg" class="rounded float-left mr-2" alt="post image" width="120" height="120">
                     <div class="ml-2">
                         <h6><a href="">Donec id elit non mi porta</a></h6>
                         <p>
@@ -169,12 +186,15 @@
                         <p class="d-flex justify-content-between">
                             <small class="text-muted">July 21.</small>
                             <small class="text-muted">10 min read</small>
+                            <span class=" d-flex justify-content-end ">
+                                <small><a href="" class="text-success"> <i class="fas fa-thumbs-up"></i>Like</a></small>
+                                <small><a href="" class="text-warning"> <i class="fas fa-thumbs-down"></i>Dislike</a></small>
+                            </span>
                         </p>
                     </div>
                 </div>
                 <div class="col-sm-4">
-                    <img src="assets/thought-catalog-575829-unsplash.jpg" class="rounded float-left mr-3" alt="post image"
-                        width="120" height="120">
+                    <img src="assets/thought-catalog-575829-unsplash.jpg" class="rounded float-left mr-3" alt="post image" width="120" height="120">
                     <div class="ml-2">
                         <h6><a href="">Donec id elit non mi porta</a></h6>
                         <p>
@@ -189,6 +209,10 @@
                         <p class="d-flex justify-content-between">
                             <small class="text-muted">July 1.</small>
                             <small class="text-muted">15 min read</small>
+                            <span class=" d-flex justify-content-end ">
+                                <small><a href="" class="text-success"> <i class="fas fa-thumbs-up"></i>Like</a></small>
+                                <small><a href="" class="text-warning"> <i class="fas fa-thumbs-down"></i>Dislike</a></small>
+                            </span>
                         </p>
                     </div>
                 </div>
@@ -206,25 +230,28 @@
     <script>
 
         let followUnfollowBtn = document.getElementById('ah-follow-unfollow-btn')
-        followUnfollowBtn.addEventListener('click', function () {
+        followUnfollowBtn.addEventListener('click', function() {
             if (followUnfollowBtn.innerText === 'Follow') {
                 followUnfollowBtn.innerText = 'Unfollow'
-            }
-            else {
+            } else {
                 followUnfollowBtn.innerText = 'Follow'
             }
 
         })
         let fav = document.getElementById('fav')
         let button = document.getElementById('favourite')
-        button.addEventListener('click', function () {
-            if (fav.style.color === 'black') {
-                fav.style.color = 'green'
-            }
-            else {
-                fav.style.color = 'black'
-            }
-        })
+        button.addEventListener('click', function() {
+                    if (fav.style.color === 'black') {
+                        fav.style.color = 'green'
+                    } else {
+                        fav.style.color = 'black'
+                        button.addEventListener('click', function() {
+                            if (fav.innerText === 'Favourite this article') {
+                                fav.innerText = 'Unfavourite this article'
+                            } else {
+                                fav.innerText = 'Favourite this article'
+                            }
+                        })
     </script>
     <script src="https://use.fontawesome.com/11.4875c9fa.js"></script>
     <script src="js/jquery.min.js" async defer></script>

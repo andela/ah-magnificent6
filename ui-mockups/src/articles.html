@@ -14,8 +14,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link href="https://fonts.googleapis.com/css?family=Raleway" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css?family=Vidaloka" rel="stylesheet">
-    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.3.1/css/all.css" integrity="sha384-mzrmE5qonljUremFsqc01SB46JvROS7bZs3IO2EmfFsd15uHvIt+Y8vEf7N7fWAU"
-        crossorigin="anonymous">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.3.1/css/all.css" integrity="sha384-mzrmE5qonljUremFsqc01SB46JvROS7bZs3IO2EmfFsd15uHvIt+Y8vEf7N7fWAU" crossorigin="anonymous">
     <link rel="stylesheet" href="css/bootstrap.css">
     <link rel="stylesheet" href="css/style.css">
 
@@ -24,37 +23,93 @@
 <body>
     <nav class="navbar navbar-expand-lg navbar-light">
         <div class="container">
-            <div></div>
-            <a class="navbar-brand font-weight-bold" href="#">Authors' Haven</a>
-            <div></div>
+            <div class="header"></div>
+            <div>
+                <a class="navbar-brand font-weight-bold" href="#">Authors' Haven</a>
+            </div>
+
+            <div class="collapse navbar-collapse">
+                <ul class="navbar-nav mr-auto">
+                    <li class="nav-item active">
+                        <a class="nav-link" href="index.html">Home <span class="sr-only">(current)</span></a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="articles.html">Articles</a>
+                    </li>
+                </ul>
+            </div>
+            <div class="navbar-text">
+                <ul class="navbar-nav mr-auto">
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            user profile
+                        </a>
+                        <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+                            <a class="dropdown-item" href="new-article.html">New article</a>
+                            <a class="dropdown-item" href="myarticles.html">Articles</a>
+                        </div>
+                    </li>
+                </ul>
+            </div>
         </div>
     </nav>
     <div class="container">
         <div class="row">
-            <div class="col-sm-4">
+            <div class="col-sm-3">
                 <div class="card">
                     <img class="card-img-top" src="assets/alisa-anton-632369-unsplash.jpg" alt="Card image cap">
                     <div class="card-body">
                         <h5 class="card-title">Card title</h5>
                         <p class="card-text ">
-                            Some quick example text to build on the card title and make up the bulk of
-                            the card's content.
+                            Some quick example text to build on the card title and make up the bulk of the card's content.
                         </p>
                         <small>
-                            <a class="ah-author-link" href="#">Meshack Mbuvi</a>
+                            By <a class="ah-author-link" href="#">Mbuvi</a>
                         </small>
-                        <p class="card-text d-flex justify-content-between">
+                        <p class="card-text d-flex justify-content-between article-footer">
+
                             <small class="text-muted">July 11.</small>
-                            <small class="text-muted">7 min read</small>
+                            <span>
+                                <small><a href="" class="text-success"> <i class="fas fa-thumbs-up"></i>1020</a></small>
+                                <small><a href="" class="text-warning"> <i class="fas fa-thumbs-down"></i>20</a></small>
+                            </span>
                         </p>
                     </div>
                 </div>
             </div>
-            <div class="col-sm-4">
+            <div class="col-sm-6">
                 <div class="list-group">
                     <div class=" d-flex justify-content-between ">
-                        <img src="assets/annie-spratt-558900-unsplash.jpg" class="rounded float-left" alt="post image"
-                            width="120" height="120">
+                        <img src="assets/annie-spratt-558900-unsplash.jpg" class="rounded float-left" alt="post image" width="120" height="120">
+                        <div class="ml-2 ">
+                            <h6><a href="article.html">Donec id elit non mi porta</a></h6>
+                            <p>
+                                <small class="text-muted ah-list-content">
+                                    Donec id elit non mi porta gravida at eget metus. Maecenas sed diam eget risus
+                                    varius blandit.
+                                </small>
+                            </p>
+                            <small>
+                                By <a class="ah-author-link" href="#">Mbuvi</a>
+                            </small>
+                            <p class="d-flex justify-content-between article-footer">
+                                <small class="text-muted">July 11.</small>
+                                <small class="text-muted">7 min read</small>
+
+                                <span>
+                                    <small><a href="" class="text-success"> <i class="fas fa-thumbs-up"></i>102</a></small>
+                                    <small><a href="" class="text-warning"> <i class="fas fa-thumbs-down"></i>20</a></small>
+                                </span>
+                            </p>
+
+                        </div>
+
+                    </div>
+
+                </div>
+                <div class="list-group">
+                    <div class=" d-flex justify-content-between ">
+                        <img src="assets/alisa-anton-632369-unsplash.jpg" class="rounded float-left" alt="post image" width="120" height="120">
                         <div class="ml-2">
                             <h6><a href="article.html">Donec id elit non mi porta</a></h6>
                             <p>
@@ -64,11 +119,16 @@
                                 </small>
                             </p>
                             <small>
-                                <a class="ah-author-link" href="#">Meshack Mbuvi</a>
+                                By <a class="ah-author-link" href="#">Mbuvi</a>
                             </small>
-                            <p class="d-flex justify-content-between">
+                            <p class="d-flex justify-content-between article-footer">
                                 <small class="text-muted">July 11.</small>
                                 <small class="text-muted">7 min read</small>
+
+                                <span>
+                                    <small><a href="" class="text-success"> <i class="fas fa-thumbs-up"></i>102</a></small>
+                                    <small><a href="" class="text-warning"> <i class="fas fa-thumbs-down"></i>20</a></small>
+                                </span>
                             </p>
                         </div>
 
@@ -76,8 +136,7 @@
                 </div>
                 <div class="list-group">
                     <div class=" d-flex justify-content-between ">
-                        <img src="assets/alisa-anton-632369-unsplash.jpg" class="rounded float-left" alt="post image"
-                            width="120" height="120">
+                        <img src="assets/thought-catalog-575829-unsplash.jpg" class="rounded float-left" alt="post image" width="120" height="120">
                         <div class="ml-2">
                             <h6><a href="article.html">Donec id elit non mi porta</a></h6>
                             <p>
@@ -87,55 +146,39 @@
                                 </small>
                             </p>
                             <small>
-                                <a class="ah-author-link" href="#">Meshack Mbuvi</a>
+                                By <a class="ah-author-link" href="#">Mbuvi</a>
                             </small>
-                            <p class="d-flex justify-content-between">
+                            <p class="d-flex justify-content-between article-footer">
                                 <small class="text-muted">July 11.</small>
                                 <small class="text-muted">7 min read</small>
-                            </p>
-                        </div>
 
-                    </div>
-                </div>
-                <div class="list-group">
-                    <div class=" d-flex justify-content-between ">
-                        <img src="assets/thought-catalog-575829-unsplash.jpg" class="rounded float-left" alt="post image"
-                            width="120" height="120">
-                        <div class="ml-2">
-                            <h6><a href="article.html">Donec id elit non mi porta</a></h6>
-                            <p>
-                                <small class="text-muted ah-list-content">
-                                    Donec id elit non mi porta gravida at eget metus. Maecenas sed diam eget risus
-                                    varius blandit.
-                                </small>
-                            </p>
-                            <small>
-                                <a class="ah-author-link" href="#">Meshack Mbuvi</a>
-                            </small>
-                            <p class="d-flex justify-content-between">
-                                <small class="text-muted">July 11.</small>
-                                <small class="text-muted">7 min read</small>
+                                <span>
+                                    <small><a href="" class="text-success"> <i class="fas fa-thumbs-up"></i>102</a></small>
+                                    <small><a href="" class="text-warning"> <i class="fas fa-thumbs-down"></i>20</a></small>
+                                </span>
                             </p>
                         </div>
 
                     </div>
                 </div>
             </div>
-            <div class="col-sm-4">
+            <div class="col-sm-3">
                 <div class="card">
                     <img class="card-img-top" src="assets/alisa-anton-699811-unsplash.jpg" alt=" Card image cap">
                     <div class="card-body">
                         <h5 class="card-title">Card title</h5>
                         <p class="card-text">
-                            Some quick example text to build on the card title and make up the bulk of
-                            the card's content.
+                            Some quick example text to build on the card title and make up the bulk of the card's content.
                         </p>
                         <small>
                             <a class="ah-author-link" href="#">Meshack Mbuvi</a>
                         </small>
-                        <p class="card-text d-flex justify-content-between">
+                        <p class="d-flex justify-content-between article-footer">
                             <small class="text-muted">July 11.</small>
-                            <small class="text-muted">7 min read</small>
+                            <span>
+                                <small><a href="" class="text-success"> <i class="fas fa-thumbs-up"></i>102</a></small>
+                                <small><a href="" class="text-warning"> <i class="fas fa-thumbs-down"></i>20</a></small>
+                            </span>
                         </p>
                     </div>
                 </div>
