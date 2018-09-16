@@ -44,7 +44,7 @@ class Article(models.Model):
         """
         if not self.slug:
             self.slug = slugify(self.title + '-' +
-                                uuid.uuid4().hex)
+                                uuid.uuid4().hex[:6])
         super().save(*args, **kwargs)
 
 
