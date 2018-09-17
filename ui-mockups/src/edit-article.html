@@ -9,7 +9,7 @@
 <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <title>Edit an article</title>
+    <title>Authors Haven</title>
     <meta name="description" content="">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link href="https://fonts.googleapis.com/css?family=Raleway" rel="stylesheet">
@@ -23,9 +23,34 @@
 <body>
     <nav class="navbar navbar-expand-lg navbar-light">
         <div class="container">
-            <div></div>
-            <a class="navbar-brand font-weight-bold" href="#">Authors' Haven</a>
-            <div></div>
+            <div class="header"></div>
+            <div>
+                <a class="navbar-brand font-weight-bold" href="#">Authors Haven</a>
+            </div>
+
+            <div class="collapse navbar-collapse">
+                <ul class="navbar-nav mr-auto">
+                    <li class="nav-item active">
+                        <a class="nav-link" href="index.html">Home <span class="sr-only">(current)</span></a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="articles.html">Articles</a>
+                    </li>
+                </ul>
+            </div>
+            <div class="navbar-text">
+                <ul class="navbar-nav mr-auto">
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            user profile
+                        </a>
+                        <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+                            <a class="dropdown-item" href="new-article.html">New article</a>
+                            <a class="dropdown-item" href="myarticles.html">Articles</a>
+                        </div>
+                    </li>
+                </ul>
+            </div>
         </div>
     </nav>
     <div class="container">
@@ -36,41 +61,28 @@
                 <div class="list-group">
                     <form class="form-group">
                         <div class="ml-2 mb-3">
-                            <textarea class="form-control title" id="title" placeholder="Title">Donec id elit non mi
-                                    porta gravida at eget metus. Maecenas sed
-                                    diam eget risus varius blandit.</textarea>
+                            <textarea class="form-control title" id="title" placeholder="Title">Donec id elit non miporta gravida at eget metus. Maecenas sed
+ diam eget risus varius blandit.</textarea>
                         </div>
                         <div class="ml-2 mb-3">
-                            <textarea class="form-control description" id="description" placeholder="Describe your
-                                    article...">Donec id elit non mi porta
-                                    gravida at eget metus. Maecenas sed diam
-                                    eget risus varius blandit.
+                            <textarea class="form-control description" id="description">Donec id elit non mi porta gravida at eget metus. Maecenas sed diam eget risus varius blandit.
                                 </textarea>
                         </div>
                         <div class="ml-2 mb-3">
                             <textarea class="form-control" id="body" placeholder="" rows="10">
-                                    Donec id elit non mi porta gravida at eget
-                                    metus. Maecenas sed diam eget risus varius
-                                    blandit.Donec id elit non mi
-                                    porta gravida at eget metus. Maecenas sed
-                                    diam eget risus varius blandit.Donec id elit
-                                    non mi porta gravida at eget
-                                    metus. Maecenas sed diam eget risus varius
-                                    blandit.Donec id elit non mi
-                                    porta gravida at eget metus. Maecenas sed
-                                    diam eget risus varius blandit.Donec id elit
-                                    non mi porta gravida at eget
-                                    metus. Maecenas sed diam eget risus varius
-                                    blandit.Donec id elit non mi
-                                    porta gravida at eget metus. Maecenas sed
-                                    diam eget risus varius blandit.
-                                </textarea>
+Donec id elit non mi porta gravida at egetmetus. Maecenas sed diam eget risus variusblandit.Donec id elit non mi porta
+gravida at eget metus. Maecenas sed diam eget risus varius blandit.Donec id elit non mi porta gravida at eget metus.
+Maecenas sed diam eget risus varius
+blandit.Donec id elit non mi porta gravida at eget metus. Maecenas seddiam eget risus varius blandit.Donec id elit non
+mi porta gravida at egetmetus. Maecenas sed diam eget risus variusblandit.Donec id elit non miporta gravida at eget
+metus. Maecenas sed diam eget risus varius blandit.
+                            </textarea>
                         </div>
                         <div class="input-group m-2">
                             <div class="custom-file">
                                 <input type="file" class="custom-file-input" id="image" accept="image/*">
                                 <label class="custom-file-label" for="image">Choose new image for your
-                                        article</label>
+                                    article</label>
                             </div>
                         </div>
                         <div class="ml-2">

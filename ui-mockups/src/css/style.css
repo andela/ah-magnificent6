@@ -85,7 +85,7 @@ textarea:focus {
   background-color: transparent; }
 
 .form-control:focus {
-  border-bottom: solid 10px;
+  border-bottom: solid 1px;
   box-shadow: None; }
 
 .title {
@@ -103,7 +103,8 @@ h6 a:hover {
 .footer a {
   color: #999999; }
 
-fieldset, label {
+fieldset,
+label {
   margin: 0;
   padding: 0; }
 
@@ -138,7 +139,8 @@ h1 {
   float: right; }
 
 /***** CSS Magic to Highlight Stars on Hover *****/
-fieldset, label {
+fieldset,
+label {
   margin: 0;
   padding: 0; }
 
@@ -184,3 +186,22 @@ h1 {
 .rating > label:hover ~ input:checked ~ label,
 .rating > input:checked ~ label:hover ~ label {
   color: #FFDE00; }
+
+.header {
+  display: block; }
+
+.article {
+  border-bottom: 1px solid #eeebeb;
+  margin-bottom: 2px !important; }
+
+.likes a:hover,
+.likes a {
+  background-color: #f9f8f3;
+  text-decoration: None; }
+
+.likes a {
+  margin-left: 6px;
+  text-decoration: None; }
+
+.text-success {
+  color: #91be69 !important; }

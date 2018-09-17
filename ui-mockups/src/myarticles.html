@@ -9,13 +9,12 @@
 <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <title>Your article</title>
+    <title>Authors Haven</title>
     <meta name="description" content="">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link href="https://fonts.googleapis.com/css?family=Raleway" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css?family=Vidaloka" rel="stylesheet">
-    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.3.1/css/all.css" integrity="sha384-mzrmE5qonljUremFsqc01SB46JvROS7bZs3IO2EmfFsd15uHvIt+Y8vEf7N7fWAU"
-        crossorigin="anonymous">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.3.1/css/all.css" integrity="sha384-mzrmE5qonljUremFsqc01SB46JvROS7bZs3IO2EmfFsd15uHvIt+Y8vEf7N7fWAU" crossorigin="anonymous">
     <link rel="stylesheet" href="css/bootstrap.css">
     <link rel="stylesheet" href="css/style.css">
 
@@ -24,9 +23,34 @@
 <body>
     <nav class="navbar navbar-expand-lg navbar-light">
         <div class="container">
-            <div></div>
-            <a class="navbar-brand font-weight-bold" href="#">Your articles</a>
-            <div></div>
+            <div class="header"></div>
+            <div>
+                <a class="navbar-brand font-weight-bold" href="#">Authors' Haven</a>
+            </div>
+
+            <div class="collapse navbar-collapse">
+                <ul class="navbar-nav mr-auto">
+                    <li class="nav-item active">
+                        <a class="nav-link" href="index.html">Home <span class="sr-only">(current)</span></a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="articles.html">Articles</a>
+                    </li>
+                </ul>
+            </div>
+            <div class="navbar-text">
+                <ul class="navbar-nav mr-auto">
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            user profile
+                        </a>
+                        <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+                            <a class="dropdown-item" href="new-article.html">New article</a>
+                            <a class="dropdown-item" href="myarticles.html">Articles</a>
+                        </div>
+                    </li>
+                </ul>
+            </div>
         </div>
     </nav>
     <div class="container">
@@ -36,8 +60,7 @@
             <div class="col-sm-8">
                 <div class="list-group mb-3">
                     <div class=" d-flex justify-content-between ">
-                        <img src="assets/annie-spratt-558900-unsplash.jpg" class="rounded float-left" alt="post image"
-                            width="120" height="120">
+                        <img src="assets/annie-spratt-558900-unsplash.jpg" class="rounded float-left" alt="post image" width="120" height="120">
                         <div class="ml-2">
                             <h6><a href="article.html">Donec id elit non mi porta</a></h6>
                             <p>
@@ -50,15 +73,18 @@
                             </p>
                             <p class="card-text d-flex justify-content-between mr-3">
                                 <small class="text-muted"></small>
-                                <span class="text-muted editLink"><a href="edit-article.html">Edit</a> | <a href="">Delete</a></span>
+                                <span class="text-muted editLink"><a href="edit-article.html"><i class="far fa-edit">
+                                            Edit</i>
+                                    </a> | <a href=""><i class="fas fa-trash"> Delete</i></a>
+                                    <button class="btn-outline-success btn-sm">publish</button>
+                                </span>
                             </p>
                         </div>
                     </div>
                 </div>
                 <div class="list-group mb-3">
                     <div class=" d-flex justify-content-between ">
-                        <img src="assets/thought-catalog-575829-unsplash.jpg" class="rounded float-left" alt="post image"
-                            width="120" height="120">
+                        <img src="assets/thought-catalog-575829-unsplash.jpg" class="rounded float-left" alt="post image" width="120" height="120">
                         <div class="ml-2">
                             <h6><a href="article.html">Donec id elit non mi porta</a></h6>
                             <p>
@@ -71,7 +97,11 @@
                             </p>
                             <p class="card-text d-flex justify-content-between mr-3">
                                 <small class="text-muted"></small>
-                                <span class="text-muted editLink"><a href="edit-article.html">Edit</a> | <a href="">Delete</a></span>
+                                <span class="text-muted editLink"><a href="edit-article.html"><i class="far fa-edit">
+                                            Edit</i>
+                                    </a> | <a href=""><i class="fas fa-trash"> Delete</i></a>
+                                    <button class="btn-outline-success btn-sm">publish</button>
+                                </span>
                             </p>
                         </div>
 
@@ -79,8 +109,7 @@
                 </div>
                 <div class="list-group mb-3">
                     <div class=" d-flex justify-content-between ">
-                        <img src="assets/thought-catalog-575829-unsplash.jpg" class="rounded float-left" alt="post image"
-                            width="120" height="120">
+                        <img src="assets/thought-catalog-575829-unsplash.jpg" class="rounded float-left" alt="post image" width="120" height="120">
                         <div class="ml-2">
                             <h6><a href="article.html">Donec id elit non mi porta</a></h6>
                             <p>
@@ -93,14 +122,18 @@
                             </p>
                             <p class="card-text d-flex justify-content-between mr-3">
                                 <small class="text-muted"></small>
-                                <span class="text-muted editLink"><a href="edit-article.html">Edit</a> | <a href="">Delete</a></span>
+                                <span class="text-muted editLink"><a href="edit-article.html"><i class="far fa-edit">
+                                            Edit</i>
+                                    </a> | <a href=""><i class="fas fa-trash"> Delete</i></a>
+                                    <button class="btn-outline-success btn-sm">publish</button>
+                                </span>
                             </p>
                         </div>
 
                     </div>
                 </div>
             </div>
-            
+
         </div>
         <hr>
     </div>
