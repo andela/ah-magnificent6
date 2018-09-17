@@ -11,10 +11,10 @@ class ArticleTests(Base):
         self.initial_count = len(response.data["results"])
         response = self.client.post(self.article_url, self.article_data,
                                     format="json", **self.headers)
-        self.article_id = response.data['id']
+        self.article_slug = response.data['slug']
         self.retrieve_update_delete_url = reverse(
-            'articles:retrieveUpdateDelete', kwargs={'pk': self.article_id})
-        self.non_existing_article_id = -1
+            'articles:retrieveUpdateDelete', kwargs={'slug': self.article_slug})
+        self.non_existing_article_slug = 'fkghflqwu'
 
     def tearDown(self):
         super().tearDown()
@@ -35,7 +35,7 @@ class ArticleTests(Base):
         response = self.client.get(self.retrieve_update_delete_url,
                                    format="json", **self.headers)
         self.assertEqual(response.status_code, status.HTTP_200_OK)
-        self.assertTrue(response.data['id'] == self.article_id)
+        self.assertTrue(response.data['slug'] == self.article_slug)
 
     def test_cannot_retrieve_a_non_existing_article(self):
         """
@@ -44,6 +44,6 @@ class ArticleTests(Base):
         response = self.client.get(
             reverse(
                 'articles:retrieveUpdateDelete',
-                kwargs={'pk': self.non_existing_article_id}),
+                kwargs={'slug': self.non_existing_article_slug}),
             format="json", **self.headers)
         self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
