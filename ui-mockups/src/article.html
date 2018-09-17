@@ -36,8 +36,12 @@
                     <div class="card-body">
                         <h1 class="card-title">Article title: My journey into Andela</h1>
                         <small>
+
                             <a class="ah-author-link" href="#">Meshack Mbuvi</a> <button id="ah-follow-unfollow-btn"
                                 class="btn btn-sm btn-outline-success ml-2 mb-2">Follow</button>
+
+                            <a class="ah-author-link" href="#">Meshack Mbuvi</a> <button id="ah-follow-unfollow-btn" class="btn btn-sm btn-outline-success ml-2 mb-2">Follow</button>
+
                         </small>
                         <p class="card-text d-flex justify-content-between">
                             <span class="text-muted">Article description: Some quick example text to build on the
@@ -200,6 +204,7 @@
         </div>
     </div>
     <script>
+
         let followUnfollowBtn = document.getElementById('ah-follow-unfollow-btn')
         followUnfollowBtn.addEventListener('click', function () {
             if (followUnfollowBtn.innerText === 'Follow') {
@@ -219,6 +224,25 @@
             else {
                 fav.style.color = 'black'
             }
+        })
+    </script>
+    <script src="https://use.fontawesome.com/11.4875c9fa.js"></script>
+    <script src="js/jquery.min.js" async defer></script>
+    <script src="js/bootstrap.min.js" async defer></script>
+</body>
+
+</html>
+<script>
+
+    let followUnfollowBtn = document.getElementById('ah-follow-unfollow-btn')
+    followUnfollowBtn.addEventListener('click', function(){
+            if (followUnfollowBtn.innerText === 'Follow'){
+                followUnfollowBtn.innerText = 'Unfollow'
+            }
+            else{
+                followUnfollowBtn.innerText = 'Follow'
+            }
+
         })
     </script>
     <script src="https://use.fontawesome.com/11.4875c9fa.js"></script>
