@@ -11,7 +11,7 @@ class ArticleTests(Base):
 
     def test_create_article(self):
         """
-        Tests a that user can create a new article
+        Tests that a user can create a new article
         """
         response = self.client.post(self.article_url,
                                     self.article_data,
@@ -23,7 +23,7 @@ class ArticleTests(Base):
 
     def test_cannot_create_article_with_missing_a_title(self):
         """
-        Tests a that user cannot create a new article without a title
+        Tests that a user cannot create a new article without a title
         """
         self.article_data['title'] = None
         response = self.client.post(self.article_url,
