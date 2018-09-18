@@ -94,3 +94,30 @@ class ArticleDeleteUpdateTests(Base):
         notification = self.client.put(
             reverse('notifications:my_notifications'), **self.headers_two)
         self.assertEqual(notification.status_code, status.HTTP_200_OK)
+
+    def test_unsuccessfully_mark_non_existing_notification(self):
+        """
+        Tests that a user unssuccessful marks as read non existing notification.
+        """
+        response = self.client.put(
+            reverse('notifications:notification', kwargs={'pk': 500}),
+            **self.headers_two)
+        self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
+
+    def test_unsuccessfully_delete_non_existing_notification(self):
+        """
+        Tests that a user unsuccessfully deletes non-existing notification.
+        """
+        response = self.client.delete(
+            reverse('notifications:notification', kwargs={'pk': 500}),
+            **self.headers_two)
+        self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
+
+    def test_unsuccessfully_get_non_existing_notification(self):
+        """
+        Tests that a user unsuccessfully gets non-existing notification.
+        """
+        response = self.client.get(
+            reverse('notifications:notification', kwargs={'pk': 500}),
+            **self.headers_two)
+        self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
