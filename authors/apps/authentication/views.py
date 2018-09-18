@@ -275,7 +275,7 @@ class SocialLoginView(generics.CreateAPIView):
     def create(self, request):
         """ Receives a provider and token and creates a new user,
             if the new user does not exist already.
-            The username is retreived and used to generate the JWT token 
+            The username is retreived and used to generate the JWT token
             used to access the apps endpoints.
         """
 
@@ -291,7 +291,8 @@ class SocialLoginView(generics.CreateAPIView):
         strategy = load_strategy(request)
         try:
             # Get backend corresponding to provider.
-            backend = load_backend(strategy=strategy, name=provider, redirect_uri=None)
+            backend = load_backend(
+                strategy=strategy, name=provider, redirect_uri=None)
 
             if isinstance(backend, BaseOAuth1):
                 # Get access_token and access token secret for Oauth1 used by Twitter

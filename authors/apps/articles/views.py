@@ -85,7 +85,8 @@ class ArticleDetailsView(generics.RetrieveUpdateDestroyAPIView):
         """
         article = self.get_object(slug)
         if article:
-            serializer = self.serializer_class(article)
+            serializer = self.serializer_class(
+                article, context={'request': request})
             return Response(serializer.data, status.HTTP_200_OK)
         else:
             # return error message indicating article requested is not found.

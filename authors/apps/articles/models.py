@@ -1,6 +1,8 @@
 from django.db import models
 from django.utils.text import slugify
 from django.core.validators import MinValueValidator, MaxValueValidator
+from rest_framework.reverse import reverse as api_reverse
+
 
 from authors.apps.authentication.models import User
 import uuid
@@ -46,6 +48,30 @@ class Article(models.Model):
             self.slug = slugify(self.title + '-' +
                                 uuid.uuid4().hex[:6])
         super().save(*args, **kwargs)
+
+    def get_share_uri(self, request=None):
+        """
+        Method to prepare and generate urls  for sharing the article to facebook,
+        twitter and email.
+        """
+        absolute_share_uri = api_reverse(
+            'articles:retrieveUpdateDelete',
+            kwargs={'slug': self.slug},
+            request=request)
+
+        uri_data = {
+            'twitter':
+            'https://twitter.com/intent/tweet?url={}'.format(
+                absolute_share_uri),
+            'facebook':
+            'https://www.facebook.com/sharer/sharer.php?u={}'.format(
+                absolute_share_uri),
+            'email':
+            'mailto:?subject=New Article Alert&body={}'.format(
+                absolute_share_uri)
+        }
+
+        return uri_data
 
 
 class ArticleRating(models.Model):

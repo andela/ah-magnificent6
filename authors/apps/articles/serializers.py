@@ -11,6 +11,7 @@ class ArticleSerializer(serializers.ModelSerializer):
     favourite = serializers.SerializerMethodField(method_name='get_favorite')
     favouritesCount = serializers.SerializerMethodField(
         method_name='get_favorites_count')
+    share_urls = serializers.SerializerMethodField(read_only=True)
 
     class Meta:
         """Declare all fields to be returned from the model of articles."""
@@ -32,7 +33,8 @@ class ArticleSerializer(serializers.ModelSerializer):
             "favouritesCount",
             "userLikes",
             "userDisLikes",
-            "rating_average"
+            "rating_average",
+            "share_urls"
         )
 
     def get_favorite(self, instance):
@@ -47,6 +49,14 @@ class ArticleSerializer(serializers.ModelSerializer):
     def get_favorites_count(self, instance):
         """Return the number of users who have favourited the atricle."""
         return instance.favourited.count()
+
+    def get_share_urls(self, instance):
+        """
+        Populates the share_urls field with the urls for facebook, twitter
+        and email.
+        """
+        request = self.context.get('request')
+        return instance.get_share_uri(request=request)
 
 
 class ArticleRatingSerializer(serializers.ModelSerializer):
