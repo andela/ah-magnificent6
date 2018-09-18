@@ -239,6 +239,9 @@ class UserSerializer(serializers.ModelSerializer):
         """
         instance.save()
 
+        # Save the user profile data
+        instance.profile.save()
+
         return instance
 
 
