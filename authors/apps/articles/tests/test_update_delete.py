@@ -74,6 +74,42 @@ class ArticleDeleteUpdateTests(Base):
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(response.data['body'], self.article_data['body'])
 
+    def test_can_add_tags_to_an_article(self):
+        """
+        Tests that a client can add tags to an article on updating
+        """
+        self.article_data['tags'] = 'Learning,Reading,Software'
+        response = self.client.put(
+            self.retrieve_update_delete_url,
+            data=self.article_data,
+            format="json",
+            **self.headers)
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertTrue(len(response.data['article_tags']) == 3)
+
+    def test_can_remove_tags_to_an_article(self):
+        """
+        Tests that a client can add tags to an article on updating
+        """
+        self.article_data['tags'] = 'Learning,Reading,Software'
+        response = self.client.post(self.article_url,
+                                    self.article_data,
+                                    format="json",
+                                    **self.headers
+                                    )
+        slug = response.data['slug']
+        self.retrieve_update_delete_url = reverse(
+            'articles:retrieveUpdateDelete', kwargs={'slug': slug})
+        # remove tags for article data
+        self.article_data['tags'] = None
+        response = self.client.put(
+            self.retrieve_update_delete_url,
+            data=self.article_data,
+            format="json",
+            **self.headers)
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertTrue(len(response.data['article_tags']) == 0)
+
     def test_cannot_edit_non_existing_article(self):
         """
         Tests that a client cannot update details of an article which does
