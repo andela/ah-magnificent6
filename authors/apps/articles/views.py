@@ -8,6 +8,8 @@ from rest_framework.permissions import (
 )
 from rest_framework.views import APIView
 from django.db.models import Avg
+from django.db.models.signals import post_save
+from django.dispatch import receiver
 from django.core.exceptions import ObjectDoesNotExist
 from django.views.generic import ListView
 from rest_framework.views import APIView
@@ -21,6 +23,7 @@ from .serializers import (
     ArticleSerializer, ArticleRatingSerializer, LikesSerializer, TagsSerializer
 )
 from .models import Article, ArticleRating, Likes, ArticleTags
+from authors.apps.notifications.models import notify_follower
 
 
 def create_tag(tags, article):
@@ -54,8 +57,8 @@ class ArticleAPIView(generics.ListCreateAPIView):
     """
     queryset = Article.objects.all()
     serializer_class = ArticleSerializer
-    renderer_classes = (ArticleJSONRenderer,)
-    permission_classes = (IsAuthenticatedOrReadOnly,)
+    renderer_classes = (ArticleJSONRenderer, )
+    permission_classes = (IsAuthenticatedOrReadOnly, )
     # Apply pagination to view
     pagination_class = PageNumberPagination
 
@@ -87,6 +90,17 @@ class ArticleAPIView(generics.ListCreateAPIView):
         return Response(serializer.data, status.HTTP_201_CREATED)
 
 
+@receiver(post_save, sender=Article)
+def notify_follower_reciever(sender, instance, created, **kwargs):
+    """
+    Send a notification after the article being created is saved.
+    """
+    if created:
+        message = (instance.author.username +
+                   " has created an article. Title: " + instance.title)
+        notify_follower(instance.author, message, instance)
+
+
 class ArticleDetailsView(generics.RetrieveUpdateDestroyAPIView):
     """
     get:
@@ -94,8 +108,8 @@ class ArticleDetailsView(generics.RetrieveUpdateDestroyAPIView):
     delete:
     """
     serializer_class = ArticleSerializer
-    renderer_classes = (ArticleJSONRenderer,)
-    permission_classes = (IsAuthenticatedOrReadOnly,)
+    renderer_classes = (ArticleJSONRenderer, )
+    permission_classes = (IsAuthenticatedOrReadOnly, )
 
     def get_object(self, slug):
         try:
@@ -231,10 +245,10 @@ class ArticleRatingAPIView(generics.ListCreateAPIView):
     post:
     Create a new article rating
     """
-    permission_classes = (IsAuthenticated,)
+    permission_classes = (IsAuthenticated, )
     queryset = ArticleRating.objects.all()
     serializer_class = ArticleRatingSerializer
-    renderer_classes = (ArticleJSONRenderer,)
+    renderer_classes = (ArticleJSONRenderer, )
 
     def post(self, request, slug):
         """
@@ -249,9 +263,7 @@ class ArticleRatingAPIView(generics.ListCreateAPIView):
         try:
             article = Article.objects.get(slug=slug)
         except Exception:
-            response = {
-                'message': 'That article does not exist'
-            }
+            response = {'message': 'That article does not exist'}
             return Response(response, status=status.HTTP_404_NOT_FOUND)
 
         if article.author.id == request.user.id:
@@ -275,15 +287,12 @@ class ArticleRatingAPIView(generics.ListCreateAPIView):
         serializer.save()
 
         # Save the average article rating to the Article model
-        q = ArticleRating.objects.filter(
-            article_id=article.id).aggregate(Avg('rating'))
+        q = ArticleRating.objects.filter(article_id=article.id).aggregate(
+            Avg('rating'))
         article.rating_average = q['rating__avg']
         article.save(update_fields=['rating_average'])
 
-        data = {
-            "message":
-            "Thank you for taking time to rate this article."
-        }
+        data = {"message": "Thank you for taking time to rate this article."}
 
         return Response(data, status.HTTP_201_CREATED)
 

@@ -14,6 +14,7 @@ class Article(models.Model):
     """
     Defines fields for each article.
     """
+
     class Meta:
         # Order article by date published
         ordering = ['-published_at']
@@ -26,8 +27,8 @@ class Article(models.Model):
     updated_at = models.DateTimeField(auto_now=True)
     published_at = models.DateTimeField(auto_now=True)
     slug = models.SlugField(unique=True, editable=False, max_length=140)
-    favourited = models.ManyToManyField(User, related_name='favourited',
-                                        blank=True)
+    favourited = models.ManyToManyField(
+        User, related_name='favourited', blank=True)
     rating_average = models.DecimalField(
         max_digits=3, decimal_places=2, blank=True, null=True)
     image = models.ImageField(
@@ -96,6 +97,7 @@ class Article(models.Model):
         if read_time < 1:
             return '1 min'
         return str(read_time) + ' min'
+
 
 class ArticleRating(models.Model):
     """

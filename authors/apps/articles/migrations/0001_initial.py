@@ -11,7 +11,6 @@ class Migration(migrations.Migration):
     initial = True
 
     dependencies = [
-        migrations.swappable_dependency(settings.AUTH_USER_MODEL),
     ]
 
     operations = [
@@ -52,11 +51,6 @@ class Migration(migrations.Migration):
                 ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
                 ('like', models.BooleanField()),
                 ('article', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='articles.Article')),
-                ('user', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to=settings.AUTH_USER_MODEL)),
             ],
-        ),
-        migrations.AlterUniqueTogether(
-            name='likes',
-            unique_together={('article', 'user')},
         ),
     ]
