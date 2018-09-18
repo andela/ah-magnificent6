@@ -4,6 +4,7 @@ from rest_framework.exceptions import NotFound
 from rest_framework.serializers import ValidationError
 from rest_framework import status, generics
 from rest_framework.response import Response
+from rest_framework.pagination import LimitOffsetPagination
 
 from .models import Profile
 from .renderers import ProfileJSONRenderer
@@ -110,3 +111,22 @@ class FollowingAPIView(APIView):
         following = user.following(profile)
         serializer = self.serializer_class(following, many=True)
         return Response(serializer.data, status=status.HTTP_200_OK)
+
+
+class ProfilesAPIView(generics.ListAPIView):
+    """This class allows authenticated users to get all profiles
+    Get:
+    Profiles
+    """
+    permission_classes = (IsAuthenticated,)
+
+    queryset = Profile.objects.all().exclude()
+    serializer_class = ProfileSerializer
+    pagination_class = LimitOffsetPagination
+
+    def list(self, request, *args, **kwargs):
+        queryset = self.get_queryset().exclude(user=request.user)
+        page = self.paginate_queryset(queryset)
+        serializer = ProfileSerializer(queryset, page, many=True)
+        serializer.is_valid()
+        return self.get_paginated_response(serializer.data)
