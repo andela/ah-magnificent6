@@ -63,6 +63,18 @@ class ArticleDeleteUpdateTests(Base):
             **self.headers_one)
         self.assertEqual(delete.status_code, status.HTTP_403_FORBIDDEN)
 
+    def test_unsuccessfully_mark_read_notification(self):
+        """
+        Tests that a user cannot mark read a notification they do not own.
+        """
+        notification = self.client.get(
+            reverse('notifications:my_notifications'), **self.headers_two)
+        pk = [*notification.data][0]
+        delete = self.client.put(
+            reverse('notifications:notification', kwargs={'pk': pk}),
+            **self.headers_one)
+        self.assertEqual(delete.status_code, status.HTTP_403_FORBIDDEN)
+
     def test_successfully_mark_read_notification(self):
         """
         Tests that a user successfully marks as read.
