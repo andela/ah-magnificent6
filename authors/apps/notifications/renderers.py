@@ -23,4 +23,3 @@ class NotificationJSONRenderer(JSONRenderer):
         return json.dumps({
             'notification': data
         })
-

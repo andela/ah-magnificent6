@@ -29,22 +29,18 @@ class Notification(models.Model):
 
 
 def notify_follower(author, notification, article):
+    """
+    Function that adds a notification to the Notification model.
+    Loops to check the author's followers profiles where notification is on
+    in order to add them to the notified column of the notification.
+    """
     n = Notification.objects.create(
         notification=notification, classification="article", article=article)
     profile = author.profile
     followers = profile.followed_by.all()
 
     for follower in followers:
+        # checks if notification is set to True
         if follower.notification is True:
             n.notified.add(follower.user.id)
-    n.save()
-
-
-def notify_favourite(article, notification):
-    n = Notification.objects.create(
-        notification=notification, classification="comment")
-
-    for user in article.favourited.all():
-        if user.profile.notification is True:
-            n.notified.add(user.id)
     n.save()

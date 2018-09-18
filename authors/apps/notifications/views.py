@@ -38,10 +38,10 @@ class NotificationDetailsView(generics.RetrieveUpdateDestroyAPIView):
     def delete(self, request, pk):
         """
         Delete a given notification.
-        :params pk: an id of the article to be deleted
+        :params pk: an id of the notification to be deleted
                 request: a request object with authenticated user credentials
         :returns dict: a json object containing message to indicate that the
-        article has been deleted
+        notification has been deleted
         """
         try:
             notification = Notification.objects.get(pk=pk)
@@ -66,7 +66,9 @@ class NotificationDetailsView(generics.RetrieveUpdateDestroyAPIView):
 
     def put(self, request, pk):
         """
-        Mark as read.
+        Mark the notification as read.
+        The function adds the user id to the read field in the
+        Notifications model
         """
         try:
             notification = Notification.objects.get(pk=pk)
@@ -117,7 +119,7 @@ class NotificationAPIView(generics.RetrieveUpdateAPIView):
 
     def put(self, request):
         """
-        Mark all as read.
+        Mark all notifications as read.
         """
         notifications = Notification.objects.all()
         user = request.user

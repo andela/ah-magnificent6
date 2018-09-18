@@ -27,7 +27,8 @@ class NotificationSerializer(serializers.ModelSerializer):
 
     def read(self, instance):
         """
-        bjnklm
+        Check if user has read the article.
+        Returns True or False to the serializer.
         """
         request = self.context.get('request')
         if request.user in instance.read.all():
