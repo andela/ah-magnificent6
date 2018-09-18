@@ -12,7 +12,7 @@ class ArticleReadTime(Base):
         response = self.client.post(self.article_url, self.article_data,
                                     format="json", **self.headers)
         self.article_slug = response.data['slug']
-        self.time_to_read = '0 min'
+        self.time_to_read = '1 min'
         self.retrieve_update_delete_url = reverse(
             'articles:retrieveUpdateDelete', kwargs={'slug': self.article_slug})
 
