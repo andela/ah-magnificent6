@@ -1,5 +1,8 @@
 import uuid
+<<<<<<< HEAD
 import re
+=======
+>>>>>>> [Feature 159965318] Refactor get_read_time method to capture time less than 1 min cases
 
 from django.db import models
 from django.utils.text import slugify
