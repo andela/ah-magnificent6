@@ -65,28 +65,4 @@ class Migration(migrations.Migration):
             name='article_tags',
             field=models.ManyToManyField(blank=True, null=True, to='articles.ArticleTags'),
         ),
-        migrations.AddField(
-            model_name='article',
-            name='author',
-            field=models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to=settings.AUTH_USER_MODEL),
-        ),
-        migrations.AddField(
-            model_name='article',
-            name='favourited',
-            field=models.ManyToManyField(blank=True, related_name='favourited', to=settings.AUTH_USER_MODEL),
-        ),
-        migrations.AddField(
-            model_name='article',
-            name='userDisLikes',
-            field=models.ManyToManyField(blank=True, related_name='_article_userDisLikes_+', to=settings.AUTH_USER_MODEL),
-        ),
-        migrations.AddField(
-            model_name='article',
-            name='userLikes',
-            field=models.ManyToManyField(blank=True, related_name='_article_userLikes_+', to=settings.AUTH_USER_MODEL),
-        ),
-        migrations.AlterUniqueTogether(
-            name='likes',
-            unique_together={('article', 'user')},
-        ),
     ]
