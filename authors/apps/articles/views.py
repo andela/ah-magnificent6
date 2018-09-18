@@ -18,6 +18,15 @@ from rest_framework import authentication
 
 # Add pagination
 from rest_framework.pagination import PageNumberPagination
+
+# Search and filter plugins
+from rest_framework.filters import SearchFilter
+
+import coreapi
+from rest_framework.schemas import AutoSchema
+import coreschema
+
+
 from .renderers import ArticleJSONRenderer
 from .serializers import (
     ArticleSerializer, ArticleRatingSerializer, LikesSerializer, TagsSerializer
@@ -63,6 +72,49 @@ class ArticleAPIView(generics.ListCreateAPIView):
     permission_classes = (IsAuthenticatedOrReadOnly, )
     # Apply pagination to view
     pagination_class = PageNumberPagination
+    # Add search class and fields
+    fields = ('author__username','title',)
+    filter_backends = (SearchFilter,)
+    search_fields = fields
+    # Add schema fields to allow testing of endpoint on Swagger
+    schema = AutoSchema(
+        manual_fields=[
+            coreapi.Field(
+                "author",
+                description="Filter by author",
+                required=False,
+                location="query",
+                schema=coreschema.String()
+            ),
+            coreapi.Field(
+                "title",
+                description="Filter by title",
+                required=False,
+                location="query",
+                schema=coreschema.String()
+            ),
+        ]
+    )
+
+    def get_queryset(self):
+        """
+        Allow filter by author's name, article title and tag
+        """
+        queryset = Article.objects.all()
+
+        # Get the params in the url query
+        author = self.request.query_params.get('author', None)
+        title = self.request.query_params.get('title', None)
+
+        # Filter based on existence of the parameter
+        if author is not None and title is None:
+            queryset = queryset.filter(author__username__icontains=author)
+        elif title is not None and author is None:
+            queryset = queryset.filter(title__icontains=title)
+        elif title is not None and author is not None:
+            queryset = queryset.filter(author__username__icontains=author).filter(title__icontains=title)
+        
+        return queryset
 
     def post(self, request):
         """
