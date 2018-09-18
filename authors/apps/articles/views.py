@@ -18,9 +18,33 @@ from rest_framework import authentication
 from rest_framework.pagination import PageNumberPagination
 from .renderers import ArticleJSONRenderer
 from .serializers import (
-    ArticleSerializer, ArticleRatingSerializer, LikesSerializer
+    ArticleSerializer, ArticleRatingSerializer, LikesSerializer, TagsSerializer
 )
-from .models import Article, ArticleRating, Likes
+from .models import Article, ArticleRating, Likes, ArticleTags
+
+
+def create_tag(tags, article):
+    """
+    This method checks whether a tag with tag provided exists in the database
+    and creates it if it does not exist.
+    :params str tag: name of the new tag or tag to query from the database
+    :returns cls object ArticleTags: the tag as retrieved from the database
+    """
+    # retrieve all tag names and create new ones if they do not exist
+    # also, add them to the articles and save the article instance
+
+    for tag in tags.split(','):
+        try:
+            data = {'tag': tag.strip()}
+            serializer = TagsSerializer(data=data)
+            serializer.is_valid(raise_exception=True)
+            serializer.save()
+        except:
+            pass
+        new_tag = ArticleTags.objects.get(tag=tag)
+        article.article_tags.add(new_tag)
+    article.save()
+    return None
 
 
 class ArticleAPIView(generics.ListCreateAPIView):
@@ -58,6 +82,12 @@ class ArticleAPIView(generics.ListCreateAPIView):
         serializer = self.serializer_class(data=article)
         serializer.is_valid(raise_exception=True)
         serializer.save()
+        # retrieve the tags as passed on in the article data
+        tags = request.data.get('tags', None)
+        if tags:
+            # we need to have an instance of the newly created article
+            article = Article.objects.get(slug=serializer.data['slug'])
+            create_tag(tags,article)
         return Response(serializer.data, status.HTTP_201_CREATED)
 
 
@@ -141,6 +171,12 @@ class ArticleDetailsView(generics.RetrieveUpdateDestroyAPIView):
             serializer = self.serializer_class(article, data=request.data)
             serializer.is_valid(raise_exception=True)
             serializer.save()
+            tags = request.data.get('tags', None)
+            # clear all tags in the article before adding new ones
+            article.article_tags.clear()
+            if tags:
+                # add tags to the article
+                create_tag(tags, article)
             return Response(serializer.data, status.HTTP_200_OK)
         else:
             # prevent a user from updating an article s/he does not own
