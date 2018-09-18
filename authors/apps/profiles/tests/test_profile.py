@@ -86,6 +86,9 @@ class ProfileTests(APITestCase):
             reverse('profiles:follow', kwargs={"username": self.user_data["username"]}), **headers)
         self.assertIn("You cannot follow yourself", str(follow_self_response.data))
 
+        follow_user_response = self.client.post(reverse('profiles:follow', kwargs={"username": "user5"}), **headers)
+        self.assertIn("The user you are looking for does not exist", str(follow_user_response.data))
+
     def test_unfollow_user(self):
         """
         Ensure user can unfollow another user
@@ -93,9 +96,16 @@ class ProfileTests(APITestCase):
         """
         login_response = self.client.post(self.login_url, self.user_data, format='json')
         headers = {'HTTP_AUTHORIZATION': 'Bearer {}'.format(login_response.data.get('token'))}
+
         unfollow_response = self.client.delete(self.follow_url, **headers)
         self.assertEqual(len(unfollow_response.data), 12)
         self.assertEqual(unfollow_response.status_code, status.HTTP_200_OK)
+
+        unfollow_self_response = self.client.delete(reverse('profiles:follow',
+                                                    kwargs={"username": self.user_data["username"]}),
+                                                    **headers)
+
+        self.assertIn('You cannot perform that action', str(unfollow_self_response.data))
 
     def test_following(self):
         """
