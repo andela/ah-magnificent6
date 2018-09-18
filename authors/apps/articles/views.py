@@ -19,9 +19,13 @@ from rest_framework import authentication
 # Add pagination
 from rest_framework.pagination import PageNumberPagination
 
-# Add search and filter packages
+# Search and filter plugins
 from rest_framework.filters import SearchFilter
-from django_filters.rest_framework import DjangoFilterBackend
+
+import coreapi
+from rest_framework.schemas import AutoSchema
+import coreschema
+
 
 from .renderers import ArticleJSONRenderer
 from .serializers import (
