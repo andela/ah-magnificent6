@@ -41,7 +41,7 @@ def create_tag(tags, article):
             serializer.save()
         except:
             pass
-        new_tag = ArticleTags.objects.get(tag=tag)
+        new_tag = ArticleTags.objects.get(tag=tag.strip())
         article.article_tags.add(new_tag)
     article.save()
     return None
@@ -87,7 +87,7 @@ class ArticleAPIView(generics.ListCreateAPIView):
         if tags:
             # we need to have an instance of the newly created article
             article = Article.objects.get(slug=serializer.data['slug'])
-            create_tag(tags,article)
+            create_tag(tags, article)
         return Response(serializer.data, status.HTTP_201_CREATED)
 
 
