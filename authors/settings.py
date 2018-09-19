@@ -102,8 +102,6 @@ DATABASES = {
     'default': env.db()
 }
 
-
-
 # Password validation
 # https://docs.djangoproject.com/en/2.1/ref/settings/#auth-password-validators
 
@@ -201,7 +199,7 @@ SWAGGER_SETTINGS = {
     }
 }
 
-#Email_configuration
+# Email_configuration
 EMAIL_USE_TLS = True
 EMAIL_HOST = env('EMAIL_HOST')
 EMAIL_HOST_USER = env('EMAIL_HOST_USER')
@@ -249,3 +247,6 @@ SOCIAL_AUTH_PIPELINE = (
     'social_core.pipeline.social_auth.load_extra_data',
     'social_core.pipeline.user.user_details',
 )
+
+# WORDS PER MINUTE
+WORDS_PER_MIN = env('WORDS_PER_MIN')

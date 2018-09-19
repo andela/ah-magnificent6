@@ -12,6 +12,7 @@ class ArticleSerializer(serializers.ModelSerializer):
     favouritesCount = serializers.SerializerMethodField(
         method_name='get_favorites_count')
     share_urls = serializers.SerializerMethodField(read_only=True)
+    time_to_read = serializers.ReadOnlyField(source="get_time_to_read")
 
     class Meta:
         """Declare all fields to be returned from the model of articles."""
@@ -34,7 +35,8 @@ class ArticleSerializer(serializers.ModelSerializer):
             "userLikes",
             "userDisLikes",
             "rating_average",
-            "share_urls"
+            "share_urls",
+            "time_to_read"
         )
 
     def get_favorite(self, instance):
