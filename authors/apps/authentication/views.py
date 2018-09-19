@@ -314,7 +314,7 @@ class SocialLoginView(generics.CreateAPIView):
             return Response({"error": "Invalid provider"}, status=status.HTTP_400_BAD_REQUEST)
 
         try:
-            user = backend.do_auth(access_token, user=authentic_user)
+            user = backend.do_auth(access_token, user=existing_user)
         except BaseException as error:
             return Response({"error": str(error)}, status=status.HTTP_400_BAD_REQUEST)
 
