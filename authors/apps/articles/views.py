@@ -19,12 +19,8 @@ from rest_framework import authentication
 # Add pagination
 from rest_framework.pagination import PageNumberPagination
 
-# Search and filter plugins
+# Add search package 
 from rest_framework.filters import SearchFilter
-
-import coreapi
-from rest_framework.schemas import AutoSchema
-import coreschema
 
 
 from .renderers import ArticleJSONRenderer
@@ -58,6 +54,9 @@ def create_tag(tags, article):
     article.save()
     return None
 
+# Import custom schema to add filter fields to the API docs
+from authors.apps.core.custom_schemas import SearchFilterSchema
+
 
 class ArticleAPIView(generics.ListCreateAPIView):
     """
@@ -73,46 +72,38 @@ class ArticleAPIView(generics.ListCreateAPIView):
     # Apply pagination to view
     pagination_class = PageNumberPagination
     # Add search class and fields
-    fields = ('author__username','title',)
     filter_backends = (SearchFilter,)
-    search_fields = fields
-    # Add schema fields to allow testing of endpoint on Swagger
-    schema = AutoSchema(
-        manual_fields=[
-            coreapi.Field(
-                "author",
-                description="Filter by author",
-                required=False,
-                location="query",
-                schema=coreschema.String()
-            ),
-            coreapi.Field(
-                "title",
-                description="Filter by title",
-                required=False,
-                location="query",
-                schema=coreschema.String()
-            ),
-        ]
-    )
+    search_fields = ('author__username','title',)
+    schema = SearchFilterSchema()
 
     def get_queryset(self):
         """
-        Allow filter by author's name, article title and tag
+        Overide get_queryset to allow filter by author's name, article title and tag
         """
         queryset = Article.objects.all()
+
+        # Add schema fields to allow testing of endpoint on Swagger
+        
 
         # Get the params in the url query
         author = self.request.query_params.get('author', None)
         title = self.request.query_params.get('title', None)
 
-        # Filter based on existence of the parameter
-        if author is not None and title is None:
-            queryset = queryset.filter(author__username__icontains=author)
-        elif title is not None and author is None:
-            queryset = queryset.filter(title__icontains=title)
-        elif title is not None and author is not None:
-            queryset = queryset.filter(author__username__icontains=author).filter(title__icontains=title)
+        filter_values={}
+        filter_values={
+            "author":author,
+            "title":title,
+        }
+
+        for value in filter_values:
+            if filter_values[value] is not None:
+                if value == "author":
+                    filter_value = "author__username__icontains"
+                else:
+                    filter_value = "{}__icontains".format(value)
+            
+                 # using ** to expand dictionary key/value pairs to keyword argument - value pairs
+                queryset = queryset.filter(**{filter_value: filter_values[value]})
         
         return queryset
 
@@ -126,6 +117,7 @@ class ArticleAPIView(generics.ListCreateAPIView):
         # Retrieve article data from the request object and convert it
         # to a kwargs object
         # get user data at this point
+       
         article = {
             'title': request.data.get('title', None),
             'body': request.data.get('body', None),
