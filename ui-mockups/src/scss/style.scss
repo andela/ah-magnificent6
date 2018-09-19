@@ -101,6 +101,11 @@ small a:hover,
     color: #ea4335;
 }
 
+.fa-facebook:hover, .fa-twitter:hover, .fa-envelope:hover{
+    opacity: 0.7;
+    cursor: pointer;
+}
+
 .form-group,
 .form-control {
     background-color: $bg-color !important;
@@ -164,8 +169,14 @@ h1 {
 .rating {
     border: none;
     float: left;
+    margin-left: -30px;
 }
 
+.ah-rating-average{
+ font-family: 'Vidaloka', serif;
+ font-weight: bold;
+ font-size: 2rem;
+}
 .rating>input {
     display: none;
 }
