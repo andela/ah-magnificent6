@@ -1,12 +1,5 @@
 import uuid
-<<<<<<< HEAD
-<<<<<<< HEAD
 import re
-=======
->>>>>>> [Feature 159965318] Refactor get_read_time method to capture time less than 1 min cases
-=======
-import re 
->>>>>>> [Feature 159965318] Update get_time_to_read method to use regex which is much effecient
 
 from django.db import models
 from django.utils.text import slugify
