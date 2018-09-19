@@ -19,12 +19,8 @@ from rest_framework import authentication
 # Add pagination
 from rest_framework.pagination import PageNumberPagination
 
-# Search and filter plugins
+# Add search package 
 from rest_framework.filters import SearchFilter
-
-import coreapi
-from rest_framework.schemas import AutoSchema
-import coreschema
 
 
 from .renderers import ArticleJSONRenderer
