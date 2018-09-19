@@ -19,9 +19,9 @@ from rest_framework import authentication
 # Add pagination
 from rest_framework.pagination import PageNumberPagination
 
-# Add search package 
+# Add search and filter packages
 from rest_framework.filters import SearchFilter
-
+from django_filters.rest_framework import DjangoFilterBackend
 
 from .renderers import ArticleJSONRenderer
 from .serializers import (
@@ -54,9 +54,6 @@ def create_tag(tags, article):
     article.save()
     return None
 
-# Import custom schema to add filter fields to the API docs
-from authors.apps.core.custom_schemas import SearchFilterSchema
-
 
 class ArticleAPIView(generics.ListCreateAPIView):
     """
@@ -72,40 +69,14 @@ class ArticleAPIView(generics.ListCreateAPIView):
     # Apply pagination to view
     pagination_class = PageNumberPagination
     # Add search class and fields
-    filter_backends = (SearchFilter,)
-    search_fields = ('author__username','title',)
-    schema = SearchFilterSchema()
-
-    def get_queryset(self):
-        """
-        Overide get_queryset to allow filter by author's name, article title and tag
-        """
-        queryset = Article.objects.all()
-
-        # Add schema fields to allow testing of endpoint on Swagger
-        
-
-        # Get the params in the url query
-        author = self.request.query_params.get('author', None)
-        title = self.request.query_params.get('title', None)
-
-        filter_values={}
-        filter_values={
-            "author":author,
-            "title":title,
-        }
-
-        for value in filter_values:
-            if filter_values[value] is not None:
-                if value == "author":
-                    filter_value = "author__username__icontains"
-                else:
-                    filter_value = "{}__icontains".format(value)
-            
-                 # using ** to expand dictionary key/value pairs to keyword argument - value pairs
-                queryset = queryset.filter(**{filter_value: filter_values[value]})
-        
-        return queryset
+    filter_backends = (SearchFilter, DjangoFilterBackend, )
+    # Define search and filter fields with the field names mapped to a list of lookups
+    fields = {
+        'author__username': ['icontains'],
+        'title': ['icontains'],
+    }
+    search_fields = fields
+    filter_fields = fields
 
     def post(self, request):
         """
