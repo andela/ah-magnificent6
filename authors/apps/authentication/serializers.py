@@ -263,6 +263,7 @@ class ResetPasswordSerializer(serializers.Serializer):
         """Validates passwords and token.
         Token can only be used once"""
 
+
         # Query DB for user email
         user = User.objects.filter(email=data.get('email', None)).first()
 

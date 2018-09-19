@@ -119,11 +119,13 @@ class Likes(models.Model):
     This class defines fields necessary to record likes of a given article
     by users.
     """
+
     class Meta:
         # A user can like or dislike an article only once.
         # Making an article_id and user_id unique_together achieves
         # the intended behavior.
         unique_together = (('article', 'user'))
+
     article = models.ForeignKey(Article, on_delete=models.CASCADE)
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     # This field will be set to True if user likes an article
@@ -131,11 +133,13 @@ class Likes(models.Model):
     like = models.BooleanField()
 
 
+
 class ArticleTags(models.Model):
     tag = models.CharField(max_length=30, unique=True)
 
     def __str__(self):
         return self.tag
+
 
 
 class ArticleReport(models.Model):
@@ -151,3 +155,20 @@ class ArticleReport(models.Model):
     text = models.CharField(max_length=255)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
+
+class Comment(models.Model):
+    """
+    This class defines fields necessary to record comments
+    on an article
+    """
+
+    commented_by = models.ForeignKey(User, on_delete=models.CASCADE)
+    article = models.ForeignKey(Article, on_delete=models.CASCADE)
+    comment_body = models.CharField(max_length=500)
+    created_at = models.DateTimeField(auto_now_add=True)
+    parent = models.ForeignKey('self', on_delete=models.CASCADE, null=True)
+
+    def __str__(self):
+        return self.commented_by.username
+
+

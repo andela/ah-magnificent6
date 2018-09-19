@@ -6,6 +6,7 @@ from rest_framework.response import Response
 from rest_framework.permissions import (
     AllowAny, IsAuthenticatedOrReadOnly, IsAuthenticated
 )
+from datetime import datetime
 from rest_framework.views import APIView
 from django.db.models import Avg
 from django.db.models.signals import post_save
@@ -15,6 +16,8 @@ from django.views.generic import ListView
 from rest_framework.views import APIView
 from rest_framework.renderers import JSONRenderer
 from rest_framework import authentication
+from .serializers import CommentSerializer, ArticleSerializer, ArticleRatingSerializer, LikesSerializer, TagsSerializer
+
 
 # Add pagination
 from rest_framework.pagination import PageNumberPagination
@@ -25,11 +28,16 @@ from django_filters.rest_framework import DjangoFilterBackend
 
 
 from .renderers import ArticleJSONRenderer
+
 from .serializers import (
     ArticleSerializer, ArticleRatingSerializer, LikesSerializer, TagsSerializer,
     ArticleReportSerializer, ArticleReportRetrieveSerializer
 )
 from .models import Article, ArticleRating, Likes, ArticleTags, ArticleReport
+
+
+from .models import Article, ArticleRating, Likes, ArticleTags
+
 from authors.apps.notifications.models import notify_follower
 
 
@@ -55,6 +63,13 @@ def create_tag(tags, article):
             article.article_tags.add(article_tag.first())
     article.save()
     return None
+
+
+
+from .models import Article, ArticleRating, Likes, Comment
+
+
+
 
 
 class ArticleAPIView(generics.ListCreateAPIView):
@@ -180,7 +195,7 @@ class ArticleDetailsView(generics.RetrieveUpdateDestroyAPIView):
             # prevent a user from deleting an article s/he does not own
             return Response({
                 'error':
-                'You cannot delete articles belonging to other users.'
+                    'You cannot delete articles belonging to other users.'
             }, status.HTTP_403_FORBIDDEN)
 
     def put(self, request, slug):
@@ -222,7 +237,7 @@ class FavoriteArticle(generics.CreateAPIView):
     A user is able to favourite an article if they had not favourited it.
     If they had favourited it, the article becomes unfavourited.
     """
-    permission_classes = (IsAuthenticated, )
+    permission_classes = (IsAuthenticated,)
     queryset = Article.objects.all()
     serializer_class = ArticleSerializer
 
@@ -291,8 +306,8 @@ class ArticleRatingAPIView(generics.ListCreateAPIView):
             wink_emoji = u"\U0001F609"
             data = {
                 'message':
-                'We see what you did there {}. Sorry, but you cannot rate your '
-                'own article.'.format(wink_emoji)
+                    'We see what you did there {}. Sorry, but you cannot rate your '
+                    'own article.'.format(wink_emoji)
             }
             return Response(data, status.HTTP_403_FORBIDDEN)
 
@@ -313,7 +328,14 @@ class ArticleRatingAPIView(generics.ListCreateAPIView):
         article.rating_average = q['rating__avg']
         article.save(update_fields=['rating_average'])
 
+
         data = {"message": "Thank you for taking time to rate this article."}
+
+        data = {
+            "message":
+                "Thank you for taking time to rate this article."
+        }
+
 
         return Response(data, status.HTTP_201_CREATED)
 
@@ -352,7 +374,7 @@ class ArticleLikes(generics.ListCreateAPIView):
         if like is None or type(like) != type(True):
             return Response(
                 {'message':
-                 'You must indicate whether you like or dislike this article'
+                     'You must indicate whether you like or dislike this article'
                  },
                 status.HTTP_400_BAD_REQUEST)
         # we continue now since we are sure we have a valid payload
@@ -430,11 +452,12 @@ class ArticleLikes(generics.ListCreateAPIView):
         return Response(
             {
                 'message': (
-                    'Thank you {} for giving your opinion on this '.format(
-                        request.user.username) + 'article.'
+                        'Thank you {} for giving your opinion on this '.format(
+                            request.user.username) + 'article.'
                 )
             }, status.HTTP_201_CREATED
         )
+
 
 
 class ArticleReportAPIView(generics.ListCreateAPIView):
@@ -639,3 +662,43 @@ class ArticleReportRUDAPIView(generics.RetrieveUpdateDestroyAPIView):
             return Response(data={
                 'message': 'That article report does not exist.'
             }, status=status.HTTP_404_NOT_FOUND)
+
+class ListCreateCommentAPIView(generics.ListCreateAPIView):
+    """
+    This class contains method to list
+    and add comments to an article
+    """
+    permission_classes = (IsAuthenticated,)
+
+    queryset = Comment.objects.all()
+    serializer_class = CommentSerializer
+
+    def create(self, request, slug):
+        data = request.data
+
+        # query the database to get article with provided slug
+        article = Article.objects.get(slug=slug)
+
+        comment_data = {
+            'commented_by': request.user.id,
+            'article': article.id,
+            'comment_body': request.data.get('comment_body', None)
+        }
+
+        serialize = self.serializer_class(data=comment_data)
+        serialize.is_valid(raise_exception=True)
+
+        serialize.save()
+
+        return Response(serialize.data)
+
+
+class RetrieveCommentAPIView(generics.RetrieveAPIView):
+    """
+    This class contains method to retrieve a comment
+    """
+
+    permission_classes = (IsAuthenticated,)
+    queryset = Comment.objects.all()
+    serializer_class = CommentSerializer
+

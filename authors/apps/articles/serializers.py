@@ -2,8 +2,14 @@ from rest_framework import serializers
 from rest_framework.validators import UniqueTogetherValidator
 
 from .models import Article, ArticleRating, Likes, ArticleTags, ArticleReport
+
+from .models import Article, ArticleRating, Likes, ArticleTags
+
+from .models import Article, ArticleRating, Likes, Comment
+
 from ..authentication.models import User
 from ..authentication.serializers import UserSerializer
+from ..profiles.serializers import ProfileSerializer
 
 
 class ArticleSerializer(serializers.ModelSerializer):
@@ -62,7 +68,6 @@ class ArticleSerializer(serializers.ModelSerializer):
 
 
 class ArticleRatingSerializer(serializers.ModelSerializer):
-
     class Meta:
         model = ArticleRating
 
@@ -100,7 +105,7 @@ class ArticleRatingSerializer(serializers.ModelSerializer):
         article_rating_object, created = ArticleRating.objects.get_or_create(
             article_id=validated_data.get('article').id,
             user_id=validated_data.get('user').id,
-            defaults={'rating': validated_data.get('rating', None)},)
+            defaults={'rating': validated_data.get('rating', None)}, )
 
         if not created:
             self.update(instance=article_rating_object,
@@ -132,6 +137,7 @@ class TagsSerializer(serializers.ModelSerializer):
 
 class ArticleReportSerializer(serializers.ModelSerializer):
     """Serializer class for ArticleReport model."""
+
     class Meta:
         model = ArticleReport
         fields = '__all__'
@@ -151,3 +157,17 @@ class ArticleReportRetrieveSerializer(serializers.ModelSerializer):
 
     def get_article(self, instance):
         return instance.article.title
+
+
+class CommentSerializer(serializers.ModelSerializer):
+    """
+    This serializer converts comments to json serializable data
+    and back
+    """
+
+    # article = ArticleSerializer()
+    # commented_by = ProfileSerializer()
+
+    class Meta:
+        model = Comment
+        fields = '__all__'
