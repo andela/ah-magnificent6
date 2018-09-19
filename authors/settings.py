@@ -53,6 +53,9 @@ INSTALLED_APPS = [
     'django_cron',
     # Include python social auth app django
     'social_django',
+
+    # Include django-filters package
+    'django_filters',
 ]
 
 CRON_CLASSES = [
