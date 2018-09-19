@@ -36,6 +36,7 @@ class ArticleTests(Base):
                                    format="json", **self.headers)
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertTrue(response.data['slug'] == self.article_slug)
+        self.assertIsNotNone(response.data['share_urls'])
 
     def test_cannot_retrieve_a_non_existing_article(self):
         """
