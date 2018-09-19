@@ -8,7 +8,8 @@ from django.utils.timesince import timesince
 
 class NotificationSerializer(serializers.ModelSerializer):
     article = ArticleSerializer('article')
-    timestance = serializers.SerializerMethodField(method_name='timesince')
+    timestance = serializers.SerializerMethodField(
+        method_name='calculate_timesince')
     unread = serializers.SerializerMethodField(method_name='read')
 
     class Meta:
@@ -19,7 +20,7 @@ class NotificationSerializer(serializers.ModelSerializer):
         fields = ('unread', 'created_at', 'notification', 'classification',
                   'article', 'timestance')
 
-    def timesince(self, instance, now=None):
+    def calculate_timesince(self, instance, now=None):
         """
         Get the time difference of the notification with the current time.
         """

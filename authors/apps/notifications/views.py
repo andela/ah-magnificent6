@@ -8,6 +8,7 @@ from django.core.exceptions import ObjectDoesNotExist
 from .serializers import NotificationSerializer
 from .renderers import NotificationJSONRenderer
 from .models import Notification
+from authors.apps.profiles.models import Profile
 
 
 class NotificationDetailsView(generics.RetrieveUpdateDestroyAPIView):
@@ -129,3 +130,38 @@ class NotificationAPIView(generics.RetrieveUpdateAPIView):
                 message = "You successfully marked all notifications as read"
                 response = {"message": message}
         return Response(response, status=status.HTTP_200_OK)
+
+
+class NotificationSwitchAPIView(generics.CreateAPIView):
+    """
+    A user is able to activate or deactivate notifications.
+    """
+    permission_classes = (IsAuthenticated, )
+    # queryset = Profile.objects.all()
+    serializer_class = NotificationSerializer
+
+    def post(self, request):
+        """
+        This method handles activating and deactivating notifications.
+        Checks if the user notification boolean is set to true in
+        order to deactivate.
+        Else activates.
+        """
+        user = request.user
+        profile = Profile.objects.get(user=user)
+
+        if profile.notification is True:
+            # sets notification boolean in the profile to false
+            profile.notification = False
+            profile.save()
+            message = "You have successfully deactivated notifications"
+            response = {"message": message}
+            return Response(response, status=status.HTTP_200_OK)
+
+        else:
+            # sets notification boolean in the profile to true
+            profile.notification = True
+            profile.save()
+            message = "You have successfully activated notifications"
+            response = {"message": message}
+            return Response(response, status=status.HTTP_200_OK)

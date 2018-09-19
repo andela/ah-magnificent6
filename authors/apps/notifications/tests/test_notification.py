@@ -133,3 +133,21 @@ class ArticleDeleteUpdateTests(Base):
             reverse('notifications:notification', kwargs={'pk': 500}),
             **self.headers_two)
         self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
+
+    def test_successfully_activate_notification(self):
+        """
+        Tests that a user successfully activating notifications.
+        """
+        response = self.client.post(
+            reverse('notifications:switch_notifications'), **self.headers_two)
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+
+    def test_successfully_deactivate_notification(self):
+        """
+        Tests that a user successfully deactivating notifications.
+        """
+        self.client.post(
+            reverse('notifications:switch_notifications'), **self.headers_two)
+        response = self.client.post(
+            reverse('notifications:switch_notifications'), **self.headers_two)
+        self.assertEqual(response.status_code, status.HTTP_200_OK)

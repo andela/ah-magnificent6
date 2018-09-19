@@ -34,7 +34,7 @@ def notify_follower(author, notification, article):
     Loops to check the author's followers profiles where notification is on
     in order to add them to the notified column of the notification.
     """
-    n = Notification.objects.create(
+    created_notification = Notification.objects.create(
         notification=notification, classification="article", article=article)
     profile = author.profile
     followers = profile.followed_by.all()
@@ -42,5 +42,5 @@ def notify_follower(author, notification, article):
     for follower in followers:
         # checks if notification is set to True
         if follower.notification is True:
-            n.notified.add(follower.user.id)
-    n.save()
+            created_notification.notified.add(follower.user.id)
+    created_notification.save()
