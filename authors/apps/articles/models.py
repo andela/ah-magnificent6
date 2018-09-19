@@ -1,11 +1,13 @@
+import uuid
+import re
+
 from django.db import models
 from django.utils.text import slugify
 from django.core.validators import MinValueValidator, MaxValueValidator
 from rest_framework.reverse import reverse as api_reverse
 
-
 from authors.apps.authentication.models import User
-import uuid
+from authors import settings
 
 
 class Article(models.Model):
@@ -73,6 +75,25 @@ class Article(models.Model):
 
         return uri_data
 
+    @property
+    def get_time_to_read(self):
+        # Set the standard read time
+        words_per_min = settings.WORDS_PER_MIN
+        """
+        Cleaning the post content and lower casing all words: 
+        """
+        # Removing characters from the post and replacing with space for easier conversion to a list
+        post = re.sub(r'[^\w]', ' ', self.body)
+        # Using split to return a list of words from the post: split() returns a list of words delimited by sequences of whitespace e.g ['Cleaning', 'the', 'post', 'content' ]
+        words_list = post.split()
+        # Grabbing the length of the list returned by `split()` and converting toan `int` for division
+        words_in_article = int(len(words_list))
+        # Using double-slash to round down to nearest whole number
+        read_time = words_in_article // int(words_per_min)
+        # Return 1 min when the read time is less than 1
+        if read_time < 1:
+            return '1 min'
+        return str(read_time) + ' min'
 
 class ArticleRating(models.Model):
     """
