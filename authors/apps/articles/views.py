@@ -34,15 +34,14 @@ def create_tag(tags, article):
     # also, add them to the articles and save the article instance
 
     for tag in tags.split(','):
-        try:
+        article_tag = ArticleTags.objects.filter(tag__icontains=tag.strip())
+        if not article_tag:
             data = {'tag': tag.strip()}
             serializer = TagsSerializer(data=data)
             serializer.is_valid(raise_exception=True)
             serializer.save()
-        except:
-            pass
-        new_tag = ArticleTags.objects.get(tag=tag.strip())
-        article.article_tags.add(new_tag)
+        article_tag = ArticleTags.objects.get(tag=tag.strip())
+        article.article_tags.add(article_tag)
     article.save()
     return None
 
