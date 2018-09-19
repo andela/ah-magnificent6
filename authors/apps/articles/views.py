@@ -39,8 +39,7 @@ def create_tag(tags, article):
             data = {'tag': tag.strip()}
             serializer = TagsSerializer(data=data)
             serializer.is_valid(raise_exception=True)
-            serializer.save()
-        article_tag = ArticleTags.objects.get(tag=tag.strip())
+            article_tag = serializer.save()
         article.article_tags.add(article_tag)
     article.save()
     return None
