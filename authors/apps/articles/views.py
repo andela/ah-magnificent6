@@ -79,12 +79,10 @@ class ArticleAPIView(generics.ListCreateAPIView):
         # valid and if valid, save it.
         serializer = self.serializer_class(data=article)
         serializer.is_valid(raise_exception=True)
-        serializer.save()
+        article = serializer.save()
         # retrieve the tags as passed on in the article data
         tags = request.data.get('tags', None)
         if tags:
-            # we need to have an instance of the newly created article
-            article = Article.objects.get(slug=serializer.data['slug'])
             create_tag(tags, article)
         return Response(serializer.data, status.HTTP_201_CREATED)
 
