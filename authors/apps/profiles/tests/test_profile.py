@@ -42,6 +42,7 @@ class ProfileTests(APITestCase):
         self.follow_url = reverse('profiles:follow', kwargs={"username": self.user_data2["username"]})
         self.following_url = reverse('profiles:following', kwargs={"username": self.user_data["username"]})
         self.followers_url = reverse('profiles:followers', kwargs={"username": self.user_data2["username"]})
+        self.profiles_url = reverse('profiles:profiles')
         self.user_response = self.client.post(self.registration_url, self.user_data, format='json')
         self.client.post(self.registration_url, self.user_data2, format='json')
         token = generate_jwt_token(self.user_data['username'])
@@ -81,8 +82,12 @@ class ProfileTests(APITestCase):
         self.assertEqual(len(follow_response.data), 12)
         self.assertEqual(follow_response.status_code, status.HTTP_200_OK)
 
-        follow_self_response = self.client.post(reverse('profiles:follow', kwargs={"username": self.user_data["username"]}), **headers)
+        follow_self_response = self.client.post(
+            reverse('profiles:follow', kwargs={"username": self.user_data["username"]}), **headers)
         self.assertIn("You cannot follow yourself", str(follow_self_response.data))
+
+        follow_user_response = self.client.post(reverse('profiles:follow', kwargs={"username": "user5"}), **headers)
+        self.assertIn("The user you are looking for does not exist", str(follow_user_response.data))
 
     def test_unfollow_user(self):
         """
@@ -91,9 +96,16 @@ class ProfileTests(APITestCase):
         """
         login_response = self.client.post(self.login_url, self.user_data, format='json')
         headers = {'HTTP_AUTHORIZATION': 'Bearer {}'.format(login_response.data.get('token'))}
+
         unfollow_response = self.client.delete(self.follow_url, **headers)
         self.assertEqual(len(unfollow_response.data), 12)
         self.assertEqual(unfollow_response.status_code, status.HTTP_200_OK)
+
+        unfollow_self_response = self.client.delete(reverse('profiles:follow',
+                                                    kwargs={"username": self.user_data["username"]}),
+                                                    **headers)
+
+        self.assertIn('You cannot perform that action', str(unfollow_self_response.data))
 
     def test_following(self):
         """
@@ -118,5 +130,12 @@ class ProfileTests(APITestCase):
         follower_response = self.client.get(self.followers_url, **headers)
         self.assertEqual(len(follower_response.data), 1)
 
-
-
+    def test_list_authors_profile(self):
+        """
+        Ensure an authenticated user can view authors profile
+        :return: all profiles
+        """
+        login_response = self.client.post(self.login_url, self.user_data, format='json')
+        headers = {'HTTP_AUTHORIZATION': 'Bearer {}'.format(login_response.data.get('token'))}
+        response = self.client.get(self.profiles_url, **headers)
+        self.assertEqual(len(response.data['results']), 1)
