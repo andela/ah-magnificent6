@@ -19,9 +19,9 @@ from rest_framework import authentication
 # Add pagination
 from rest_framework.pagination import PageNumberPagination
 
-# Add search and filter packages
+# Add search package 
 from rest_framework.filters import SearchFilter
-from django_filters.rest_framework import DjangoFilterBackend
+
 
 from .renderers import ArticleJSONRenderer
 from .serializers import (
@@ -53,7 +53,6 @@ def create_tag(tags, article):
             article.article_tags.add(article_tag.first())
     article.save()
     return None
-
 
 class ArticleAPIView(generics.ListCreateAPIView):
     """

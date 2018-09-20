@@ -55,13 +55,10 @@ INSTALLED_APPS = [
     'social_django',
 ]
 
-<<<<<<< HEAD
 CRON_CLASSES = [
     "authors.apps.core.cron.EmailNotificationCron",
-=======
     # Include django-filters package
     'django_filters',
->>>>>>> [Feature #159965317] Add search and filter using django_filters
 ]
 
 MIDDLEWARE = [
