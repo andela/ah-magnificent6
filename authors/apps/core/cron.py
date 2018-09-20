@@ -14,7 +14,6 @@ class MyCronJob(CronJobBase):
     def do(self):
         """send emails to all the persons to be notified"""
         subject = 'Authors Haven Notification'
-        message = "Click this link to be activated "
 
         emails = []
         notifications = Notification.objects.all()
