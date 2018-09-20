@@ -22,6 +22,7 @@ class Notification(models.Model):
         User, related_name='notified', blank=True)
     read = models.ManyToManyField(User, related_name='read', blank=True)
     classification = models.TextField(default="article")
+    email_sent = models.BooleanField(default=False)
 
     def __str__(self):
         "Returns a string representation of notification."

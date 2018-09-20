@@ -21,6 +21,7 @@ class Profile(TimeStampModel):
     website = models.URLField(_('website'), blank=True, null=True, default='')
     follows = models.ManyToManyField('self', related_name='followed_by', symmetrical=False)
     app_notification_enabled = models.BooleanField(default=True)
+    email_notification_enabled = models.BooleanField(default=True)
 
     def __str__(self):
         return self.user.username

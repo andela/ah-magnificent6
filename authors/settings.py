@@ -50,9 +50,13 @@ INSTALLED_APPS = [
     'authors.apps.profiles',
     'authors.apps.articles',
     'authors.apps.notifications',
-
+    'django_cron',
     # Include python social auth app django
     'social_django',
+]
+
+CRON_CLASSES = [
+    "authors.apps.core.cron.MyCronJob",
 ]
 
 MIDDLEWARE = [
