@@ -7,7 +7,7 @@ from django.conf import settings
 
 
 class MyCronJob(CronJobBase):
-    RUN_EVERY_MINS = 1 # every 2 hours
+    RUN_EVERY_MINS = settings.RUN_EVERY_MINS
     schedule = Schedule(run_every_mins=RUN_EVERY_MINS)
     code = 'authors.apps.core.cron.MyCronJob'  # a unique code
 
