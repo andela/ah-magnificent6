@@ -1,7 +1,7 @@
 from rest_framework import serializers
 from rest_framework.validators import UniqueTogetherValidator
 
-from .models import Article, ArticleRating, Likes
+from .models import Article, ArticleRating, Likes, ArticleTags
 from ..authentication.models import User
 from ..authentication.serializers import UserSerializer
 
@@ -13,6 +13,7 @@ class ArticleSerializer(serializers.ModelSerializer):
         method_name='get_favorites_count')
     share_urls = serializers.SerializerMethodField(read_only=True)
     time_to_read = serializers.ReadOnlyField(source="get_time_to_read")
+    article_tags = serializers.StringRelatedField(many=True, read_only=True)
 
     class Meta:
         """Declare all fields to be returned from the model of articles."""
@@ -36,15 +37,15 @@ class ArticleSerializer(serializers.ModelSerializer):
             "userDisLikes",
             "rating_average",
             "share_urls",
-            "time_to_read"
+            "time_to_read",
+            "share_urls",
+            "article_tags"
         )
 
     def get_favorite(self, instance):
         """Return True if the user has favorited an article, else False."""
         request = self.context.get('request', None)
-        if request is None:
-            return False
-        if not request.user.is_authenticated:
+        if request is None or not request.user.is_authenticated:
             return False
         return instance.favourited.filter(pk=request.user.pk).exists()
 
@@ -120,3 +121,11 @@ class LikesSerializer(serializers.ModelSerializer):
                 message='Sorry, you have already liked this article'
             )
         ]
+
+
+class TagsSerializer(serializers.ModelSerializer):
+    # tag = serializers.CharField(read_only=True)
+
+    class Meta:
+        model = ArticleTags
+        fields = ('tag',)

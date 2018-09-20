@@ -45,6 +45,22 @@ class ArticleLikeTests(Base):
                                     )
         self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
 
+    def test_cannot_dislike_an_article_more_than_once(self):
+        """
+        Tests that a user cannot like/dislike an article more than once
+        """
+        self.client.post(self.likes_dislikes_url,
+                         format="json",
+                         data=self.dislike,
+                         **self.headers
+                         )
+        response = self.client.post(self.likes_dislikes_url,
+                                    format="json",
+                                    data=self.dislike,
+                                    **self.headers
+                                    )
+        self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
+
     def test_cannot_like_non_existing_article(self):
         """
         Tests that a user cannot like an article which does not exist

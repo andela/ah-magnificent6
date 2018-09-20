@@ -37,6 +37,8 @@ class Article(models.Model):
         User, blank=True, related_name='Likes.user+')
     userDisLikes = models.ManyToManyField(
         User, blank=True, related_name='Likes.user+')
+    article_tags = models.ManyToManyField(
+        'ArticleTags', blank=True, null=True)
 
     def __str__(self):
         "Returns a string representation of article title."
@@ -124,3 +126,10 @@ class Likes(models.Model):
     # This field will be set to True if user likes an article
     # and False otherwise
     like = models.BooleanField()
+
+
+class ArticleTags(models.Model):
+    tag = models.CharField(max_length=30, unique=True)
+
+    def __str__(self):
+        return self.tag
