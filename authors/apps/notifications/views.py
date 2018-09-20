@@ -150,7 +150,7 @@ class NotificationSwitchAPIView(generics.CreateAPIView):
         user = request.user
         profile = Profile.objects.get(user=user)
 
-        if profile.notification is True:
+        if profile.app_notification_enabled is True:
             # sets notification boolean in the profile to false
             profile.notification = False
             profile.save()
@@ -160,7 +160,7 @@ class NotificationSwitchAPIView(generics.CreateAPIView):
 
         else:
             # sets notification boolean in the profile to true
-            profile.notification = True
+            profile.app_notification_enabled = True
             profile.save()
             message = "You have successfully activated notifications"
             response = {"message": message}

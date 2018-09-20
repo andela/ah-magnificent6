@@ -17,8 +17,8 @@ class NotificationSerializer(serializers.ModelSerializer):
         Notification fields to be returned to users
         """
         model = Notification
-        fields = ('unread', 'created_at', 'notification', 'classification',
-                  'article', 'timestance')
+        fields = ('unread', 'created_at', 'notification',
+                  'classification', 'article', 'timestance')
 
     def calculate_timesince(self, instance, now=None):
         """

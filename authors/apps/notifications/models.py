@@ -41,6 +41,6 @@ def notify_follower(author, notification, article):
 
     for follower in followers:
         # checks if notification is set to True
-        if follower.notification is True:
+        if follower.app_notification_enabled is True:
             created_notification.notified.add(follower.user.id)
     created_notification.save()
