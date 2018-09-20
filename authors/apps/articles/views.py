@@ -74,7 +74,9 @@ class ArticleAPIView(generics.ListCreateAPIView):
     fields = {
         'author__username': ['icontains'],
         'title': ['icontains'],
+        'article_tags__tag':['icontains'],
     }
+    
     search_fields = fields
     filter_fields = fields
 
