@@ -79,7 +79,7 @@ class ProfileTests(APITestCase):
         login_response = self.client.post(self.login_url, self.user_data, format='json')
         headers = {'HTTP_AUTHORIZATION': 'Bearer {}'.format(login_response.data.get('token'))}
         follow_response = self.client.post(self.follow_url, **headers)
-        self.assertEqual(len(follow_response.data), 12)
+        self.assertEqual(len(follow_response.data), 13)
         self.assertEqual(follow_response.status_code, status.HTTP_200_OK)
 
         follow_self_response = self.client.post(
@@ -98,7 +98,7 @@ class ProfileTests(APITestCase):
         headers = {'HTTP_AUTHORIZATION': 'Bearer {}'.format(login_response.data.get('token'))}
 
         unfollow_response = self.client.delete(self.follow_url, **headers)
-        self.assertEqual(len(unfollow_response.data), 12)
+        self.assertEqual(len(unfollow_response.data), 13)
         self.assertEqual(unfollow_response.status_code, status.HTTP_200_OK)
 
         unfollow_self_response = self.client.delete(reverse('profiles:follow',
