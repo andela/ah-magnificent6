@@ -165,9 +165,8 @@ class CommentSerializer(serializers.ModelSerializer):
     and back
     """
 
-    # article = ArticleSerializer()
-    # commented_by = ProfileSerializer()
-
     class Meta:
         model = Comment
-        fields = '__all__'
+
+        # fields = '__all__'
+        fields = ['commented_by', 'created_at', 'article', ]

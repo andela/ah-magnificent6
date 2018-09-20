@@ -6,6 +6,7 @@ from rest_framework.response import Response
 from rest_framework.permissions import (
     AllowAny, IsAuthenticatedOrReadOnly, IsAuthenticated
 )
+from rest_framework.serializers import ValidationError
 from datetime import datetime
 from rest_framework.views import APIView
 from django.db.models import Avg
@@ -671,6 +672,7 @@ class ListCreateCommentAPIView(generics.ListCreateAPIView):
     permission_classes = (IsAuthenticated,)
 
     queryset = Comment.objects.all()
+
     serializer_class = CommentSerializer
 
     def create(self, request, slug):
@@ -678,10 +680,11 @@ class ListCreateCommentAPIView(generics.ListCreateAPIView):
 
         # query the database to get article with provided slug
         article = Article.objects.get(slug=slug)
+        print(article.id)
 
         comment_data = {
-            'commented_by': request.user.id,
-            'article': article.id,
+            'commented_by': request.user.username,
+            'article': article.pk,
             'comment_body': request.data.get('comment_body', None)
         }
 
@@ -693,7 +696,7 @@ class ListCreateCommentAPIView(generics.ListCreateAPIView):
         return Response(serialize.data)
 
 
-class RetrieveCommentAPIView(generics.RetrieveAPIView):
+class RetrieveCommentAPIView(generics.RetrieveDestroyAPIView):
     """
     This class contains method to retrieve a comment
     """

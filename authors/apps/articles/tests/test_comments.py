@@ -33,6 +33,7 @@ class CommentTest(Base):
         self.headers = {'HTTP_AUTHORIZATION': 'Bearer {}'.format(login_response.data.get('token'))}
         self.slug = self.client.post(self.article_url, self.article_data, format="json", **self.headers)
         self.comments_url = reverse('articles:comments', kwargs={"slug": self.slug.data['slug']})
+        self.detail_comment = reverse('articles:comment_detail', kwargs={"slug": self.slug.data['slug'], "pk": 2})
 
     def test_get_comments(self):
         """Test a user can get all comments"""
@@ -43,9 +44,12 @@ class CommentTest(Base):
         self.assertEqual(list_comment_response.status_code, status.HTTP_200_OK)
 
     def test_create_comment(self):
+        """Test a user can delete a comment"""
         create_comment_response = self.client.post(self.comments_url,
-                                                   {"comment": "Amazing", 'article_id': 1},
+                                                   {"comment_body": "Amazing"},
                                                    format='json', **self.headers)
-        print(create_comment_response.data)
+        self.assertEqual(len(create_comment_response.data), 3)
+
+
 
 

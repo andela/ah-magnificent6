@@ -28,6 +28,10 @@ urlpatterns = [
 
     path('<str:slug>/comments/', ListCreateCommentAPIView.as_view(), name='comments'),
     path('<str:slug>/comments/<pk>/', RetrieveCommentAPIView.as_view(), name='comment_detail'),
+
     path('<str:slug>/comments/<pk>/comments/', ListCreateCommentAPIView.as_view()),
+
+    
+
 
 ]

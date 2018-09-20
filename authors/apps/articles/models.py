@@ -162,7 +162,7 @@ class Comment(models.Model):
     on an article
     """
 
-    commented_by = models.ForeignKey(User, on_delete=models.CASCADE)
+    commented_by = models.ForeignKey(User, to_field='username', on_delete=models.CASCADE)
     article = models.ForeignKey(Article, on_delete=models.CASCADE)
     comment_body = models.CharField(max_length=500)
     created_at = models.DateTimeField(auto_now_add=True)
