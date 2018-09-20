@@ -184,7 +184,7 @@ REST_FRAMEWORK = {
 
     # Add pagination default class and number of objects in page
     'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.PageNumberPagination',
-    'PAGE_SIZE': 10
+    'PAGE_SIZE': 20
 }
 
 # Swagger settings
