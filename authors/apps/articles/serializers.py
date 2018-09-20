@@ -20,7 +20,6 @@ class ArticleSerializer(serializers.ModelSerializer):
 
         model = Article
         fields = (
-            "id",
             "title",
             "body",
             "description",

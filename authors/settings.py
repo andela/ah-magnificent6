@@ -41,20 +41,18 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-
     'corsheaders',
     'django_extensions',
     'rest_framework',
     'rest_framework_swagger',
-
     'authors.apps.authentication',
     'authors.apps.core',
     'authors.apps.profiles',
     'authors.apps.articles',
+    'authors.apps.notifications',
 
     # Include python social auth app django
     'social_django',
-
 ]
 
 MIDDLEWARE = [
@@ -212,7 +210,7 @@ AUTHENTICATION_BACKENDS = (
     'social.backends.facebook.FacebookOAuth2',
     # For Google authentication
     'social_core.backends.google.GoogleOAuth2',
-    # For Twitter authentication 
+    # For Twitter authentication
     'social_core.backends.twitter.TwitterOAuth',
     # Ensures user will still be able to login via Django auth Model backend.
     'django.contrib.auth.backends.ModelBackend',
