@@ -114,8 +114,6 @@ class NotificationAPIView(generics.RetrieveUpdateAPIView):
                 serializer = self.serializer_class(
                     notification, context={'request': request})
                 data[notification.id] = serializer.data
-            else:
-                pass
         return Response(data, status=status.HTTP_200_OK)
 
     def put(self, request):

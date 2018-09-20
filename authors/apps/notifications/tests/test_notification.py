@@ -29,7 +29,7 @@ class ArticleDeleteUpdateTests(Base):
 
     def test_successfully_get_a_notification(self):
         """
-        Tests that a user can delete a notification.
+        Tests that a user can get a notification.
         """
         notification = self.client.get(
             reverse('notifications:my_notifications'), **self.headers_two)
@@ -147,7 +147,7 @@ class ArticleDeleteUpdateTests(Base):
         Tests that a user successfully deactivating notifications.
         """
         self.client.post(
-            reverse('notifications:switch_notifications'), **self.headers_two)
+            reverse('notifications:switch_notifications'), **self.headers_one)
         response = self.client.post(
-            reverse('notifications:switch_notifications'), **self.headers_two)
+            reverse('notifications:switch_notifications'), **self.headers_one)
         self.assertEqual(response.status_code, status.HTTP_200_OK)
