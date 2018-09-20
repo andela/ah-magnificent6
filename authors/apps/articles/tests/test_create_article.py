@@ -1,5 +1,6 @@
 from .base_setup import Base
 from rest_framework import status
+from django.urls import reverse
 
 
 class ArticleTests(Base):
@@ -20,6 +21,25 @@ class ArticleTests(Base):
                                     )
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
         self.assertEqual(response.data['title'], self.article_data['title'])
+
+    def test_create_article_with_tags(self):
+        """
+        Tests that a user can tag their articles when creating them
+        """
+        # add tags to the article data
+        self.article_data['tags'] = 'Learning,Reading,Software'
+        response = self.client.post(self.article_url,
+                                    self.article_data,
+                                    format="json",
+                                    **self.headers
+                                    )
+        slug = response.data['slug']
+        self.assertEqual(response.status_code, status.HTTP_201_CREATED)
+        self.retrieve_update_delete_url = reverse(
+            'articles:retrieveUpdateDelete', kwargs={'slug': slug})
+        response = self.client.get(self.retrieve_update_delete_url,
+                                   format="json", **self.headers)
+        self.assertTrue(len(response.data['article_tags']) > 0)
 
     def test_cannot_create_article_with_missing_a_title(self):
         """
