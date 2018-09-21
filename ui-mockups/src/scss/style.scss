@@ -303,6 +303,7 @@ h1 {
     color: #91be69 !important;
 }
 
+<<<<<<< HEAD
 .profile {
     margin: 20px;
 }
@@ -320,5 +321,56 @@ h1 {
     .fa-user-circle{
         font-size: 6.8rem;
         color: lightblue;
+=======
+// The notification bell
+.fa-bell {
+    color: $ah-secondary-text-color;
+    font-size: 25px;
+}
+
+// Position the count notification
+.badge {
+    position: absolute;
+    top: -5px;
+    right: -5px;
+}
+
+// Remove arrow after notifications icon
+.dropdown-toggle::after {
+    display:none;
+}
+
+.navbar{
+    .fa-user-circle{
+        font-size: 2.0625rem;
+    }
+    .dropdown-menu {
+        right: 0;
+        left:auto;
+    }
+}
+
+// notification bropdown style
+.notifications{
+    margin-right: 1rem;
+    .dropdown-menu {
+        min-width: 20rem;
+        font-size: 0.8125rem;
+        .dropdown-item {
+            white-space: normal;
+            // The placeholder user icon
+            .fa-user-circle{
+                color: lightblue;
+            }
+            .fa-check{
+                color: green;
+                margin-right: 1rem;
+            }
+            p{
+                margin-bottom: 0;
+            }
+        }
+        
+>>>>>>> [Feature #159965313] Mockup for notifications
     }
 }

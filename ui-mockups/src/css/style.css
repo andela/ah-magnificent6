@@ -216,6 +216,7 @@ h1 {
 .text-success {
   color: #91be69 !important; }
 
+<<<<<<< HEAD
 .profile {
   margin: 20px; }
 
@@ -230,3 +231,38 @@ h1 {
 .card-body .fa-user-circle {
   font-size: 6.8rem;
   color: lightblue; }
+=======
+.fa-bell {
+  color: #999999;
+  font-size: 25px; }
+
+.badge {
+  position: absolute;
+  top: -5px;
+  right: -5px; }
+
+.dropdown-toggle::after {
+  display: none; }
+
+.navbar .fa-user-circle {
+  font-size: 2.0625rem; }
+
+.navbar .dropdown-menu {
+  right: 0;
+  left: auto; }
+
+.notifications {
+  margin-right: 1rem; }
+  .notifications .dropdown-menu {
+    min-width: 20rem;
+    font-size: 0.8125rem; }
+    .notifications .dropdown-menu .dropdown-item {
+      white-space: normal; }
+      .notifications .dropdown-menu .dropdown-item .fa-user-circle {
+        color: lightblue; }
+      .notifications .dropdown-menu .dropdown-item .fa-check {
+        color: green;
+        margin-right: 1rem; }
+      .notifications .dropdown-menu .dropdown-item p {
+        margin-bottom: 0; }
+>>>>>>> [Feature #159965313] Mockup for notifications
