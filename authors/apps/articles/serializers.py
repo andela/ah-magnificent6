@@ -36,7 +36,7 @@ class ArticleSerializer(serializers.ModelSerializer):
             "userDisLikes",
             "rating_average",
             "time_to_read",
-            "article_tags"
+            "article_tags",
             "report_count",
             "share_urls"
         )
