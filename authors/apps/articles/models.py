@@ -67,14 +67,14 @@ class Article(models.Model):
 
         uri_data = {
             'twitter':
-            'https://twitter.com/intent/tweet?url={}'.format(
-                absolute_share_uri),
+                'https://twitter.com/intent/tweet?url={}'.format(
+                    absolute_share_uri),
             'facebook':
-            'https://www.facebook.com/sharer/sharer.php?u={}'.format(
-                absolute_share_uri),
+                'https://www.facebook.com/sharer/sharer.php?u={}'.format(
+                    absolute_share_uri),
             'email':
-            'mailto:?subject=New Article Alert&body={}'.format(
-                absolute_share_uri)
+                'mailto:?subject=New Article Alert&body={}'.format(
+                    absolute_share_uri)
         }
 
         return uri_data
@@ -133,12 +133,12 @@ class Likes(models.Model):
     like = models.BooleanField()
 
 
-
 class ArticleTags(models.Model):
     tag = models.CharField(max_length=30, unique=True)
 
     def __str__(self):
         return self.tag
+
 
 
 
@@ -156,6 +156,7 @@ class ArticleReport(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
+
 class Comment(models.Model):
     """
     This class defines fields necessary to record comments
@@ -170,5 +171,4 @@ class Comment(models.Model):
 
     def __str__(self):
         return self.commented_by.username
-
 
