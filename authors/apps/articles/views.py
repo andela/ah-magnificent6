@@ -43,7 +43,9 @@ def create_tag(tags, article):
             serializer = TagsSerializer(data=data)
             serializer.is_valid(raise_exception=True)
             article_tag = serializer.save()
-        article.article_tags.add(article_tag)
+            article.article_tags.add(article_tag)
+        else:
+            article.article_tags.add(article_tag.first())
     article.save()
     return None
 

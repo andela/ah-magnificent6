@@ -41,6 +41,30 @@ class ArticleTests(Base):
                                    format="json", **self.headers)
         self.assertTrue(len(response.data['article_tags']) > 0)
 
+    def test_create_article_with_tags_already_in_database(self):
+        """
+        Tests that a user can create several articles with the same tags.
+        """
+        # add tags to the article data
+        self.article_data['tags'] = 'Learning,Reading,Software'
+        self.client.post(self.article_url,
+                         self.article_data,
+                         format="json",
+                         **self.headers
+                         )
+        response = self.client.post(self.article_url,
+                                    self.article_data,
+                                    format="json",
+                                    **self.headers
+                                    )
+        slug = response.data['slug']
+        self.assertEqual(response.status_code, status.HTTP_201_CREATED)
+        self.retrieve_update_delete_url = reverse(
+            'articles:retrieveUpdateDelete', kwargs={'slug': slug})
+        response = self.client.get(self.retrieve_update_delete_url,
+                                   format="json", **self.headers)
+        self.assertTrue(len(response.data['article_tags']) > 0)
+
     def test_cannot_create_article_with_missing_a_title(self):
         """
         Tests that a user cannot create a new article without a title
