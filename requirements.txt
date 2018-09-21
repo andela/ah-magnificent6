@@ -37,3 +37,4 @@ python-social-auth==0.3.6
 six==1.10.0
 social-auth-app-django==2.1.0
 social-auth-core==1.7.0
+django-cron==0.5.1

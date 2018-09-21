@@ -50,9 +50,13 @@ INSTALLED_APPS = [
     'authors.apps.profiles',
     'authors.apps.articles',
     'authors.apps.notifications',
-
+    'django_cron',
     # Include python social auth app django
     'social_django',
+]
+
+CRON_CLASSES = [
+    "authors.apps.core.cron.EmailNotificationCron",
 ]
 
 MIDDLEWARE = [
@@ -248,3 +252,6 @@ SOCIAL_AUTH_PIPELINE = (
 
 # WORDS PER MINUTE
 WORDS_PER_MIN = env('WORDS_PER_MIN')
+
+# CRONJOB TIME
+RUN_EVERY_MINS = env('RUN_EVERY_MINS')

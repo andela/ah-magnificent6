@@ -33,7 +33,7 @@ class NotificationDetailsView(generics.RetrieveUpdateDestroyAPIView):
             return Response(serializer.data, status.HTTP_200_OK)
         except ObjectDoesNotExist:
             return Response({
-                'error': 'Notification does not exist'
+                'errors': 'Notification does not exist'
             }, status.HTTP_404_NOT_FOUND)
 
     def delete(self, request, pk):
@@ -48,7 +48,7 @@ class NotificationDetailsView(generics.RetrieveUpdateDestroyAPIView):
             notification = Notification.objects.get(pk=pk)
         except ObjectDoesNotExist:
             return Response({
-                'error': 'Notification with does not exist'
+                'errors': 'Notification with does not exist'
             }, status.HTTP_404_NOT_FOUND)
 
         #check whether user has the notification before attempting to delete it
@@ -62,7 +62,7 @@ class NotificationDetailsView(generics.RetrieveUpdateDestroyAPIView):
         else:
             # prevent a user from deleting an notification they do not own
             return Response({
-                'error': 'You cannot delete this notification'
+                'errors': 'You cannot delete this notification'
             }, status.HTTP_403_FORBIDDEN)
 
     def put(self, request, pk):
@@ -87,7 +87,7 @@ class NotificationDetailsView(generics.RetrieveUpdateDestroyAPIView):
             return Response(response, status=status.HTTP_200_OK)
         else:
             return Response({
-                'error':
+                'errors':
                 'You cannot mark as read a notification that is not yours'
             }, status.HTTP_403_FORBIDDEN)
 
@@ -130,7 +130,7 @@ class NotificationAPIView(generics.RetrieveUpdateAPIView):
         return Response(response, status=status.HTTP_200_OK)
 
 
-class NotificationSwitchAPIView(generics.CreateAPIView):
+class NotificationSwitchAppAPIView(generics.CreateAPIView):
     """
     A user is able to activate or deactivate notifications.
     """
@@ -152,14 +152,49 @@ class NotificationSwitchAPIView(generics.CreateAPIView):
             # sets notification boolean in the profile to false
             profile.notification = False
             profile.save()
-            message = "You have successfully deactivated notifications"
+            message = "You have successfully deactivated in app notifications"
             response = {"message": message}
             return Response(response, status=status.HTTP_200_OK)
 
-        else:
+        elif profile.email_notification_enabled is True:
             # sets notification boolean in the profile to true
             profile.app_notification_enabled = True
             profile.save()
-            message = "You have successfully activated notifications"
+            message = "You have successfully activated in app notifications"
+            response = {"message": message}
+            return Response(response, status=status.HTTP_200_OK)
+
+
+class NotificationSwitchEmailAPIView(generics.CreateAPIView):
+    """
+    A user is able to activate or deactivate notifications.
+    """
+    permission_classes = (IsAuthenticated, )
+    # queryset = Profile.objects.all()
+    serializer_class = NotificationSerializer
+
+    def post(self, request):
+        """
+        This method handles activating and deactivating notifications.
+        Checks if the user notification boolean is set to true in
+        order to deactivate.
+        Else activates.
+        """
+        user = request.user
+        profile = Profile.objects.get(user=user)
+
+        if profile.email_notification_enabled is True:
+            # sets notification boolean in the profile to false
+            profile.notification = False
+            profile.save()
+            message = "You have successfully deactivated email notifications"
+            response = {"message": message}
+            return Response(response, status=status.HTTP_200_OK)
+
+        elif profile.email_notification_enabled is False:
+            # sets notification boolean in the profile to true
+            profile.email_notification_enabled = True
+            profile.save()
+            message = "You have successfully activated email notifications"
             response = {"message": message}
             return Response(response, status=status.HTTP_200_OK)
