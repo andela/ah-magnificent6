@@ -38,11 +38,49 @@
                     </li>
                 </ul>
             </div>
+            <div class="dropdown notifications">
+                <a class="notifications-link dropdown-toggle" href="#" role="button" id="notifications" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    <i class="far fa-bell"></i>
+                    <span class="badge badge-danger">2</span>
+                </a>
+                <div class="dropdown-menu" aria-labelledby="notifications">
+                <a class="dropdown-item" href="article.html">
+                    <div class="row">
+                        <div class="col-2">
+                            <i class="fas fa-user-circle"></i>
+                        </div>
+                        <div class="col-10">
+                            <p>Leon Kioko <span class="text-secondary">published</span> My time at Andela</p>
+                            <small class="text-secondary font-italic">Today</small>
+                            <i class="fa fa-trash float-right clearfix" aria-hidden="true"></i>
+                            <i class="fa fa-check float-right clearfix" aria-hidden="true"></i>
+                        </div>
+                    </div>
+                </a>
+                <a class="dropdown-item" href="article.html">
+                    <div class="row">
+                        <div class="col-2">
+                            <i class="fas fa-user-circle"></i>
+                        </div>
+                        <div class="col-10">
+                            <p>Meshak Mbuvi <span class="text-secondary">commented on</span> My time at Andela</p>
+                            <small class="text-secondary font-italic">Sep 1</small>
+                            <i class="fa fa-trash float-right clearfix" aria-hidden="true"></i>
+                            <i class="fa fa-check float-right clearfix" aria-hidden="true"></i>
+                        </div>
+                    </div>
+                </a>
+                <div class="dropdown-item">
+                    <a class="text-secondary" href="#">Mark all as read</a>
+                </div>
+                </div>
+            </div>
+
             <div class="navbar-text">
                 <ul class="navbar-nav mr-auto">
                     <li class="nav-item dropdown">
                         <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                            user profile
+                            <i class="fas fa-user-circle"></i>
                         </a>
                         <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
                             <a class="dropdown-item" href="new-article.html">New article</a>
@@ -53,7 +91,7 @@
             </div>
         </div>
     </nav>
-    <div class="container">
+    <div id="articles" class="container">
         <div class="row">
             <div class="col-sm-3">
                 <div class="card ">
@@ -205,6 +243,7 @@
     <script src="https://use.fontawesome.com/11.4875c9fa.js"></script>
     <script src="js/jquery.min.js" async defer></script>
     <script src="js/bootstrap.min.js" async defer></script>
+    <script src="js/infinite_scroll.js" async defer></script>
 </body>
 
 </html>
