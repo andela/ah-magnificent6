@@ -2,7 +2,6 @@ from django.db import models
 from django.contrib.contenttypes.models import ContentType
 
 from authors.apps.authentication.models import User
-from authors.apps.profiles.models import Profile
 from authors.apps.articles.models import Article
 
 
@@ -32,13 +31,11 @@ class Notification(models.Model):
 def notify_follower(author, notification, article):
     """
     Function that adds a notification to the Notification model.
-    Loops to check the author's followers profiles where notification is on
     in order to add them to the notified column of the notification.
     """
     created_notification = Notification.objects.create(
         notification=notification, classification="article", article=article)
-    profile = author.profile
-    followers = profile.followed_by.all()
+    followers = author.profile.followed_by.all()
 
     for follower in followers:
         # checks if notification is set to True

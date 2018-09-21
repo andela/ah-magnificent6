@@ -1,6 +1,9 @@
 from .base_setup import Base
 from rest_framework import status
 from django.urls import reverse
+from authors.apps.authentication.models import User
+from authors.apps.profiles.models import Profile
+
 
 
 class ArticleDeleteUpdateTests(Base):
@@ -106,6 +109,10 @@ class ArticleDeleteUpdateTests(Base):
         notification = self.client.put(
             reverse('notifications:my_notifications'), **self.headers_two)
         self.assertEqual(notification.status_code, status.HTTP_200_OK)
+        response = self.client.get(
+            reverse('notifications:my_notifications'),
+            **self.headers_two)
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
 
     def test_unsuccessfully_mark_non_existing_notification(self):
         """
@@ -134,20 +141,57 @@ class ArticleDeleteUpdateTests(Base):
             **self.headers_two)
         self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
 
-    def test_successfully_activate_notification(self):
+    def test_successfully_activate_app_notification(self):
         """
         Tests that a user successfully activating notifications.
         """
         response = self.client.post(
-            reverse('notifications:switch_notifications'), **self.headers_two)
+            reverse('notifications:switch_app_notifications'),
+            **self.headers_two)
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 
-    def test_successfully_deactivate_notification(self):
+    def test_successfully_deactivate_app_notification(self):
         """
         Tests that a user successfully deactivating notifications.
         """
-        self.client.post(
-            reverse('notifications:switch_notifications'), **self.headers_one)
+        user = User.objects.get(username=self.user_two_data['username'])
+        profile = Profile.objects.get(user=user)
+        profile.app_notification_enabled = False
+        profile.save()
+        res = self.client.post(
+            reverse('notifications:switch_app_notifications'),
+            **self.headers_two)
+        self.assertEqual(res.status_code, status.HTTP_200_OK)
+
         response = self.client.post(
-            reverse('notifications:switch_notifications'), **self.headers_one)
+            reverse('notifications:switch_app_notifications'),
+            **self.headers_two)
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+
+
+    def test_successfully_activate_email_notification(self):
+        """
+        Tests that a user successfully activating email notifications.
+        """
+        response = self.client.post(
+            reverse('notifications:switch_app_notifications'),
+            **self.headers_two)
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+
+    def test_successfully_deactivate_email_notification(self):
+        """
+        Tests that a user successfully deactivating email notifications.
+        """
+        user = User.objects.get(username=self.user_two_data['username'])
+        profile = Profile.objects.get(user=user)
+        profile.email_notification_enabled = False
+        profile.save()
+        res = self.client.post(
+            reverse('notifications:switch_email_notifications'),
+            **self.headers_two)
+        self.assertEqual(res.status_code, status.HTTP_200_OK)
+
+        response = self.client.post(
+            reverse('notifications:switch_email_notifications'),
+            **self.headers_two)
         self.assertEqual(response.status_code, status.HTTP_200_OK)

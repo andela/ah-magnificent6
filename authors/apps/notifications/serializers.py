@@ -33,6 +33,6 @@ class NotificationSerializer(serializers.ModelSerializer):
         """
         request = self.context.get('request')
         if request.user in instance.read.all():
-            return False
-        else:
             return True
+        else:
+            return False
