@@ -21,6 +21,7 @@ from rest_framework.pagination import PageNumberPagination
 
 # Add search package 
 from rest_framework.filters import SearchFilter
+from django_filters.rest_framework import DjangoFilterBackend
 
 
 from .renderers import ArticleJSONRenderer
