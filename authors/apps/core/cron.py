@@ -6,7 +6,7 @@ from django.core.mail import send_mail
 from django.conf import settings
 
 
-class MyCronJob(CronJobBase):
+class EmailNotificationCron(CronJobBase):
     RUN_EVERY_MINS = settings.RUN_EVERY_MINS
     schedule = Schedule(run_every_mins=RUN_EVERY_MINS)
     code = 'authors.apps.core.cron.MyCronJob'  # a unique code

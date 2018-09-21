@@ -56,7 +56,7 @@ INSTALLED_APPS = [
 ]
 
 CRON_CLASSES = [
-    "authors.apps.core.cron.MyCronJob",
+    "authors.apps.core.cron.EmailNotificationCron",
 ]
 
 MIDDLEWARE = [

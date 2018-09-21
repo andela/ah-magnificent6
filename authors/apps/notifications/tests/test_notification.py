@@ -5,7 +5,7 @@ from django.core import mail
 
 from authors.apps.authentication.models import User
 from authors.apps.profiles.models import Profile
-from authors.apps.core.cron import MyCronJob
+from authors.apps.core.cron import EmailNotificationCron
 
 
 
@@ -37,7 +37,7 @@ class ArticleDeleteUpdateTests(Base):
         """
         Tests that a user can get a notification.
         """
-        MyCronJob().do()
+        EmailNotificationCron().do()
         self.assertEqual(len(mail.outbox), 3)
         notification = self.client.get(
             reverse('notifications:my_notifications'), **self.headers_two)
