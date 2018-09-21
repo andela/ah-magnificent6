@@ -26,9 +26,10 @@ from django_filters.rest_framework import DjangoFilterBackend
 
 from .renderers import ArticleJSONRenderer
 from .serializers import (
-    ArticleSerializer, ArticleRatingSerializer, LikesSerializer, TagsSerializer
+    ArticleSerializer, ArticleRatingSerializer, LikesSerializer, TagsSerializer,
+    ArticleReportSerializer
 )
-from .models import Article, ArticleRating, Likes, ArticleTags
+from .models import Article, ArticleRating, Likes, ArticleTags, ArticleReport
 from authors.apps.notifications.models import notify_follower
 
 
@@ -433,3 +434,199 @@ class ArticleLikes(generics.ListCreateAPIView):
                 )
             }, status.HTTP_201_CREATED
         )
+
+
+class ArticleReportAPIView(generics.ListCreateAPIView):
+    """
+    get:
+    Retrieve all article reports
+    post:
+    Create a new article report
+    """
+    permission_classes = (IsAuthenticated,)
+    queryset = ArticleReport.objects.all()
+    serializer_class = ArticleReportSerializer
+    renderer_classes = (ArticleJSONRenderer,)
+
+    def list(self, request, slug):
+        """Method for listing all reports."""
+        if request.user.is_staff:
+            queryset = self.get_queryset()
+        else:
+            queryset = ArticleReport.objects.filter(user_id=request.user.id)
+        if not queryset.exists():
+            response = {
+                'message': 'No concerns have been raised on this article.'
+            }
+            return Response(data=response, status=status.HTTP_404_NOT_FOUND)
+        serializer = ArticleReportSerializer(queryset, many=True)
+        return Response(data=serializer.data, status=status.HTTP_200_OK)
+
+    def post(self, request, slug):
+        """Method for reporting an article."""
+        try:
+            article = Article.objects.get(slug=slug)
+        except Exception:
+            response = {
+                'message': 'That article does not exist.'
+            }
+            return Response(response, status=status.HTTP_404_NOT_FOUND)
+
+        user_report_count = ArticleReport.objects.filter(
+            article_id=article.id, user_id=request.user.id).count()
+
+        if user_report_count > 4:
+            response = {
+                'message':
+                'You are not allowed to report an article more than five times.'
+            }
+            return Response(response, status=status.HTTP_200_OK)
+
+        article_report = {
+            'article': article.id,
+            'user': request.user.id,
+            'text': request.data.get('text', None),
+        }
+
+        # pass article data to the serializer class, check whether the data is
+        # valid and if valid, save it.
+        serializer = self.serializer_class(data=article_report)
+        serializer.is_valid(raise_exception=True)
+        serializer.save()
+
+        # Save the total number of reports flagged on this article.
+        total_report_count = ArticleReport.objects.filter(
+            article_id=article.id).count()
+        article.report_count = total_report_count
+        article.save(update_fields=['report_count'])
+
+        data = {
+            "message":
+            "Your feedback has been recorded. Authors' "
+            "Haven thanks you for your service."
+        }
+
+        return Response(data, status.HTTP_201_CREATED)
+
+
+class ArticleReportRUDAPIView(generics.RetrieveUpdateDestroyAPIView):
+    """
+    get:
+    Retrieve an article report
+    delete:
+    Delete an article report
+    put:
+    Update an article report
+    """
+    permission_classes = (IsAuthenticated,)
+    serializer_class = ArticleReportSerializer
+    renderer_classes = (ArticleJSONRenderer,)
+
+    def get_object(self, pk):
+        """ Getter method for an ArticleReport using pk (primary key)."""
+        try:
+            return ArticleReport.objects.get(pk=pk)
+        except ObjectDoesNotExist:
+            return None
+
+    def get(self, request, slug, pk):
+        """The method for retrievieng a sinlge Article Report."""
+        article_report = self.get_object(pk)
+        """
+        Attempt to get an article using the slug.
+        If article doesn't exist the user will receive a message telling them so
+        """
+        try:
+            article = Article.objects.get(slug=slug)
+        except Exception:
+            response = {
+                'message': 'That article does not exist.'
+            }
+            return Response(response, status=status.HTTP_404_NOT_FOUND)
+
+        if article_report:
+            if request.user.is_staff or request.user == article_report.user:
+                serializer = self.serializer_class(article_report)
+                return Response(data=serializer.data, status=status.HTTP_200_OK)
+            else:
+                return Response(data={
+                    'message': 'You are not allowed to view this report.'
+                }, status=status.HTTP_403_FORBIDDEN)
+        else:
+            # return error message indicating article report is not found.
+            return Response(data={
+                'message': 'That article report does not exist.'
+            }, status=status.HTTP_404_NOT_FOUND)
+
+    def put(self, request, slug, pk):
+        article_report = self.get_object(pk)
+        """
+        Attempt to get an article using the slug.
+        If article doesn't exist the user will receive a message telling them so
+        """
+        try:
+            article = Article.objects.get(slug=slug)
+        except Exception:
+            response = {
+                'message': 'That article does not exist.'
+            }
+            return Response(response, status=status.HTTP_404_NOT_FOUND)
+
+        if article_report:
+            if request.user.is_staff or request.user == article_report.user:
+                article_data = {
+                    'article': article_report.article.id,
+                    'user': request.user.id,
+                    'text': request.data.get('text', None),
+                }
+                serializer = self.serializer_class(
+                    article_report, data=article_data)
+                serializer.is_valid(raise_exception=True)
+                serializer.save()
+                return Response(data=serializer.data, status=status.HTTP_200_OK)
+            else:
+                return Response(data={
+                    'message': 'You are not allowed to update this report.'
+                }, status=status.HTTP_403_FORBIDDEN)
+        else:
+            # return error message indicating article report is not found.
+            return Response(data={
+                'message': 'That article report does not exist.'
+            }, status=status.HTTP_404_NOT_FOUND)
+
+    def delete(self, request, slug, pk):
+        article_report = self.get_object(pk)
+        """
+        Attempt to get an article using the slug.
+        If article doesn't exist the user will receive a message telling them so
+        """
+        try:
+            article = Article.objects.get(slug=slug)
+        except Exception:
+            response = {
+                'message': 'That article does not exist.'
+            }
+            return Response(response, status=status.HTTP_404_NOT_FOUND)
+
+        if article_report:
+            if request.user.is_staff or request.user == article_report.user:
+                article_report.delete()
+
+                # Save the total number of reports flagged on this article.
+                total_report_count = ArticleReport.objects.filter(
+                    article_id=article.id).count()
+                article.report_count = total_report_count
+                article.save(update_fields=['report_count'])
+
+                return Response(data={
+                    'message': "Report was deleted successfully"
+                }, status=status.HTTP_200_OK)
+            else:
+                return Response(data={
+                    'message': 'You are not allowed to delete this report.'
+                }, status=status.HTTP_403_FORBIDDEN)
+        else:
+            # return error message indicating article report is not found.
+            return Response(data={
+                'message': 'That article report does not exist.'
+            }, status=status.HTTP_404_NOT_FOUND)
