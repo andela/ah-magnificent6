@@ -676,29 +676,34 @@ class ListCreateCommentAPIView(generics.ListCreateAPIView):
     serializer_class = CommentSerializer
 
     def create(self, request, slug):
-        data = request.data
+        """
+        POST : create comment
+        :param request:
+        :param slug:
+        :return:
+        """
 
         # query the database to get article with provided slug
         article = Article.objects.get(slug=slug)
-        print(article.id)
 
         comment_data = {
             'commented_by': request.user.username,
-            'article': article.pk,
             'comment_body': request.data.get('comment_body', None)
         }
+        created_comment = Comment.objects.create(
+            commented_by=request.user, article=article, comment_body=request.data.get('comment_body', None))
 
         serialize = self.serializer_class(data=comment_data)
         serialize.is_valid(raise_exception=True)
 
-        serialize.save()
+        created_comment.save()
 
         return Response(serialize.data)
 
 
 class RetrieveCommentAPIView(generics.RetrieveDestroyAPIView):
     """
-    This class contains method to retrieve a comment
+    This class contains method to retrieve and delete a comment
     """
 
     permission_classes = (IsAuthenticated,)

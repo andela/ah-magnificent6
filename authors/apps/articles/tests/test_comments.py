@@ -48,7 +48,7 @@ class CommentTest(Base):
         create_comment_response = self.client.post(self.comments_url,
                                                    {"comment_body": "Amazing"},
                                                    format='json', **self.headers)
-        self.assertEqual(len(create_comment_response.data), 3)
+        self.assertEqual(len(create_comment_response.data), 2)
 
 
 
