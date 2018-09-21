@@ -39,7 +39,7 @@ class Article(models.Model):
     userDisLikes = models.ManyToManyField(
         User, blank=True, related_name='Likes.user+')
     article_tags = models.ManyToManyField(
-        'ArticleTags', blank=True, null=True)
+        'ArticleTags', blank=True)
 
     def __str__(self):
         "Returns a string representation of article title."
