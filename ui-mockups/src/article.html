@@ -171,8 +171,28 @@
                             because it is pain..." "There is no one who loves pain itself, who seeks after it and wants
                             to have it, simply because it is pain..."
                         </div>
-
                     </div>
+                    <!-- Comment section -->
+                    <div class="comments row ml-2 border-top border-bottom Z no-gutters">
+                            <h4 class="w-100">Comments (5)</h4>
+                            <p>Start a discussion not a fire. Post with kindness</p>
+                            <textarea rows="2" cols="100" name="comment" form="usrform">Post a comment</textarea>
+                        <div class="col col-md-1">
+                            <!-- Usr icon -->
+                            <div class="thumbnail">
+                                    <i class="fas fa-user-circle"></i>
+                            </div>
+                        </div>
+                        <div class="col col-md-11">
+                            <div class="panel panel-default">
+                                <div class="panel-heading">
+                                    <strong>Mike Nthiwa</strong> <span class="text-muted">commented 5 days ago</span>
+                                </div>
+                            <div class="panel-body">
+                                I am a fellow. I can mentor you.
+                            </div>
+                        </div>
+                    </div> <!-- End comment section -->
                     <div class="clear"></div>
                 </div>
             </div>
@@ -256,9 +276,7 @@
         </div>
         <hr>
         <div class="row footer">
-            <div class="col-sm-4">
-            </div>
-            <div class="col-sm-4">
+            <div class="col">
                 <a href="#">About us |</a><a href="#"> Contact us </a>
             </div>
         </div>
@@ -288,29 +306,12 @@
                         fav.innerText = 'Favourite this article'
                     }
                 })
+            }
+        })
     </script>
     <script src="https://use.fontawesome.com/11.4875c9fa.js"></script>
     <script src="js/jquery.min.js" async defer></script>
     <script src="js/bootstrap.min.js" async defer></script>
-</body>
-
-</html>
-<script>
-
-            let followUnfollowBtn = document.getElementById('ah-follow-unfollow-btn')
-            followUnfollowBtn.addEventListener('click', function () {
-                if (followUnfollowBtn.innerText === 'Follow') {
-                    followUnfollowBtn.innerText = 'Unfollow'
-                }
-                else {
-                    followUnfollowBtn.innerText = 'Follow'
-                }
-
-            })
-</script>
-<script src="https://use.fontawesome.com/11.4875c9fa.js"></script>
-<script src="js/jquery.min.js" async defer></script>
-<script src="js/bootstrap.min.js" async defer></script>
 </body>
 
 </html>
