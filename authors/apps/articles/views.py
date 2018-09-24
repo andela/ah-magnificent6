@@ -745,8 +745,8 @@ class ArticleBookmarkAPIView(generics.CreateAPIView):
 
     def get(self, request, slug=None):
         return Response(
-            {'message': f'Sorry {request.user.username},this\
-                         on this endpoint is not allowed.'
+            {'message': 'Sorry {},this'.format(request.user.username) + 'on \
+            this endpoint is not allowed.'
              }, status.HTTP_403_FORBIDDEN)
 
     def post(self, request, slug):
