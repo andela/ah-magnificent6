@@ -1,7 +1,7 @@
 from rest_framework import serializers
 from rest_framework.validators import UniqueTogetherValidator
 
-from .models import Article, ArticleRating, Likes, ArticleTags
+from .models import Article, ArticleRating, Likes, ArticleTags, ArticleReport
 from ..authentication.models import User
 from ..authentication.serializers import UserSerializer
 
@@ -35,10 +35,10 @@ class ArticleSerializer(serializers.ModelSerializer):
             "userLikes",
             "userDisLikes",
             "rating_average",
-            "share_urls",
             "time_to_read",
-            "share_urls",
-            "article_tags"
+            "article_tags",
+            "report_count",
+            "share_urls"
         )
 
     def get_favorite(self, instance):
@@ -128,3 +128,26 @@ class TagsSerializer(serializers.ModelSerializer):
     class Meta:
         model = ArticleTags
         fields = ('tag',)
+
+
+class ArticleReportSerializer(serializers.ModelSerializer):
+    """Serializer class for ArticleReport model."""
+    class Meta:
+        model = ArticleReport
+        fields = '__all__'
+
+
+class ArticleReportRetrieveSerializer(serializers.ModelSerializer):
+    """Serializer class for Retrieving ArticleReport model."""
+    user = serializers.SerializerMethodField()
+    article = serializers.SerializerMethodField()
+
+    class Meta:
+        model = ArticleReport
+        fields = ('text', 'user', 'article', 'created_at', 'updated_at')
+
+    def get_user(self, instance):
+        return instance.user.username
+
+    def get_article(self, instance):
+        return instance.article.title

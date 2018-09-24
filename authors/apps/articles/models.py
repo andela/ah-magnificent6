@@ -31,6 +31,7 @@ class Article(models.Model):
         User, related_name='favourited', blank=True)
     rating_average = models.DecimalField(
         max_digits=3, decimal_places=2, blank=True, null=True)
+    report_count = models.PositiveIntegerField(default=0)
     image = models.ImageField(
         upload_to='static/images', default='static/images/no-img.jpg')
     # store users who have liked/disliked this article here
@@ -83,7 +84,7 @@ class Article(models.Model):
         # Set the standard read time
         words_per_min = settings.WORDS_PER_MIN
         """
-        Cleaning the post content and lower casing all words: 
+        Cleaning the post content and lower casing all words:
         """
         # Removing characters from the post and replacing with space for easier conversion to a list
         post = re.sub(r'[^\w]', ' ', self.body)
@@ -135,3 +136,18 @@ class ArticleTags(models.Model):
 
     def __str__(self):
         return self.tag
+
+
+class ArticleReport(models.Model):
+    """
+    Article Report schema.
+    Article can be reported when they violate the terms and conditions of Authors'
+    Haven.
+    """
+
+    article = models.ForeignKey(Article, on_delete=models.CASCADE)
+    user = models.ForeignKey(
+        User, on_delete=models.CASCADE, null=True, blank=True)
+    text = models.CharField(max_length=255)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
