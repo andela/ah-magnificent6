@@ -778,28 +778,41 @@ class ArticleBookmarkDetailAPIView(generics.RetrieveDestroyAPIView):
     queryset = Bookmark.objects.all()
 
     def get(self, request, pk=None):
-        bookmarks = Bookmark.objects.filter(user=request.user)
-        serializer = self.serializer_class(data=bookmarks, many=True)
-        serializer.is_valid()
-        return Response(serializer.data)
+        if pk:
+            bookmarks = Bookmark.objects.filter(user=request.user)
+            serializer = self.serializer_class(data=bookmarks,many=True)
+            serializer.is_valid()
+            return Response(serializer.data)
+        else:
+            bookmarks = Bookmark.objects.filter(user=request.user)
+            serializer = self.serializer_class(data=bookmarks, many=True)
+            serializer.is_valid()
+            return Response(serializer.data)
 
-    def delete(self, request, pk):
+    def delete(self, request, pk=None):
         try:
-            bookmark = Bookmark.objects.get(pk=pk)
-            if bookmark.user.username == request.user.username:
-                bookmark.delete()
+            if pk:
+                bookmark = Bookmark.objects.get(pk=pk)
+                if bookmark.user.username == request.user.username:
+                    bookmark.delete()
+                    return Response(
+                        {
+                            'message': "Bookmark deleted successfully"
+                        }, status.HTTP_200_OK)
+                else:
+                    # prevent a user from deleting a bookmark s/he does not own
+                    return Response({
+                        'error': f'Sorry {request.user.username},'
+                        + 'you cannot delete bookmarks belonging to other users.'
+                    }, status.HTTP_403_FORBIDDEN)
+            else:
+                bookmarks = Bookmark.objects.filter(user=request.user)
+                bookmarks.delete()
                 return Response(
                     {
-                        'message': "Bookmark deleted successfully"
+                        'message': "All bookmarks deleted successfully"
                     }, status.HTTP_200_OK)
-            else:
-                # prevent a user from deleting a bookmark s/he does not own
-                return Response({
-                    'error': f'Sorry {request.user.username},'
-                    + 'you cannot delete bookmarks belonging to other users.'
-                }, status.HTTP_403_FORBIDDEN)
         except ObjectDoesNotExist:
-            print("here")
             return Response(
                 {
                     'message': f'Sorry {request.user.username},'

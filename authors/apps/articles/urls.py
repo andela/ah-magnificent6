@@ -39,5 +39,7 @@ urlpatterns = [
     path('<str:slug>/bookmarks/', ArticleBookmarkAPIView.as_view(),
          name='bookmark_article'),
     path('bookmarks/<str:pk>', ArticleBookmarkDetailAPIView.as_view(),
+         name='user_bookmarks'),
+    path('bookmarks/', ArticleBookmarkDetailAPIView.as_view(),
          name='user_bookmarks')
 ]
