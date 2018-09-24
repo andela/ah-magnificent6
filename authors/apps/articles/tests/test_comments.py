@@ -37,7 +37,7 @@ class CommentTest(Base):
 
     def test_get_comments(self):
         """Test a user can get all comments"""
-
+        # no comments available
         list_comment_response = self.client.get(self.comments_url,
                                                 self.article_data, format='json',
                                                 **self.headers)
@@ -45,11 +45,36 @@ class CommentTest(Base):
         self.assertIn('There are currently no available comments', str(list_comment_response.data))
 
     def test_create_comment(self):
-        """Test a user can delete a comment"""
+        """Test a user can create a comment"""
         create_comment_response = self.client.post(self.comments_url,
                                                    {"comment_body": "Amazing"},
                                                    format='json', **self.headers)
         self.assertEqual(len(create_comment_response.data), 2)
+
+        # get comments created
+        list_comment_response = self.client.get(self.comments_url,
+                                                self.article_data, format='json',
+                                                **self.headers)
+        self.assertEqual(list_comment_response.data['count'], 1)
+        self.assertEqual(list_comment_response.status_code, status.HTTP_200_OK)
+
+        # User provides invalid comment id
+        invalid_comment_id_response = self.client.get(self.detail_comment, format='json', **self.headers)
+        self.assertIn('The comment your entered does not exist', str(invalid_comment_id_response.data))
+
+        """Delete comment"""
+        detail_comment_url = reverse('articles:comment_detail', kwargs={"slug": self.slug.data['slug'], "pk": 1})
+        delete_comment_response = self.client.delete(detail_comment_url, format='json', **self.headers)
+        self.assertIn('You have deleted the comment', str(delete_comment_response.data))
+
+
+
+
+
+
+
+
+
 
 
 
