@@ -19,7 +19,7 @@ from rest_framework import authentication
 # Add pagination
 from rest_framework.pagination import PageNumberPagination
 
-# Add search package 
+# Add search package
 from rest_framework.filters import SearchFilter
 from django_filters.rest_framework import DjangoFilterBackend
 
@@ -56,6 +56,7 @@ def create_tag(tags, article):
     article.save()
     return None
 
+
 class ArticleAPIView(generics.ListCreateAPIView):
     """
     get:
@@ -75,9 +76,9 @@ class ArticleAPIView(generics.ListCreateAPIView):
     fields = {
         'author__username': ['icontains'],
         'title': ['icontains'],
-        'article_tags__tag':['icontains'],
+        'article_tags__tag': ['icontains'],
     }
-    
+
     search_fields = fields
     filter_fields = fields
 
@@ -91,7 +92,7 @@ class ArticleAPIView(generics.ListCreateAPIView):
         # Retrieve article data from the request object and convert it
         # to a kwargs object
         # get user data at this point
-       
+
         article = {
             'title': request.data.get('title', None),
             'body': request.data.get('body', None),
@@ -450,7 +451,6 @@ class ArticleReportAPIView(generics.ListCreateAPIView):
 
     def list(self, request, slug):
         """Method for listing all reports."""
-        """Method for reporting an article."""
         try:
             article = Article.objects.get(slug=slug)
         except Exception:
@@ -531,7 +531,7 @@ class ArticleReportRUDAPIView(generics.RetrieveUpdateDestroyAPIView):
     serializer_class = ArticleReportSerializer
     renderer_classes = (ArticleJSONRenderer,)
 
-    def get_object(self, pk):
+    def get_article_object(self, pk):
         """ Getter method for an ArticleReport using pk (primary key)."""
         try:
             return ArticleReport.objects.get(pk=pk)
@@ -540,7 +540,7 @@ class ArticleReportRUDAPIView(generics.RetrieveUpdateDestroyAPIView):
 
     def get(self, request, slug, pk):
         """The method for retrievieng a sinlge Article Report."""
-        article_report = self.get_object(pk)
+        article_report = self.get_article_object(pk)
         """
         Attempt to get an article using the slug.
         If article doesn't exist the user will receive a message telling them so
@@ -568,7 +568,7 @@ class ArticleReportRUDAPIView(generics.RetrieveUpdateDestroyAPIView):
             }, status=status.HTTP_404_NOT_FOUND)
 
     def put(self, request, slug, pk):
-        article_report = self.get_object(pk)
+        article_report = self.get_article_object(pk)
         """
         Attempt to get an article using the slug.
         If article doesn't exist the user will receive a message telling them so
@@ -604,7 +604,7 @@ class ArticleReportRUDAPIView(generics.RetrieveUpdateDestroyAPIView):
             }, status=status.HTTP_404_NOT_FOUND)
 
     def delete(self, request, slug, pk):
-        article_report = self.get_object(pk)
+        article_report = self.get_article_object(pk)
         """
         Attempt to get an article using the slug.
         If article doesn't exist the user will receive a message telling them so

@@ -144,7 +144,7 @@ class ArticleReportRetrieveSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = ArticleReport
-        fields = ('text', 'user', 'article',)
+        fields = ('text', 'user', 'article', 'created_at', 'updated_at')
 
     def get_user(self, instance):
         return instance.user.username
