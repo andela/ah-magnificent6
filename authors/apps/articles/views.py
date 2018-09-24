@@ -690,8 +690,8 @@ class ListCreateCommentAPIView(generics.ListCreateAPIView):
             'commented_by': request.user.username,
             'comment_body': request.data.get('comment_body', None)
         }
-        created_comment = Comment.objects.create(
-            commented_by=request.user, article=article, comment_body=request.data.get('comment_body', None))
+        created_comment = Comment.objects.create(commented_by=request.user, article=article,
+                                                 comment_body=request.data.get('comment_body', None))
 
         serialize = self.serializer_class(data=comment_data)
         serialize.is_valid(raise_exception=True)
