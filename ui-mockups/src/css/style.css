@@ -215,3 +215,18 @@ h1 {
 
 .text-success {
   color: #91be69 !important; }
+
+.profile {
+  margin: 20px; }
+
+.ah-profile-card {
+  border: #e0e0d4 1px solid;
+  border-radius: 5px; }
+
+.ah-avatar {
+  width: 100px;
+  margin-right: 10px; }
+
+.card-body .fa-user-circle {
+  font-size: 6.8rem;
+  color: lightblue; }
