@@ -252,6 +252,20 @@ class ArticleRatingTests(Base):
         self.assertEqual(response.data['message'],
                          self.non_existent_article_message)
 
+    def test_unsuccessful_retrieve_all_reports_of_nonexistent_article(self):
+        """
+        Tests if a user can retrieve reports of a non existent article
+        """
+        self.slug = 'fake-slug'
+        response = self.client.get(
+            reverse('articles:reportListCreate',
+                    kwargs={'slug': self.slug}),
+            format="json",
+            **self.headers)
+        self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
+        self.assertEqual(response.data['message'],
+                         self.non_existent_article_message)
+
     def test_unsuccessful_update_report_of_nonexistent_article(self):
         """
         Tests if a user can update a report of a non existent article

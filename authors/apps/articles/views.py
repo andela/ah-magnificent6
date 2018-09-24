@@ -450,6 +450,15 @@ class ArticleReportAPIView(generics.ListCreateAPIView):
 
     def list(self, request, slug):
         """Method for listing all reports."""
+        """Method for reporting an article."""
+        try:
+            article = Article.objects.get(slug=slug)
+        except Exception:
+            response = {
+                'message': 'That article does not exist.'
+            }
+            return Response(response, status=status.HTTP_404_NOT_FOUND)
+
         if request.user.is_staff:
             queryset = self.get_queryset()
         else:
