@@ -103,7 +103,8 @@ small a:hover,
 
 .fa-facebook:hover,
 .fa-twitter:hover,
-.fa-envelope:hover {
+.fa-envelope:hover,
+.fa-flag:hover {
     opacity: 0.7;
     cursor: pointer;
 }
@@ -171,7 +172,7 @@ h1 {
 .rating {
     border: none;
     float: left;
-    margin-left: -30px;
+    margin-right: -20px;
 }
 
 .ah-rating-average {
@@ -200,6 +201,13 @@ h1 {
 .rating>label {
     color: #ddd;
     float: right;
+}
+
+//notification badge
+.badge-notify{
+    position:relative;
+    top: -10px;
+    right: 10px;
 }
 
 
