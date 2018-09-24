@@ -18,6 +18,12 @@ from rest_framework import authentication
 
 # Add pagination
 from rest_framework.pagination import PageNumberPagination
+
+# Add search package 
+from rest_framework.filters import SearchFilter
+from django_filters.rest_framework import DjangoFilterBackend
+
+
 from .renderers import ArticleJSONRenderer
 from .serializers import (
     ArticleSerializer, ArticleRatingSerializer, LikesSerializer, TagsSerializer
@@ -49,7 +55,6 @@ def create_tag(tags, article):
     article.save()
     return None
 
-
 class ArticleAPIView(generics.ListCreateAPIView):
     """
     get:
@@ -63,6 +68,17 @@ class ArticleAPIView(generics.ListCreateAPIView):
     permission_classes = (IsAuthenticatedOrReadOnly, )
     # Apply pagination to view
     pagination_class = PageNumberPagination
+    # Add search class and fields
+    filter_backends = (SearchFilter, DjangoFilterBackend, )
+    # Define search and filter fields with the field names mapped to a list of lookups
+    fields = {
+        'author__username': ['icontains'],
+        'title': ['icontains'],
+        'article_tags__tag':['icontains'],
+    }
+    
+    search_fields = fields
+    filter_fields = fields
 
     def post(self, request):
         """
@@ -74,6 +90,7 @@ class ArticleAPIView(generics.ListCreateAPIView):
         # Retrieve article data from the request object and convert it
         # to a kwargs object
         # get user data at this point
+       
         article = {
             'title': request.data.get('title', None),
             'body': request.data.get('body', None),

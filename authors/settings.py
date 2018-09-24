@@ -53,10 +53,15 @@ INSTALLED_APPS = [
     'django_cron',
     # Include python social auth app django
     'social_django',
+
+    # Include django-filters package
+    'django_filters',
 ]
 
 CRON_CLASSES = [
     "authors.apps.core.cron.EmailNotificationCron",
+    # Include django-filters package
+    'django_filters',
 ]
 
 MIDDLEWARE = [
@@ -184,7 +189,7 @@ REST_FRAMEWORK = {
 
     # Add pagination default class and number of objects in page
     'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.PageNumberPagination',
-    'PAGE_SIZE': 20
+    'PAGE_SIZE': 20,
 }
 
 # Swagger settings

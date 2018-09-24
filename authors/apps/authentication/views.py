@@ -284,8 +284,8 @@ class SocialLoginView(generics.CreateAPIView):
 
         provider = serializer.data.get("provider")
 
-        # If request is from authenticated user, associate social account with it
-        authentic_user = request.user if not request.user.is_anonymous else None
+        # If request is from existing user, associate social account with it
+        existing_user = request.user if not request.user.is_anonymous else None
 
         # Load Django code to plug into Python Social Auth's functionality
         strategy = load_strategy(request)
@@ -314,7 +314,7 @@ class SocialLoginView(generics.CreateAPIView):
             return Response({"error": "Invalid provider"}, status=status.HTTP_400_BAD_REQUEST)
 
         try:
-            user = backend.do_auth(access_token, user=authentic_user)
+            user = backend.do_auth(access_token, user=existing_user)
         except BaseException as error:
             return Response({"error": str(error)}, status=status.HTTP_400_BAD_REQUEST)
 
