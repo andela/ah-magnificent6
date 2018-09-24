@@ -60,8 +60,6 @@ INSTALLED_APPS = [
 
 CRON_CLASSES = [
     "authors.apps.core.cron.EmailNotificationCron",
-    # Include django-filters package
-    'django_filters',
 ]
 
 MIDDLEWARE = [

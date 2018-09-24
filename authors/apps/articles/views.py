@@ -245,6 +245,7 @@ class FavoriteArticle(generics.CreateAPIView):
         if user in article.favourited.all():
             # User has already favourited it, unfavourites the article
             article.favourited.remove(user.id)
+            article.save()
             serializer = self.get_serializer(article)
             message = "You have successfully unfavourited this article"
             response = {"message": message, "article": serializer.data}
@@ -253,6 +254,7 @@ class FavoriteArticle(generics.CreateAPIView):
         else:
             # Favourites the article
             article.favourited.add(user.id)
+            article.save()
             serializer = self.get_serializer(article)
             message = "You have successfully favourited this article"
             response = {"message": message, "article": serializer.data}
