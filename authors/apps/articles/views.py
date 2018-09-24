@@ -744,8 +744,8 @@ class ArticleBookmarkAPIView(generics.CreateAPIView):
     queryset = Bookmark.objects.all()
 
     def get(self, request, slug=None):
-        return Response({'message': f'Sorry {request.user.username},'
-                         + 'this method on this endpoint is not allowed.'
+        return Response({'message': f'Sorry {request.user.username},this'
+                         + ' on this endpoint is not allowed.'
                          }, status.HTTP_403_FORBIDDEN)
 
     def post(self, request, slug):
@@ -780,7 +780,7 @@ class ArticleBookmarkDetailAPIView(generics.RetrieveDestroyAPIView):
     def get(self, request, pk=None):
         if pk:
             bookmarks = Bookmark.objects.filter(user=request.user)
-            serializer = self.serializer_class(data=bookmarks,many=True)
+            serializer = self.serializer_class(data=bookmarks, many=True)
             serializer.is_valid()
             return Response(serializer.data)
         else:
