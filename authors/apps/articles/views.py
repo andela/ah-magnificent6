@@ -778,7 +778,7 @@ class ArticleBookmarkDetailAPIView(generics.RetrieveDestroyAPIView):
     get:
     Retrieve all bookmarks for a logged in user
     """
-    permission_classes = (IsAuthenticatedOrReadOnly, )
+    permission_classes = (IsAuthenticated, )
     serializer_class = BookmarkSerializer
     queryset = Bookmark.objects.all()
 

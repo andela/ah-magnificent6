@@ -1,8 +1,12 @@
 from rest_framework import serializers
 from rest_framework.validators import UniqueTogetherValidator
 
+<< << << < HEAD
 from .models import (Article, ArticleRating, Likes,
                      ArticleTags, Comment, ArticleReport, Bookmark)
+== == == =
+from .models import Article, ArticleRating, Likes, ArticleTags, ArticleReport, Bookmark
+>>>>>> > [Feature  # 159965320] fix error resulting from styling markdown tags
 from ..authentication.models import User
 from ..authentication.serializers import UserSerializer
 from ..profiles.serializers import ProfileSerializer
@@ -10,18 +14,18 @@ from ..profiles.serializers import ProfileSerializer
 
 class ArticleSerializer(serializers.ModelSerializer):
     """Serializer for articles."""
-    favourite = serializers.SerializerMethodField(method_name='get_favorite')
-    favouritesCount = serializers.SerializerMethodField(
+    favourite= serializers.SerializerMethodField(method_name='get_favorite')
+    favouritesCount= serializers.SerializerMethodField(
         method_name='get_favorites_count')
-    share_urls = serializers.SerializerMethodField(read_only=True)
-    time_to_read = serializers.ReadOnlyField(source="get_time_to_read")
-    article_tags = serializers.StringRelatedField(many=True, read_only=True)
+    share_urls= serializers.SerializerMethodField(read_only=True)
+    time_to_read= serializers.ReadOnlyField(source="get_time_to_read")
+    article_tags= serializers.StringRelatedField(many=True, read_only=True)
 
     class Meta:
         """Declare all fields to be returned from the model of articles."""
 
-        model = Article
-        fields = (
+        model= Article
+        fields= (
             "title",
             "body",
             "description",
@@ -45,7 +49,7 @@ class ArticleSerializer(serializers.ModelSerializer):
 
     def get_favorite(self, instance):
         """Return True if the user has favorited an article, else False."""
-        request = self.context.get('request', None)
+        request= self.context.get('request', None)
         if request is None or not request.user.is_authenticated:
             return False
         return instance.favourited.filter(pk=request.user.pk).exists()
@@ -59,36 +63,36 @@ class ArticleSerializer(serializers.ModelSerializer):
         Populates the share_urls field with the urls for facebook, twitter
         and email.
         """
-        request = self.context.get('request')
+        request= self.context.get('request')
         return instance.get_share_uri(request=request)
 
 
 class ArticleRatingSerializer(serializers.ModelSerializer):
     class Meta:
-        model = ArticleRating
+        model= ArticleRating
 
         """
         Declare all fields we need to be returned from ArticleRating model
         """
-        fields = '__all__'
+        fields= '__all__'
 
     def __init__(self, *args, **kwargs):
         super(ArticleRatingSerializer, self).__init__(*args, **kwargs)
 
         # Override the error_messages of each field with a custom error message
         for field in self.fields:
-            field_error_messages = self.fields[field].error_messages
-            field_error_messages['null'] = field_error_messages['blank'] \
-                = field_error_messages['required'] \
-                = 'Please fill in the {}'.format(field)
+            field_error_messages= self.fields[field].error_messages
+            field_error_messages['null']= field_error_messages['blank'] \
+                =field_error_messages['required'] \
+                ='Please fill in the {}'.format(field)
 
     def update(self, instance, validated_data):
         """
         Method for updating an existing ArticleRating object
         """
-        instance.article = validated_data.get('article', instance.article)
-        instance.user = validated_data.get('user', instance.user)
-        instance.rating = validated_data.get('rating', instance.rating)
+        instance.article= validated_data.get('article', instance.article)
+        instance.user= validated_data.get('user', instance.user)
+        instance.rating= validated_data.get('rating', instance.rating)
         instance.save()
         return instance
 
@@ -98,7 +102,7 @@ class ArticleRatingSerializer(serializers.ModelSerializer):
         It checks if a user has made a rating for an article. If yes it calls
         the update method. If not, it creates a new ArticleRating object.
         """
-        article_rating_object, created = ArticleRating.objects.get_or_create(
+        article_rating_object, created= ArticleRating.objects.get_or_create(
             article_id=validated_data.get('article').id,
             user_id=validated_data.get('user').id,
             defaults={'rating': validated_data.get('rating', None)}, )
@@ -112,9 +116,9 @@ class ArticleRatingSerializer(serializers.ModelSerializer):
 
 class LikesSerializer(serializers.ModelSerializer):
     class Meta:
-        model = Likes
-        fields = '__all__'
-        validators = [
+        model= Likes
+        fields= '__all__'
+        validators= [
             UniqueTogetherValidator(
                 queryset=Likes.objects.all(),
                 fields=('article', 'user'),
@@ -126,26 +130,26 @@ class LikesSerializer(serializers.ModelSerializer):
 class TagsSerializer(serializers.ModelSerializer):
 
     class Meta:
-        model = ArticleTags
-        fields = ('tag',)
+        model= ArticleTags
+        fields= ('tag',)
 
 
 class ArticleReportSerializer(serializers.ModelSerializer):
     """Serializer class for ArticleReport model."""
 
     class Meta:
-        model = ArticleReport
-        fields = '__all__'
+        model= ArticleReport
+        fields= '__all__'
 
 
 class ArticleReportRetrieveSerializer(serializers.ModelSerializer):
     """Serializer class for Retrieving ArticleReport model."""
-    user = serializers.SerializerMethodField()
-    article = serializers.SerializerMethodField()
+    user= serializers.SerializerMethodField()
+    article= serializers.SerializerMethodField()
 
     class Meta:
-        model = ArticleReport
-        fields = ('text', 'user', 'article', 'created_at', 'updated_at')
+        model= ArticleReport
+        fields= ('text', 'user', 'article', 'created_at', 'updated_at')
 
     def get_user(self, instance):
         return instance.user.username
@@ -161,9 +165,9 @@ class CommentSerializer(serializers.ModelSerializer):
     """
 
     class Meta:
-        model = Comment
+        model= Comment
 
-        fields = ['commented_by', 'created_at', 'comment_body', 'id']
+        fields= ['commented_by', 'created_at', 'comment_body', 'id']
 
 
 class ArticleListingField(serializers.RelatedField):
@@ -175,15 +179,15 @@ class ArticleListingField(serializers.RelatedField):
 
 
 class BookmarkSerializer(serializers.ModelSerializer):
-    article = ArticleListingField(queryset=Article.objects.all())
+    article= ArticleListingField(queryset=Article.objects.all())
 
     class Meta:
-        model = Bookmark
+        model= Bookmark
         """
         Declare all fields we need to be returned from ArticleRating model
         """
-        fields = ('__all__')
-        validators = [
+        fields= ('__all__')
+        validators= [
             UniqueTogetherValidator(
                 queryset=Bookmark.objects.all(),
                 fields=('article', 'user'),
