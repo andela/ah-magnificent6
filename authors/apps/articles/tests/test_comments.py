@@ -41,7 +41,8 @@ class CommentTest(Base):
         list_comment_response = self.client.get(self.comments_url,
                                                 self.article_data, format='json',
                                                 **self.headers)
-        self.assertEqual(list_comment_response.status_code, status.HTTP_200_OK)
+
+        self.assertIn('There are currently no available comments', str(list_comment_response.data))
 
     def test_create_comment(self):
         """Test a user can delete a comment"""
