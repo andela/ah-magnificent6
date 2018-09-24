@@ -70,7 +70,9 @@ small a:hover,
 .fa-google {
   color: #ea4335; }
 
-.fa-facebook:hover, .fa-twitter:hover, .fa-envelope:hover {
+.fa-facebook:hover,
+.fa-twitter:hover,
+.fa-envelope:hover {
   opacity: 0.7;
   cursor: pointer; }
 
@@ -276,3 +278,13 @@ h1 {
     margin-top: 1.5rem; }
   .comments .card-text {
     font-size: 1rem; }
+
+.bookmark a {
+  margin-left: 6px;
+  text-decoration: None;
+  color: #999999; }
+
+.bookmark {
+  margin-left: 6px;
+  text-decoration: None;
+  color: #999999; }
