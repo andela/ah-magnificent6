@@ -140,8 +140,6 @@ class ArticleTags(models.Model):
         return self.tag
 
 
-
-
 class ArticleReport(models.Model):
     """
     Article Report schema.
@@ -163,7 +161,8 @@ class Comment(models.Model):
     on an article
     """
 
-    commented_by = models.ForeignKey(User, to_field='username', on_delete=models.CASCADE)
+    commented_by = models.ForeignKey(
+        User, to_field='username', on_delete=models.CASCADE)
     article = models.ForeignKey(Article, on_delete=models.CASCADE)
     comment_body = models.CharField(max_length=500)
     created_at = models.DateTimeField(auto_now_add=True)
@@ -172,3 +171,21 @@ class Comment(models.Model):
     def __str__(self):
         return self.commented_by.username
 
+
+class Bookmark(models.Model):
+    """
+    An article can be bookmarked by users for future reading.
+    This class defines fields necessary to bookmark an article.
+    """
+    class Meta:
+        # A user can bookmark an article only once.
+        # Making an article_id and user_id unique_together achieves
+        # the intended behavior.
+        unique_together = (('article', 'user'))
+    article = models.ForeignKey(
+        Article, on_delete=models.CASCADE)
+    user = models.ForeignKey(
+        User, on_delete=models.CASCADE)
+
+    def __str__(self):
+        return self.article.slug

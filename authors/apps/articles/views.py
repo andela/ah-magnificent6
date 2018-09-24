@@ -26,18 +26,13 @@ from rest_framework.pagination import PageNumberPagination
 from rest_framework.filters import SearchFilter
 from django_filters.rest_framework import DjangoFilterBackend
 
-
-from .renderers import ArticleJSONRenderer
-
+from .renderers import ArticleJSONRenderer, BookmarkJSONRenderer
 from .serializers import (
     ArticleSerializer, ArticleRatingSerializer, LikesSerializer, TagsSerializer,
-    ArticleReportSerializer, ArticleReportRetrieveSerializer
+    ArticleReportSerializer, ArticleReportRetrieveSerializer, BookmarkSerializer
 )
-from .models import Article, ArticleRating, Likes, ArticleTags, ArticleReport
-
-
-from .models import Article, ArticleRating, Likes, ArticleTags
-
+from .models import (
+    Article, ArticleRating, Likes, ArticleTags, ArticleReport, Bookmark)
 from authors.apps.notifications.models import notify_follower
 
 
@@ -52,12 +47,12 @@ def create_tag(tags, article):
     # also, add them to the articles and save the article instance
 
     for tag in tags.split(','):
-        article_tag = ArticleTags.objects.filter(tag__icontains=tag.strip())
+        article_tag=ArticleTags.objects.filter(tag__icontains = tag.strip())
         if not article_tag:
-            data = {'tag': tag.strip()}
-            serializer = TagsSerializer(data=data)
-            serializer.is_valid(raise_exception=True)
-            article_tag = serializer.save()
+            data={'tag': tag.strip()}
+            serializer=TagsSerializer(data = data)
+            serializer.is_valid(raise_exception = True)
+            article_tag=serializer.save()
             article.article_tags.add(article_tag)
         else:
             article.article_tags.add(article_tag.first())
@@ -83,11 +78,11 @@ class ArticleAPIView(generics.ListCreateAPIView):
     renderer_classes = (ArticleJSONRenderer,)
     permission_classes = (IsAuthenticatedOrReadOnly,)
     # Apply pagination to view
-    pagination_class = PageNumberPagination
+    pagination_class=PageNumberPagination
     # Add search class and fields
-    filter_backends = (SearchFilter, DjangoFilterBackend, )
+    filter_backends=(SearchFilter, DjangoFilterBackend, )
     # Define search and filter fields with the field names mapped to a list of lookups
-    fields = {
+    fields={
         'author__username': ['icontains'],
         'title': ['icontains'],
         'article_tags__tag': ['icontains'],
@@ -411,7 +406,6 @@ class ArticleLikes(generics.ListCreateAPIView):
             elif not likes.like and like:
                 article.userLikes.add(request.user)
                 article.userDisLikes.remove(request.user)
-            # elif likes.like and like
             elif like:
                 # User can only like an article once or dislike an article once
                 msg = '{}, you already liked this article.'.format(
@@ -739,3 +733,76 @@ class RetrieveCommentAPIView(generics.RetrieveDestroyAPIView):
 
         return Response({"msg": "You have deleted the comment"})
 
+class ArticleBookmarkAPIView(generics.CreateAPIView):
+    """
+    post:
+    Bookmark an article
+    """
+    renderer_classes = (BookmarkJSONRenderer, )
+    permission_classes = (IsAuthenticatedOrReadOnly, )
+    serializer_class = BookmarkSerializer
+    queryset = Bookmark.objects.all()
+
+    def get(self, request, slug=None):
+        return Response({'message': f'Sorry {request.user.username},'
+                         + 'this method on this endpoint is not allowed.'
+                         }, status.HTTP_403_FORBIDDEN)
+
+    def post(self, request, slug):
+        try:
+            article = Article.objects.get(slug=slug)
+            data = {
+                'article': article.id,
+                'user': request.user.id
+            }
+            serializer = self.serializer_class(data=data)
+            serializer.is_valid(raise_exception=True)
+            serializer.save()
+            return Response(serializer.data, status.HTTP_201_CREATED)
+        except ObjectDoesNotExist:
+            return Response(
+                {
+                    'message': f'Sorry {request.user.username},'
+                    + 'the article you have requested does not exist'
+                }, status.HTTP_404_NOT_FOUND
+            )
+
+
+class ArticleBookmarkDetailAPIView(generics.RetrieveDestroyAPIView):
+    """
+    get:
+    Retrieve all bookmarks for a logged in user
+    """
+    permission_classes = (IsAuthenticatedOrReadOnly, )
+    serializer_class = BookmarkSerializer
+    queryset = Bookmark.objects.all()
+
+    def get(self, request, pk=None):
+        bookmarks = Bookmark.objects.filter(user=request.user)
+        serializer = self.serializer_class(data=bookmarks, many=True)
+        serializer.is_valid()
+        return Response(serializer.data)
+
+    def delete(self, request, pk):
+        try:
+            bookmark = Bookmark.objects.get(pk=pk)
+            if bookmark.user.username == request.user.username:
+                bookmark.delete()
+                return Response(
+                    {
+                        'message': "Bookmark deleted successfully"
+                    }, status.HTTP_200_OK)
+            else:
+                # prevent a user from deleting a bookmark s/he does not own
+                return Response({
+                    'error': f'Sorry {request.user.username},'
+                    + 'you cannot delete bookmarks belonging to other users.'
+                }, status.HTTP_403_FORBIDDEN)
+        except ObjectDoesNotExist:
+            print("here")
+            return Response(
+                {
+                    'message': f'Sorry {request.user.username},'
+                    + 'the bookmark you want to delete does not exist'
+                }, status.HTTP_404_NOT_FOUND
+            )
