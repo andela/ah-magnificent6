@@ -321,8 +321,8 @@ h1 {
     margin-right: 10px;
 }
 
-.card-body{
-    .fa-user-circle{
+.card-body {
+    .fa-user-circle {
         font-size: 6.8rem;
         color: lightblue;
     }
@@ -357,7 +357,7 @@ h1 {
 }
 
 // notification dropdown style
-.notifications{
+.notifications {
     margin-right: 1rem;
     .dropdown-menu {
         min-width: 20rem;
@@ -412,23 +412,25 @@ h1 {
 .bookmark:hover {
     background-color: #fff !important;
 }
-        
+
 
 /** 
-    Search and filter CSS
+Search and filter CSS
 */
+
+
 /** 
-    Search and filter CSS
+Search and filter CSS
 */
-.search-container{
+
+.search-container {
     margin-right: 1.5rem;
     max-width: 300px;
     .fas {
         color: $ah-primary-color;
         font-size: 1.375rem;
     }
-
-    .search{
+    .search {
         -webkit-transition: width 0.3s ease;
         -moz-transition: width 0.3s ease;
         -o-transition: width 0.3s ease;
@@ -436,33 +438,56 @@ h1 {
     }
 }
 
-.filter-container{
+.filter-container {
     margin-top: 1rem;
-    .applied-filters{
+    .applied-filters {
         margin-left: 0.3125rem;
-        .alert{
+        .alert {
             padding: 2px 0.5rem;
             border-radius: 1rem;
         }
-        .filter-value:after{
+        .filter-value:after {
             content: '\2715';
             padding-left: 0.5rem;
             color: $ah-secondary-text-color;
             font-size: 0.75rem;
         }
     }
-    .filter{
+    .filter {
         margin-top: 1.5rem;
-        input{
+        input {
             margin-bottom: 1rem;
         }
-        .results{
+        .results {
             padding: 1rem;
         }
-
-        .reset-filters{
+        .reset-filters {
             display: block;
             margin-top: 1rem;
         }
     }
+}
+
+.tags {
+    font-size: 15px;
+    font-weight: 400;
+}
+
+ul {
+    list-style: none;
+}
+
+li {
+    float: left;
+    display: block;
+    border: $ah-secondary-color 1px solid;
+    border-radius: 2px;
+}
+
+li a:hover {
+    text-decoration: none;
+}
+
+li a {
+    color: $ah-secondary-text-color;
 }

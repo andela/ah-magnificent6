@@ -294,10 +294,10 @@ h1 {
   background-color: #fff !important; }
 
 /** 
-    Search and filter CSS
+Search and filter CSS
 */
 /** 
-    Search and filter CSS
+Search and filter CSS
 */
 .search-container {
   margin-right: 1.5rem;
@@ -332,3 +332,22 @@ h1 {
     .filter-container .filter .reset-filters {
       display: block;
       margin-top: 1rem; }
+
+.tags {
+  font-size: 15px;
+  font-weight: 400; }
+
+ul {
+  list-style: none; }
+
+li {
+  float: left;
+  display: block;
+  border: #e0e0d4 1px solid;
+  border-radius: 2px; }
+
+li a:hover {
+  text-decoration: none; }
+
+li a {
+  color: #999999; }
