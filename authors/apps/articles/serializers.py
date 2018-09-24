@@ -168,13 +168,6 @@ class CommentSerializer(serializers.ModelSerializer):
     class Meta:
         model = Comment
 
-
-
-        fields = '__all__'
-
-
-        # fields = '__all__'
         fields = ['commented_by', 'created_at', 'comment_body', 'id']
 
-        # fields = ['commented_by', 'created_at', 'comment_body']
 
