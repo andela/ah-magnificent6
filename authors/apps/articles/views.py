@@ -759,7 +759,11 @@ class ArticleBookmarkAPIView(generics.CreateAPIView):
             serializer = self.serializer_class(data=data)
             serializer.is_valid(raise_exception=True)
             serializer.save()
-            return Response(serializer.data, status.HTTP_201_CREATED)
+            bookmark = {
+                "id": serializer.data['id'],
+                "article": serializer.data['article']
+            }
+            return Response(bookmark, status.HTTP_201_CREATED)
         except ObjectDoesNotExist:
             return Response(
                 {
