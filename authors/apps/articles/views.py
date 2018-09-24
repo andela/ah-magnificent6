@@ -27,7 +27,7 @@ from django_filters.rest_framework import DjangoFilterBackend
 from .renderers import ArticleJSONRenderer
 from .serializers import (
     ArticleSerializer, ArticleRatingSerializer, LikesSerializer, TagsSerializer,
-    ArticleReportSerializer
+    ArticleReportSerializer, ArticleReportRetrieveSerializer
 )
 from .models import Article, ArticleRating, Likes, ArticleTags, ArticleReport
 from authors.apps.notifications.models import notify_follower
@@ -459,7 +459,7 @@ class ArticleReportAPIView(generics.ListCreateAPIView):
                 'message': 'No concerns have been raised on this article.'
             }
             return Response(data=response, status=status.HTTP_404_NOT_FOUND)
-        serializer = ArticleReportSerializer(queryset, many=True)
+        serializer = ArticleReportRetrieveSerializer(queryset, many=True)
         return Response(data=serializer.data, status=status.HTTP_200_OK)
 
     def post(self, request, slug):
@@ -546,7 +546,7 @@ class ArticleReportRUDAPIView(generics.RetrieveUpdateDestroyAPIView):
 
         if article_report:
             if request.user.is_staff or request.user == article_report.user:
-                serializer = self.serializer_class(article_report)
+                serializer = ArticleReportRetrieveSerializer(article_report)
                 return Response(data=serializer.data, status=status.HTTP_200_OK)
             else:
                 return Response(data={

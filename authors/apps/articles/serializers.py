@@ -135,3 +135,19 @@ class ArticleReportSerializer(serializers.ModelSerializer):
     class Meta:
         model = ArticleReport
         fields = '__all__'
+
+
+class ArticleReportRetrieveSerializer(serializers.ModelSerializer):
+    """Serializer class for Retrieving ArticleReport model."""
+    user = serializers.SerializerMethodField()
+    article = serializers.SerializerMethodField()
+
+    class Meta:
+        model = ArticleReport
+        fields = ('text', 'user', 'article',)
+
+    def get_user(self, instance):
+        return instance.user.username
+
+    def get_article(self, instance):
+        return instance.article.title
