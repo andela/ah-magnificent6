@@ -19,7 +19,6 @@ from rest_framework.renderers import JSONRenderer
 from rest_framework import authentication
 from .serializers import CommentSerializer, ArticleSerializer, ArticleRatingSerializer, LikesSerializer, TagsSerializer
 
-
 # Add pagination
 from rest_framework.pagination import PageNumberPagination
 
@@ -72,7 +71,6 @@ from .models import Article, ArticleRating, Likes, Comment
 
 
 
-
 class ArticleAPIView(generics.ListCreateAPIView):
     """
     get:
@@ -82,8 +80,8 @@ class ArticleAPIView(generics.ListCreateAPIView):
     """
     queryset = Article.objects.all()
     serializer_class = ArticleSerializer
-    renderer_classes = (ArticleJSONRenderer, )
-    permission_classes = (IsAuthenticatedOrReadOnly, )
+    renderer_classes = (ArticleJSONRenderer,)
+    permission_classes = (IsAuthenticatedOrReadOnly,)
     # Apply pagination to view
     pagination_class = PageNumberPagination
     # Add search class and fields
@@ -145,8 +143,8 @@ class ArticleDetailsView(generics.RetrieveUpdateDestroyAPIView):
     delete:
     """
     serializer_class = ArticleSerializer
-    renderer_classes = (ArticleJSONRenderer, )
-    permission_classes = (IsAuthenticatedOrReadOnly, )
+    renderer_classes = (ArticleJSONRenderer,)
+    permission_classes = (IsAuthenticatedOrReadOnly,)
 
     def get_object(self, slug):
         try:
@@ -282,10 +280,10 @@ class ArticleRatingAPIView(generics.ListCreateAPIView):
     post:
     Create a new article rating
     """
-    permission_classes = (IsAuthenticated, )
+    permission_classes = (IsAuthenticated,)
     queryset = ArticleRating.objects.all()
     serializer_class = ArticleRatingSerializer
-    renderer_classes = (ArticleJSONRenderer, )
+    renderer_classes = (ArticleJSONRenderer,)
 
     def post(self, request, slug):
         """
@@ -329,14 +327,12 @@ class ArticleRatingAPIView(generics.ListCreateAPIView):
         article.rating_average = q['rating__avg']
         article.save(update_fields=['rating_average'])
 
-
         data = {"message": "Thank you for taking time to rate this article."}
 
         data = {
             "message":
                 "Thank you for taking time to rate this article."
         }
-
 
         return Response(data, status.HTTP_201_CREATED)
 
@@ -700,6 +696,15 @@ class ListCreateCommentAPIView(generics.ListCreateAPIView):
 
         return Response(serialize.data)
 
+    def get_queryset(self):
+        """Get all comments for a particular article"""
+
+        comments = self.queryset.all()
+
+        if len(comments) is 0:
+            raise ValidationError("There are currently no available comments")
+        return comments
+
 
 class RetrieveCommentAPIView(generics.RetrieveDestroyAPIView):
     """
@@ -709,4 +714,29 @@ class RetrieveCommentAPIView(generics.RetrieveDestroyAPIView):
     permission_classes = (IsAuthenticated,)
     queryset = Comment.objects.all()
     serializer_class = CommentSerializer
+
+
+    def get(self, request, *args, **kwargs):
+
+        try:
+            comment = self.queryset.get(pk=kwargs['pk'])
+
+        except Comment.DoesNotExist:
+            raise ValidationError("The comment your entered does not exist")
+
+        data = {"comment": comment.comment_body,
+                "comment_by": request.user.username,
+                "created_at": comment.created_at}
+
+        return Response(data)
+
+    def delete(self, request, *args, **kwargs):
+        try:
+            comment = Comment.objects.get(pk=kwargs['pk'])
+        except Comment.DoesNotExist:
+            raise ValidationError("The comment you are trying to delete does not exist")
+
+        comment.delete()
+
+        return Response({"msg": "You have deleted the comment"})
 

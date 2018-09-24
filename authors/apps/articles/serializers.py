@@ -174,7 +174,7 @@ class CommentSerializer(serializers.ModelSerializer):
 
 
         # fields = '__all__'
-        fields = ['commented_by', 'created_at', 'article', ]
+        fields = ['commented_by', 'created_at', 'comment_body', 'id']
 
-        fields = ['commented_by', 'created_at', 'comment_body']
+        # fields = ['commented_by', 'created_at', 'comment_body']
 
