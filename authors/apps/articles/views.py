@@ -745,7 +745,7 @@ class ArticleBookmarkAPIView(generics.CreateAPIView):
 
     def get(self, request, slug=None):
         return Response(
-            {'message': 'Sorry {},this'.format(request.user.username) + 'on \
+            {'message': 'Sorry {}, this'.format(request.user.username) + 'on \
             this endpoint is not allowed.'
              }, status.HTTP_403_FORBIDDEN)
 
@@ -763,8 +763,8 @@ class ArticleBookmarkAPIView(generics.CreateAPIView):
         except ObjectDoesNotExist:
             return Response(
                 {
-                    'message': f'Sorry {request.user.username},'
-                    + 'the article you have requested does not exist'
+                    'message': 'Sorry {}, '.format(request.user.username) + 'the \
+                    article you have requested does not exist'
                 }, status.HTTP_404_NOT_FOUND
             )
 
@@ -803,8 +803,8 @@ class ArticleBookmarkDetailAPIView(generics.RetrieveDestroyAPIView):
                 else:
                     # prevent a user from deleting a bookmark s/he does not own
                     return Response({
-                        'error': f'Sorry {request.user.username},'
-                        + 'you cannot delete bookmarks belonging to other users.'
+                        'error': 'Sorry {}, '.format(request.user.username) + '\
+                        you cannot delete bookmarks belonging to other users.'
                     }, status.HTTP_403_FORBIDDEN)
             else:
                 bookmarks = Bookmark.objects.filter(user=request.user)
@@ -816,7 +816,7 @@ class ArticleBookmarkDetailAPIView(generics.RetrieveDestroyAPIView):
         except ObjectDoesNotExist:
             return Response(
                 {
-                    'message': f'Sorry {request.user.username},'
-                    + 'the bookmark you want to delete does not exist'
+                    'message': 'Sorry {}, '.format(request.user.username) + '\
+                    the bookmark you want to delete does not exist'
                 }, status.HTTP_404_NOT_FOUND
             )
