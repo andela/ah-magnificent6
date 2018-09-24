@@ -67,6 +67,10 @@ class CommentTest(Base):
         delete_comment_response = self.client.delete(detail_comment_url, format='json', **self.headers)
         self.assertIn('You have deleted the comment', str(delete_comment_response.data))
 
+        # ID provided during deletion does bot exist
+        invalid_delete_response = self.client.delete(self.detail_comment, format='json', **self.headers)
+        self.assertIn('The comment you are trying to delete does not exist', str(invalid_delete_response.data))
+
 
 
 
