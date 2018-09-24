@@ -717,7 +717,7 @@ class RetrieveCommentAPIView(generics.RetrieveDestroyAPIView):
 
 
     def get(self, request, *args, **kwargs):
-
+        """Get a comment instance"""
         try:
             comment = self.queryset.get(pk=kwargs['pk'])
 
@@ -731,6 +731,7 @@ class RetrieveCommentAPIView(generics.RetrieveDestroyAPIView):
         return Response(data)
 
     def delete(self, request, *args, **kwargs):
+        """Delete a comment instance"""
         try:
             comment = Comment.objects.get(pk=kwargs['pk'])
         except Comment.DoesNotExist:
