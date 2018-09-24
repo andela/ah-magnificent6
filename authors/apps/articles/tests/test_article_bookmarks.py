@@ -64,14 +64,21 @@ class ArticleBookmarkTests(Base):
                                     )
         self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
 
-    def test_user_can_retrieve_bookmarks(self):
+    def test_user_can_retrieve_all_bookmarks(self):
         """
         Tests that a user can retrieve bookmarks
         """
-        response = self.client.get(self.article_bookmark_retrieval_url,
+        self.client.post(self.article_bookmark_url,
+                         format="json",
+                         **self.headers
+                         )
+        article_bookmark_retrieval_url = reverse(
+            'articles:user_bookmarks')
+        response = self.client.get(article_bookmark_retrieval_url,
                                    format="json",
                                    **self.headers
                                    )
+        self.assertTrue(len(response.data) > 0)
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 
     def test_user_can_retrieve_a_single_bookmark(self):
@@ -101,10 +108,12 @@ class ArticleBookmarkTests(Base):
                                     )
         article_bookmark_retrieval_url = reverse(
             'articles:user_bookmarks')
-        response = self.client.get(article_bookmark_retrieval_url,
-                                   format="json",
-                                   **self.headers
-                                   )
+        response = self.client.delete(article_bookmark_retrieval_url,
+                                      format="json",
+                                      **self.headers
+                                      )
+        self.assertEqual(response.data['message'],
+                         'All bookmarks deleted successfully')
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 
     def test_user_can_delete_a_bookmark(self):
@@ -118,10 +127,10 @@ class ArticleBookmarkTests(Base):
         bookmark_id = response.data['id']
         article_bookmark_retrieval_url = reverse(
             'articles:user_bookmarks', kwargs={'pk': bookmark_id})
-        response = self.client.get(article_bookmark_retrieval_url,
-                                   format="json",
-                                   **self.headers
-                                   )
+        response = self.client.delete(article_bookmark_retrieval_url,
+                                      format="json",
+                                      **self.headers
+                                      )
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 
     def test_user_cannot_delete_non_existing_bookmark(self):

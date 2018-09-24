@@ -796,10 +796,8 @@ class ArticleBookmarkDetailAPIView(generics.RetrieveDestroyAPIView):
                 bookmark = Bookmark.objects.get(pk=pk)
                 if bookmark.user.username == request.user.username:
                     bookmark.delete()
-                    return Response(
-                        {
-                            'message': "Bookmark deleted successfully"
-                        }, status.HTTP_200_OK)
+                    return Response({'message': "Bookmark deleted successfully"
+                                     }, status.HTTP_200_OK)
                 else:
                     # prevent a user from deleting a bookmark s/he does not own
                     return Response({
@@ -809,14 +807,11 @@ class ArticleBookmarkDetailAPIView(generics.RetrieveDestroyAPIView):
             else:
                 bookmarks = Bookmark.objects.filter(user=request.user)
                 bookmarks.delete()
-                return Response(
-                    {
-                        'message': "All bookmarks deleted successfully"
-                    }, status.HTTP_200_OK)
+                return Response({'message': "All bookmarks deleted successfully"
+                                 }, status.HTTP_200_OK)
         except ObjectDoesNotExist:
-            return Response(
-                {
-                    'message': 'Sorry {}, '.format(request.user.username) + '\
+            return Response({
+                'message': 'Sorry {}, '.format(request.user.username) + '\
                     the bookmark you want to delete does not exist'
-                }, status.HTTP_404_NOT_FOUND
+            }, status.HTTP_404_NOT_FOUND
             )
