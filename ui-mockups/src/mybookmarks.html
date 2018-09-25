@@ -38,49 +38,11 @@
                     </li>
                 </ul>
             </div>
-            <div class="dropdown notifications">
-                <a class="notifications-link dropdown-toggle" href="#" role="button" id="notifications" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                    <i class="far fa-bell"></i>
-                    <span class="badge badge-danger">2</span>
-                </a>
-                <div class="dropdown-menu" aria-labelledby="notifications">
-                <a class="dropdown-item" href="article.html">
-                    <div class="row">
-                        <div class="col-2">
-                            <i class="fas fa-user-circle"></i>
-                        </div>
-                        <div class="col-10">
-                            <p>Leon Kioko <span class="text-secondary">published</span> My time at Andela</p>
-                            <small class="text-secondary font-italic">Today</small>
-                            <i class="fa fa-trash float-right clearfix" aria-hidden="true"></i>
-                            <i class="fa fa-check float-right clearfix" aria-hidden="true"></i>
-                        </div>
-                    </div>
-                </a>
-                <a class="dropdown-item" href="article.html">
-                    <div class="row">
-                        <div class="col-2">
-                            <i class="fas fa-user-circle"></i>
-                        </div>
-                        <div class="col-10">
-                            <p>Meshak Mbuvi <span class="text-secondary">commented on</span> My time at Andela</p>
-                            <small class="text-secondary font-italic">Sep 1</small>
-                            <i class="fa fa-trash float-right clearfix" aria-hidden="true"></i>
-                            <i class="fa fa-check float-right clearfix" aria-hidden="true"></i>
-                        </div>
-                    </div>
-                </a>
-                <div class="dropdown-item">
-                    <a class="text-secondary" href="#">Mark all as read</a>
-                </div>
-                </div>
-            </div>
-
             <div class="navbar-text">
                 <ul class="navbar-nav mr-auto">
                     <li class="nav-item dropdown">
                         <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                            <i class="fas fa-user-circle"></i>
+                            user profile
                         </a>
                         <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
                             <a class="dropdown-item" href="new-article.html">New article</a>
@@ -92,34 +54,9 @@
             </div>
         </div>
     </nav>
-    <div id="articles" class="container">
+    <div class="container">
         <div class="row">
-            <div class="col-sm-3">
-                <div class="card ">
-                    <img class="card-img-top" src="assets/alisa-anton-632369-unsplash.jpg" alt="Card image cap">
-                    <div class="card-body">
-                        <h5 class="card-title">Card title</h5>
-                        <p class="card-text ">
-                            Some quick example text to build on the card title and make up the bulk of the card's content.
-                        </p>
-                        <small>
-                            By <a class="ah-author-link" href="#">Mbuvi</a>
-                        </small>
-                        <p class="card-text d-flex justify-content-between article">
-
-                            <small class="text-muted">July 11.</small>
-                            <span>
-                                <small class="likes"><a href="" class="text-success"> <i class="fas fa-thumbs-up"> </i>
-                                        1020</a></small>
-                                <small class="likes"><a href="" class="text-warning"> <i class="fas fa-thumbs-down">
-                                        </i> 20</a></small>
-                            </span>
-                            <small><a href="" class="bookmark"> <i class="fas fa-bookmark"></i></i></a></small>
-                        </p>
-                    </div>
-                </div>
-            </div>
-            <div class="col-sm-6">
+            <div class="col-sm-8">
                 <div class="list-group">
                     <div class=" d-flex justify-content-between article">
                         <img src="assets/annie-spratt-558900-unsplash.jpg" class="rounded float-left" alt="post image" width="120" height="120">
@@ -144,10 +81,11 @@
                                     <small class="likes"><a href="" class="text-warning"> <i class="fas fa-thumbs-down"></i>
                                             20</a></small>
                                 </span>
-                                <small><a href="" class="bookmark"> <i class="fas fa-bookmark"></i></i></a></small>
+                                <small><a href="" class="bookmark text-info"> <i class="fas fa-bookmark"></i></i></a></small>
                             </p>
                         </div>
                     </div>
+
 
                 </div>
                 <div class="list-group">
@@ -174,7 +112,7 @@
                                     <small class="likes"><a href="" class="text-warning"> <i class="fas fa-thumbs-down"></i>
                                             20</a></small>
                                 </span>
-                                <small><a href="" class="bookmark"> <i class="fas fa-bookmark"></i></i></a></small>
+                                <small><a href="" class="bookmark text-info"> <i class="fas fa-bookmark"></i></i></a></small>
                             </p>
                         </div>
 
@@ -204,37 +142,14 @@
                                     <small class="likes"><a href="" class="text-warning"> <i class="fas fa-thumbs-down"></i>
                                             20</a></small>
                                 </span>
-                                <small><a href="" class="bookmark text-info"> <i class="fas fa-bookmark"></i></a></small>
+                                <small><a href="" class="bookmark text-info"> <i class="fas fa-bookmark"></i></i></a></small>
                             </p>
                         </div>
 
                     </div>
                 </div>
             </div>
-            <div class="col-sm-3">
-                <div class="card">
-                    <img class="card-img-top" src="assets/alisa-anton-699811-unsplash.jpg" alt=" Card image cap">
-                    <div class="card-body">
-                        <h5 class="card-title">Card title</h5>
-                        <p class="card-text">
-                            Some quick example text to build on the card title and make up the bulk of the card's content.
-                        </p>
-                        <small>
-                            <a class="ah-author-link" href="#">Meshack Mbuvi</a>
-                        </small>
-                        <p class="d-flex justify-content-between article">
-                            <small class="text-muted">July 11.</small>
-                            <span>
-                                <small class="likes"><a href="" class="text-success"> <i class="fas fa-thumbs-up"></i>
-                                        102</a></small>
-                                <small class="likes"><a href="" class="text-warning"> <i class="fas fa-thumbs-down"></i>
-                                        20</a></small>
-                            </span>
-                            <small><a href="" class="bookmark"> <i class="fas fa-bookmark"></i></i></a></small>
-                        </p>
-                    </div>
-                </div>
-            </div>
+
         </div>
         <hr>
         <div class="row footer">
@@ -249,7 +164,6 @@
     <script src="https://use.fontawesome.com/11.4875c9fa.js"></script>
     <script src="js/jquery.min.js" async defer></script>
     <script src="js/bootstrap.min.js" async defer></script>
-    <script src="js/infinite_scroll.js" async defer></script>
 </body>
 
 </html>

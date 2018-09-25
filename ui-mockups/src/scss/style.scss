@@ -101,7 +101,9 @@ small a:hover,
     color: #ea4335;
 }
 
-.fa-facebook:hover, .fa-twitter:hover, .fa-envelope:hover{
+.fa-facebook:hover,
+.fa-twitter:hover,
+.fa-envelope:hover {
     opacity: 0.7;
     cursor: pointer;
 }
@@ -172,11 +174,12 @@ h1 {
     margin-left: -30px;
 }
 
-.ah-rating-average{
- font-family: 'Vidaloka', serif;
- font-weight: bold;
- font-size: 2rem;
+.ah-rating-average {
+    font-family: 'Vidaloka', serif;
+    font-weight: bold;
+    font-size: 2rem;
 }
+
 .rating>input {
     display: none;
 }
@@ -307,21 +310,23 @@ h1 {
     margin: 20px;
 }
 
-.ah-profile-card{
+.ah-profile-card {
     border: $ah-secondary-color 1px solid;
     border-radius: 5px;
 }
 
-.ah-avatar{
+.ah-avatar {
     width: 100px;
     margin-right: 10px;
 }
-.card-body{
-    .fa-user-circle{
+
+.card-body {
+    .fa-user-circle {
         font-size: 6.8rem;
         color: lightblue;
     }
 }
+
 // The notification bell
 .fa-bell {
     color: $ah-secondary-text-color;
@@ -337,21 +342,21 @@ h1 {
 
 // Remove arrow after notifications icon
 .dropdown-toggle::after {
-    display:none;
+    display: none;
 }
 
-.navbar{
-    .fa-user-circle{
+.navbar {
+    .fa-user-circle {
         font-size: 2.0625rem;
     }
     .dropdown-menu {
         right: 0;
-        left:auto;
+        left: auto;
     }
 }
 
 // notification bropdown style
-.notifications{
+.notifications {
     margin-right: 1rem;
     .dropdown-menu {
         min-width: 20rem;
@@ -359,33 +364,50 @@ h1 {
         .dropdown-item {
             white-space: normal;
             // The placeholder user icon
-            .fa-user-circle{
+            .fa-user-circle {
                 color: lightblue;
             }
-            .fa-check{
+            .fa-check {
                 color: green;
                 margin-right: 1rem;
             }
-            p{
+            p {
                 margin-bottom: 0;
             }
         }
-        
     }
 }
 
+
 /** Comment section CSS **/
-.comments{
+
+.comments {
     border-color: rgb(238, 235, 235);
     padding: 1rem;
     margin: 1rem 0 2rem 0;
-    .fa-user-circle{
+    .fa-user-circle {
         font-size: 3rem;
     }
-    .col{
+    .col {
         margin-top: 1.5rem;
     }
-    .card-text{
+    .card-text {
         font-size: 1rem;
     }
+}
+
+.bookmark a {
+    margin-left: 6px;
+    text-decoration: None;
+    color: $ah-secondary-text-color;
+}
+
+.bookmark {
+    margin-left: 6px;
+    text-decoration: None;
+    color: $ah-secondary-text-color;
+}
+
+.bookmark:hover {
+    background-color: #fff !important;
 }
