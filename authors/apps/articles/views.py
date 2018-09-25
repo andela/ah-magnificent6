@@ -47,12 +47,12 @@ def create_tag(tags, article):
     # also, add them to the articles and save the article instance
 
     for tag in tags.split(','):
-        article_tag=ArticleTags.objects.filter(tag__icontains = tag.strip())
+        article_tag = ArticleTags.objects.filter(tag__icontains=tag.strip())
         if not article_tag:
-            data={'tag': tag.strip()}
-            serializer=TagsSerializer(data = data)
-            serializer.is_valid(raise_exception = True)
-            article_tag=serializer.save()
+            data = {'tag': tag.strip()}
+            serializer = TagsSerializer(data=data)
+            serializer.is_valid(raise_exception=True)
+            article_tag = serializer.save()
             article.article_tags.add(article_tag)
         else:
             article.article_tags.add(article_tag.first())
@@ -75,14 +75,19 @@ class ArticleAPIView(generics.ListCreateAPIView):
     """
     queryset = Article.objects.all()
     serializer_class = ArticleSerializer
+<<<<<<< HEAD
     renderer_classes = (ArticleJSONRenderer,)
     permission_classes = (IsAuthenticatedOrReadOnly,)
+=======
+    renderer_classes = (ArticleJSONRenderer, )
+    permission_classes = (IsAuthenticatedOrReadOnly, )
+>>>>>>> [Feature #159965320] update permission for viewing bookmarks to allow users view their bookmarks only.
     # Apply pagination to view
-    pagination_class=PageNumberPagination
+    pagination_class = PageNumberPagination
     # Add search class and fields
-    filter_backends=(SearchFilter, DjangoFilterBackend, )
+    filter_backends = (SearchFilter, DjangoFilterBackend, )
     # Define search and filter fields with the field names mapped to a list of lookups
-    fields={
+    fields = {
         'author__username': ['icontains'],
         'title': ['icontains'],
         'article_tags__tag': ['icontains'],
@@ -736,7 +741,9 @@ class RetrieveCommentAPIView(generics.RetrieveDestroyAPIView):
 class ArticleBookmarkAPIView(generics.CreateAPIView):
     """
     post:
-    Bookmark an article
+    Bookmark an article for future reading.
+    get:
+    This endpoint is not supported
     """
     renderer_classes = (BookmarkJSONRenderer, )
     permission_classes = (IsAuthenticatedOrReadOnly, )
@@ -776,7 +783,9 @@ class ArticleBookmarkAPIView(generics.CreateAPIView):
 class ArticleBookmarkDetailAPIView(generics.RetrieveDestroyAPIView):
     """
     get:
-    Retrieve all bookmarks for a logged in user
+    Retrieve a singe or all bookmarks for a logged in user
+    delete:
+    Delete a single or all bookmarks
     """
     permission_classes = (IsAuthenticated, )
     serializer_class = BookmarkSerializer
