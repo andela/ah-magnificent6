@@ -337,25 +337,6 @@ Search and filter CSS
   font-size: 15px;
   font-weight: 400; }
 
-ul {
-  list-style: none; }
-
-li {
-  float: left;
-  display: block;
-  border: #e0e0d4 1px solid;
-  border-radius: 2px; }
-
-li a:hover {
-  text-decoration: none; }
-
-li a {
-  color: #999999; }
-
-.tags {
-  font-size: 12px;
-  font-weight: 400; }
-
 .tags ul {
   list-style: none; }
 
