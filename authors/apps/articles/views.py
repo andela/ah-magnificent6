@@ -6,6 +6,8 @@ from rest_framework.response import Response
 from rest_framework.permissions import (
     AllowAny, IsAuthenticatedOrReadOnly, IsAuthenticated
 )
+from rest_framework.serializers import ValidationError
+from datetime import datetime
 from rest_framework.views import APIView
 from django.db.models import Avg
 from django.db.models.signals import post_save
@@ -15,6 +17,7 @@ from django.views.generic import ListView
 from rest_framework.views import APIView
 from rest_framework.renderers import JSONRenderer
 from rest_framework import authentication
+from .serializers import CommentSerializer, ArticleSerializer, ArticleRatingSerializer, LikesSerializer, TagsSerializer
 
 # Add pagination
 from rest_framework.pagination import PageNumberPagination
@@ -25,11 +28,16 @@ from django_filters.rest_framework import DjangoFilterBackend
 
 
 from .renderers import ArticleJSONRenderer
+
 from .serializers import (
     ArticleSerializer, ArticleRatingSerializer, LikesSerializer, TagsSerializer,
     ArticleReportSerializer, ArticleReportRetrieveSerializer
 )
 from .models import Article, ArticleRating, Likes, ArticleTags, ArticleReport
+
+
+from .models import Article, ArticleRating, Likes, ArticleTags
+
 from authors.apps.notifications.models import notify_follower
 
 
@@ -57,6 +65,12 @@ def create_tag(tags, article):
     return None
 
 
+
+from .models import Article, ArticleRating, Likes, Comment
+
+
+
+
 class ArticleAPIView(generics.ListCreateAPIView):
     """
     get:
@@ -66,8 +80,8 @@ class ArticleAPIView(generics.ListCreateAPIView):
     """
     queryset = Article.objects.all()
     serializer_class = ArticleSerializer
-    renderer_classes = (ArticleJSONRenderer, )
-    permission_classes = (IsAuthenticatedOrReadOnly, )
+    renderer_classes = (ArticleJSONRenderer,)
+    permission_classes = (IsAuthenticatedOrReadOnly,)
     # Apply pagination to view
     pagination_class = PageNumberPagination
     # Add search class and fields
@@ -129,8 +143,8 @@ class ArticleDetailsView(generics.RetrieveUpdateDestroyAPIView):
     delete:
     """
     serializer_class = ArticleSerializer
-    renderer_classes = (ArticleJSONRenderer, )
-    permission_classes = (IsAuthenticatedOrReadOnly, )
+    renderer_classes = (ArticleJSONRenderer,)
+    permission_classes = (IsAuthenticatedOrReadOnly,)
 
     def get_object(self, slug):
         try:
@@ -180,7 +194,7 @@ class ArticleDetailsView(generics.RetrieveUpdateDestroyAPIView):
             # prevent a user from deleting an article s/he does not own
             return Response({
                 'error':
-                'You cannot delete articles belonging to other users.'
+                    'You cannot delete articles belonging to other users.'
             }, status.HTTP_403_FORBIDDEN)
 
     def put(self, request, slug):
@@ -222,7 +236,7 @@ class FavoriteArticle(generics.CreateAPIView):
     A user is able to favourite an article if they had not favourited it.
     If they had favourited it, the article becomes unfavourited.
     """
-    permission_classes = (IsAuthenticated, )
+    permission_classes = (IsAuthenticated,)
     queryset = Article.objects.all()
     serializer_class = ArticleSerializer
 
@@ -266,10 +280,10 @@ class ArticleRatingAPIView(generics.ListCreateAPIView):
     post:
     Create a new article rating
     """
-    permission_classes = (IsAuthenticated, )
+    permission_classes = (IsAuthenticated,)
     queryset = ArticleRating.objects.all()
     serializer_class = ArticleRatingSerializer
-    renderer_classes = (ArticleJSONRenderer, )
+    renderer_classes = (ArticleJSONRenderer,)
 
     def post(self, request, slug):
         """
@@ -291,8 +305,8 @@ class ArticleRatingAPIView(generics.ListCreateAPIView):
             wink_emoji = u"\U0001F609"
             data = {
                 'message':
-                'We see what you did there {}. Sorry, but you cannot rate your '
-                'own article.'.format(wink_emoji)
+                    'We see what you did there {}. Sorry, but you cannot rate your '
+                    'own article.'.format(wink_emoji)
             }
             return Response(data, status.HTTP_403_FORBIDDEN)
 
@@ -314,6 +328,11 @@ class ArticleRatingAPIView(generics.ListCreateAPIView):
         article.save(update_fields=['rating_average'])
 
         data = {"message": "Thank you for taking time to rate this article."}
+
+        data = {
+            "message":
+                "Thank you for taking time to rate this article."
+        }
 
         return Response(data, status.HTTP_201_CREATED)
 
@@ -352,7 +371,7 @@ class ArticleLikes(generics.ListCreateAPIView):
         if like is None or type(like) != type(True):
             return Response(
                 {'message':
-                 'You must indicate whether you like or dislike this article'
+                     'You must indicate whether you like or dislike this article'
                  },
                 status.HTTP_400_BAD_REQUEST)
         # we continue now since we are sure we have a valid payload
@@ -430,11 +449,12 @@ class ArticleLikes(generics.ListCreateAPIView):
         return Response(
             {
                 'message': (
-                    'Thank you {} for giving your opinion on this '.format(
-                        request.user.username) + 'article.'
+                        'Thank you {} for giving your opinion on this '.format(
+                            request.user.username) + 'article.'
                 )
             }, status.HTTP_201_CREATED
         )
+
 
 
 class ArticleReportAPIView(generics.ListCreateAPIView):
@@ -639,3 +659,81 @@ class ArticleReportRUDAPIView(generics.RetrieveUpdateDestroyAPIView):
             return Response(data={
                 'message': 'That article report does not exist.'
             }, status=status.HTTP_404_NOT_FOUND)
+
+class ListCreateCommentAPIView(generics.ListCreateAPIView):
+    """
+    Get and Post Comments
+    """
+    permission_classes = (IsAuthenticated,)
+
+    queryset = Comment.objects.all()
+
+    serializer_class = CommentSerializer
+
+    def create(self, request, slug):
+        """
+        Post a comment
+        """
+
+        # query the database to get article with provided slug
+        article = Article.objects.get(slug=slug)
+
+        comment_data = {
+            'commented_by': request.user.username,
+            'comment_body': request.data.get('comment_body', None)
+        }
+        created_comment = Comment.objects.create(commented_by=request.user, article=article,
+                                                 comment_body=request.data.get('comment_body', None))
+
+        serialize = self.serializer_class(data=comment_data)
+        serialize.is_valid(raise_exception=True)
+
+        created_comment.save()
+
+        return Response(serialize.data)
+
+    def get_queryset(self):
+        """Get all comments for a particular article"""
+
+        comments = self.queryset.all()
+
+        if len(comments) is 0:
+            raise ValidationError("There are currently no available comments")
+        return comments
+
+
+class RetrieveCommentAPIView(generics.RetrieveDestroyAPIView):
+    """
+    This class contains method to retrieve and delete a comment
+    """
+
+    permission_classes = (IsAuthenticated,)
+    queryset = Comment.objects.all()
+    serializer_class = CommentSerializer
+
+
+    def get(self, request, *args, **kwargs):
+        """Get a comment instance"""
+        try:
+            comment = self.queryset.get(pk=kwargs['pk'])
+
+        except Comment.DoesNotExist:
+            raise ValidationError("The comment your entered does not exist")
+
+        data = {"comment": comment.comment_body,
+                "comment_by": request.user.username,
+                "created_at": comment.created_at}
+
+        return Response(data)
+
+    def delete(self, request, *args, **kwargs):
+        """Delete a comment instance"""
+        try:
+            comment = Comment.objects.get(pk=kwargs['pk'])
+        except Comment.DoesNotExist:
+            raise ValidationError("The comment you are trying to delete does not exist")
+
+        comment.delete()
+
+        return Response({"msg": "You have deleted the comment"})
+
