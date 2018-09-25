@@ -75,13 +75,8 @@ class ArticleAPIView(generics.ListCreateAPIView):
     """
     queryset = Article.objects.all()
     serializer_class = ArticleSerializer
-<<<<<<< HEAD
     renderer_classes = (ArticleJSONRenderer,)
     permission_classes = (IsAuthenticatedOrReadOnly,)
-=======
-    renderer_classes = (ArticleJSONRenderer, )
-    permission_classes = (IsAuthenticatedOrReadOnly, )
->>>>>>> [Feature #159965320] update permission for viewing bookmarks to allow users view their bookmarks only.
     # Apply pagination to view
     pagination_class = PageNumberPagination
     # Add search class and fields
