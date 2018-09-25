@@ -303,7 +303,6 @@ h1 {
     color: #91be69 !important;
 }
 
-<<<<<<< HEAD
 .profile {
     margin: 20px;
 }
@@ -321,7 +320,8 @@ h1 {
     .fa-user-circle{
         font-size: 6.8rem;
         color: lightblue;
-=======
+    }
+}
 // The notification bell
 .fa-bell {
     color: $ah-secondary-text-color;
@@ -371,6 +371,21 @@ h1 {
             }
         }
         
->>>>>>> [Feature #159965313] Mockup for notifications
+    }
+}
+
+/** Comment section CSS **/
+.comments{
+    border-color: rgb(238, 235, 235);
+    padding: 1rem;
+    margin: 1rem 0 2rem 0;
+    .fa-user-circle{
+        font-size: 3rem;
+    }
+    .col{
+        margin-top: 1.5rem;
+    }
+    .card-text{
+        font-size: 1rem;
     }
 }

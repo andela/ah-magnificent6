@@ -216,7 +216,6 @@ h1 {
 .text-success {
   color: #91be69 !important; }
 
-<<<<<<< HEAD
 .profile {
   margin: 20px; }
 
@@ -231,7 +230,7 @@ h1 {
 .card-body .fa-user-circle {
   font-size: 6.8rem;
   color: lightblue; }
-=======
+
 .fa-bell {
   color: #999999;
   font-size: 25px; }
@@ -265,4 +264,15 @@ h1 {
         margin-right: 1rem; }
       .notifications .dropdown-menu .dropdown-item p {
         margin-bottom: 0; }
->>>>>>> [Feature #159965313] Mockup for notifications
+
+/** Comment section CSS **/
+.comments {
+  border-color: #eeebeb;
+  padding: 1rem;
+  margin: 1rem 0 2rem 0; }
+  .comments .fa-user-circle {
+    font-size: 3rem; }
+  .comments .col {
+    margin-top: 1.5rem; }
+  .comments .card-text {
+    font-size: 1rem; }
