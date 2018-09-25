@@ -662,8 +662,7 @@ class ArticleReportRUDAPIView(generics.RetrieveUpdateDestroyAPIView):
 
 class ListCreateCommentAPIView(generics.ListCreateAPIView):
     """
-    This class contains method to list
-    and add comments to an article
+    Get and Post Comments
     """
     permission_classes = (IsAuthenticated,)
 
@@ -673,10 +672,7 @@ class ListCreateCommentAPIView(generics.ListCreateAPIView):
 
     def create(self, request, slug):
         """
-        POST : create comment
-        :param request:
-        :param slug:
-        :return:
+        Post a comment
         """
 
         # query the database to get article with provided slug
