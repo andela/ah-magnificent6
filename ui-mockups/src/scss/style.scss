@@ -440,6 +440,16 @@ h1 {
     margin-top: 1rem;
     .applied-filters{
         margin-left: 0.3125rem;
+        .alert{
+            padding: 2px 0.5rem;
+            border-radius: 1rem;
+        }
+        .filter-value:after{
+            content: '\2715';
+            padding-left: 0.5rem;
+            color: $ah-secondary-text-color;
+            font-size: 0.75rem;
+        }
     }
     .filter{
         margin-top: 1.5rem;
