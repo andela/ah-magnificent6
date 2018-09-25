@@ -491,3 +491,30 @@ li a:hover {
 li a {
     color: $ah-secondary-text-color;
 }
+
+.tags {
+    font-size: 12px;
+    font-weight: 400;
+}
+
+.tags {
+    ul {
+        list-style: none;
+    }
+    ;
+    li {
+        float: left;
+        display: block;
+        border: $ah-secondary-color 1px solid;
+        border-radius: 2px;
+    }
+    ;
+    li a:hover {
+        text-decoration: none;
+    }
+    ;
+    li a {
+        color: $ah-secondary-text-color;
+    }
+    ;
+}
