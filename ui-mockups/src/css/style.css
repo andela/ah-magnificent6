@@ -274,3 +274,5 @@ h1 {
     font-size: 3rem; }
   .comments .col {
     margin-top: 1.5rem; }
+  .comments .card-text {
+    font-size: 1rem; }
