@@ -412,3 +412,53 @@ h1 {
 .bookmark:hover {
     background-color: #fff !important;
 }
+
+/** 
+    Search and filter CSS
+*/
+.search-container{
+    margin-right: 1.5rem;
+    max-width: 300px;
+    .fas {
+        color: $ah-primary-color;
+        font-size: 1.375rem;
+    }
+
+    .search{
+        -webkit-transition: width 0.3s ease;
+        -moz-transition: width 0.3s ease;
+        -o-transition: width 0.3s ease;
+        transition: width 0.3s ease;
+    }
+}
+
+.filter-container{
+    margin-top: 1rem;
+    .applied-filters{
+        margin-left: 0.3125rem;
+        .alert{
+            padding: 2px 0.5rem;
+            border-radius: 1rem;
+        }
+        .filter-value:after{
+            content: '\2715';
+            padding-left: 0.5rem;
+            color: $ah-secondary-text-color;
+            font-size: 0.75rem;
+        }
+    }
+    .filter{
+        margin-top: 1.5rem;
+        input{
+            margin-bottom: 1rem;
+        }
+        .results{
+            padding: 1rem;
+        }
+
+        .reset-filters{
+            display: block;
+            margin-top: 1rem;
+        }
+    }
+}

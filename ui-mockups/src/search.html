@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<!--[if lt IE 7]>      <html class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
+<!--[if IE 7]>         <html class="no-js lt-ie9 lt-ie8"> <![endif]-->
+<!--[if IE 8]>         <html class="no-js lt-ie9"> <![endif]-->
+<!--[if gt IE 8]><!-->
+<html class="no-js" lang="en">
+<!--<![endif]-->
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>All articles</title>
+    <meta name="description" content="">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link href="https://fonts.googleapis.com/css?family=Raleway" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Vidaloka" rel="stylesheet">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.3.1/css/all.css" integrity="sha384-mzrmE5qonljUremFsqc01SB46JvROS7bZs3IO2EmfFsd15uHvIt+Y8vEf7N7fWAU" crossorigin="anonymous">
+    <link rel="stylesheet" href="css/bootstrap.css">
+    <link rel="stylesheet" href="css/style.css">
+
+</head>
+
+<body>
+    <nav class="navbar navbar-expand-lg navbar-light">
+        <div class="container">
+            <div class="clearfix">
+                <a class="navbar-brand font-weight-bold" href="#">Authors' Haven</a>
+            </div>
+            <!-- Begin user panel -->
+            <div class="float-right clearfix row align-items-center no-gutters">
+                <!-- Begin search -->
+                <div class="col search-container align-items-center ">
+                    <div class="row no-gutters">
+                        <div id="searchbar" class="search col-9 panel-collapse collapse">
+                            <input type="text" placeholder="Search..">
+                        </div>
+                        <a class="search col-3" data-toggle="collapse" href="#searchbar">
+                            <i class="fas fa-search"></i>
+                        </a>
+                    </div>
+                </div>
+                <!-- End search -->
+                <div class="col dropdown notifications">
+                    <a class="notifications-link dropdown-toggle" href="#" role="button" id="notifications" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        <i class="far fa-bell"></i>
+                        <span class="badge badge-danger">2</span>
+                    </a>
+                    <div class="dropdown-menu" aria-labelledby="notifications">
+                    <a class="dropdown-item" href="article.html">
+                        <div class="row">
+                            <div class="col-2">
+                                <i class="fas fa-user-circle"></i>
+                            </div>
+                            <div class="col-10">
+                                <p>Leon Kioko <span class="text-secondary">published</span> My time at Andela</p>
+                                <small class="text-secondary font-italic">Today</small>
+                                <i class="fa fa-trash float-right clearfix" aria-hidden="true"></i>
+                                <i class="fa fa-check float-right clearfix" aria-hidden="true"></i>
+                            </div>
+                        </div>
+                    </a>
+                    <a class="dropdown-item" href="article.html">
+                        <div class="row">
+                            <div class="col-2">
+                                <i class="fas fa-user-circle"></i>
+                            </div>
+                            <div class="col-10">
+                                <p>Meshak Mbuvi <span class="text-secondary">commented on</span> My time at Andela</p>
+                                <small class="text-secondary font-italic">Sep 1</small>
+                                <i class="fa fa-trash float-right clearfix" aria-hidden="true"></i>
+                                <i class="fa fa-check float-right clearfix" aria-hidden="true"></i>
+                            </div>
+                        </div>
+                    </a>
+                    <div class="dropdown-item">
+                        <a class="text-secondary" href="#">Mark all as read</a>
+                    </div>
+                    </div>
+                </div>
+
+                <div class="col navbar-text">
+                    <ul class="navbar-nav mr-auto">
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                <i class="fas fa-user-circle"></i>
+                            </a>
+                            <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+                                <a class="dropdown-item" href="new-article.html">New article</a>
+                                <a class="dropdown-item" href="myarticles.html">Articles</a>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+            </div> <!-- End user panel-->
+        </div>
+    </nav>
+    <div class="filter-container container">
+        <div class="applied-filters row">
+            <p><span class="alert alert-secondary">1</span> article found for the author <span class="filter-value alert alert-secondary">Omari</span> with the title <span class="filter-value alert alert-secondary">My first article</span></p>
+        </div>
+        <div class="row filter">
+            <div class="col-md-3">
+                <input type="text" placeholder="Author">
+                <input type="text" placeholder="Title">
+                <input type="text" placeholder="Tags">
+                <div class="w-100"></div>
+                <button type="button" class="btn btn-secondary">Filter</button>  
+                <div class="w-100"></div>
+                <a class="reset-filters text-secondary" href="#">
+                        <i class="fas fa-sync"></i>
+                        <span>Reset filters</span>
+                </a>           
+            </div>
+            <div class="results bg-white col-md-9 border border-secondary rounded">
+                <div class="list-group">
+                    <div class=" d-flex justify-content-between article">
+                        <img src="assets/annie-spratt-558900-unsplash.jpg" class="rounded float-left" alt="post image" width="120" height="120">
+                        <div class="ml-2 ">
+                            <h6><a href="article.html">Donec id elit non mi porta</a></h6>
+                            <p>
+                                <small class="text-muted ah-list-content">
+                                    Donec id elit non mi porta gravida at eget metus. Maecenas sed diam eget risus
+                                    varius blandit.
+                                </small>
+                            </p>
+                            <small>
+                                By <a class="ah-author-link" href="#">Mbuvi</a>
+                            </small>
+                            <p class="d-flex justify-content-between article-footer">
+                                <small class="text-muted">July 11.</small>
+                                <small class="text-muted">7 min read</small>
+
+                                <span>
+                                    <small class="likes"><a href="" class="text-success"> <i class="fas fa-thumbs-up"></i>
+                                            102</a></small>
+                                    <small class="likes"><a href="" class="text-warning"> <i class="fas fa-thumbs-down"></i>
+                                            20</a></small>
+                                </span>
+                            </p>
+                        </div>
+                    </div>
+
+                </div>
+
+            </div>
+        </div>
+
+
+    </div>
+
+    <script src="https://use.fontawesome.com/11.4875c9fa.js"></script>
+    <script src="js/jquery.min.js" async defer></script>
+    <script src="js/bootstrap.min.js" async defer></script>
+</body>
+
+</html>

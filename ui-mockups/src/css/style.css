@@ -292,3 +292,40 @@ h1 {
 
 .bookmark:hover {
   background-color: #fff !important; }
+
+/** 
+    Search and filter CSS
+*/
+.search-container {
+  margin-right: 1.5rem;
+  max-width: 300px; }
+  .search-container .fas {
+    color: #000000;
+    font-size: 1.375rem; }
+  .search-container .search {
+    -webkit-transition: width 0.3s ease;
+    -moz-transition: width 0.3s ease;
+    -o-transition: width 0.3s ease;
+    transition: width 0.3s ease; }
+
+.filter-container {
+  margin-top: 1rem; }
+  .filter-container .applied-filters {
+    margin-left: 0.3125rem; }
+    .filter-container .applied-filters .alert {
+      padding: 2px 0.5rem;
+      border-radius: 1rem; }
+    .filter-container .applied-filters .filter-value:after {
+      content: '\2715';
+      padding-left: 0.5rem;
+      color: #999999;
+      font-size: 0.75rem; }
+  .filter-container .filter {
+    margin-top: 1.5rem; }
+    .filter-container .filter input {
+      margin-bottom: 1rem; }
+    .filter-container .filter .results {
+      padding: 1rem; }
+    .filter-container .filter .reset-filters {
+      display: block;
+      margin-top: 1rem; }
