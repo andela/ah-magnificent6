@@ -46,7 +46,7 @@ small a:hover,
 
 .ah-jumbotron h1,
 .navbar-brand {
-  font-size: 3.5rem;
+  font-size: 3rem;
   font-family: 'Vidaloka', serif; }
 
 .modal-content {
@@ -72,7 +72,8 @@ small a:hover,
 
 .fa-facebook:hover,
 .fa-twitter:hover,
-.fa-envelope:hover {
+.fa-envelope:hover,
+.fa-flag:hover {
   opacity: 0.7;
   cursor: pointer; }
 
@@ -125,7 +126,7 @@ h1 {
 .rating {
   border: none;
   float: left;
-  margin-left: -30px; }
+  margin-right: -20px; }
 
 .ah-rating-average {
   font-family: 'Vidaloka', serif;
@@ -237,7 +238,7 @@ h1 {
   color: #999999;
   font-size: 25px; }
 
-.badge {
+.ah-notifications-badge {
   position: absolute;
   top: -5px;
   right: -5px; }
