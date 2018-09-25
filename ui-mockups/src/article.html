@@ -28,7 +28,6 @@
             <div>
                 <a class="navbar-brand font-weight-bold" href="#">Authors' Haven</a>
             </div>
-
             <div class="collapse navbar-collapse">
                 <ul class="navbar-nav mr-auto">
                     <li class="nav-item active">
@@ -44,12 +43,14 @@
                     <li class="nav-item dropdown">
                         <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" data-toggle="dropdown"
                             aria-haspopup="true" aria-expanded="false">
-                            user profile
+                            <i class="fas fa-user-circle"></i>
                         </a>
                         <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
                             <a class="dropdown-item" href="new-article.html">New article</a>
                             <a class="dropdown-item" href="myarticles.html">Articles</a>
                             <a class="dropdown-item" href="mybookmarks.html">Bookmarks</a>
+                            <a class="dropdown-item" href="myreports.html">Reports</a>
+                            <a class="dropdown-item" href="profile.html">My profile</a>
                         </div>
                     </li>
                 </ul>
@@ -123,9 +124,6 @@
                             </div>
                             <div class="p-2">
                                 <i class="fas fa-lg fa-flag text-danger" data-toggle="modal" data-target="#ahReportArticleModal"></i>
-                                <a href="myreports.html">
-                                    <span class="badge badge-light text-danger badge-notify">3</span>
-                                </a>
                             </div>
                         </div>
 
@@ -316,7 +314,7 @@
         <div class="modal-dialog" role="document">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="ahSignInModalLongTitle">Report this article .</h5>
+                    <h5 class="modal-title" id="ahSignInModalLongTitle">Report this article.</h5>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
@@ -324,12 +322,12 @@
                 <div class="modal-body">
                     <div class="container">
                         <div class="row">
-                            <div class="m-auto col-sm-8">
+                            <div class="m-auto col-sm-12">
                                 <form>
                                     <div class="form-group">
                                         <label for="message-text" class="col-form-label">Help us understand the
                                             problem:</label>
-                                        <textarea class="form-control" id="message-text"></textarea>
+                                        <textarea class="form-control" id="message-text" rows="6"></textarea>
                                     </div>
                                     <button type="submit" class="btn btn-warning text-center">Report</button>
                                 </form>

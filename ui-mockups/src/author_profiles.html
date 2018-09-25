@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <title></title>
@@ -7,158 +8,161 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link href="https://fonts.googleapis.com/css?family=Raleway" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css?family=Vidaloka" rel="stylesheet">
-    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.3.1/css/all.css"
-          integrity="sha384-mzrmE5qonljUremFsqc01SB46JvROS7bZs3IO2EmfFsd15uHvIt+Y8vEf7N7fWAU" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.3.1/css/all.css" integrity="sha384-mzrmE5qonljUremFsqc01SB46JvROS7bZs3IO2EmfFsd15uHvIt+Y8vEf7N7fWAU"
+        crossorigin="anonymous">
     <link rel="stylesheet" href="css/bootstrap.css">
     <link rel="stylesheet" href="css/style.css">
 </head>
+
 <body>
-<nav class="navbar navbar-expand-lg navbar-light">
+    <nav class="navbar navbar-expand-lg navbar-light">
+        <div class="container">
+            <div class="header"></div>
+            <div>
+                <a class="navbar-brand font-weight-bold" href="#">Authors' Haven</a>
+            </div>
+
+            <div class="collapse navbar-collapse">
+                <ul class="navbar-nav mr-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="index.html">Home <span class="sr-only">(current)</span></a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="articles.html">Articles</a>
+                    </li>
+                    <li class="nav-item active">
+                        <a class="nav-link" href="articles.html">Authors</a>
+                    </li>
+                </ul>
+            </div>
+            <div class="navbar-text">
+                <ul class="navbar-nav mr-auto">
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" data-toggle="dropdown"
+                            aria-haspopup="true" aria-expanded="false">
+                            user profile
+                        </a>
+                        <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+                            <a class="dropdown-item" href="new-article.html">New article</a>
+                            <a class="dropdown-item" href="myarticles.html">Articles</a>
+                            <a class="dropdown-item" href="myreports.html">Reports</a>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
     <div class="container">
-        <div class="header"></div>
-        <div>
-            <a class="navbar-brand font-weight-bold" href="#">Authors' Haven</a>
-        </div>
-
-        <div class="collapse navbar-collapse">
-            <ul class="navbar-nav mr-auto">
-                <li class="nav-item">
-                    <a class="nav-link" href="index.html">Home <span class="sr-only">(current)</span></a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="articles.html">Articles</a>
-                </li>
-                <li class="nav-item active">
-                    <a class="nav-link" href="articles.html">Authors</a>
-                </li>
-            </ul>
-        </div>
-        <div class="navbar-text">
-            <ul class="navbar-nav mr-auto">
-                <li class="nav-item dropdown">
-                    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" data-toggle="dropdown"
-                       aria-haspopup="true" aria-expanded="false">
-                        user profile
-                    </a>
-                    <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
-                        <a class="dropdown-item" href="new-article.html">New article</a>
-                        <a class="dropdown-item" href="myarticles.html">Articles</a>
+        <div class="row">
+            <div class="col-md-2 col-md-3 p-1">
+                <div class="card ah-profile-card">
+                    <div class="card-body text-center">
+                        <i class="fas fa-user-circle"></i>
+                        <p>Abishi Omar</p>
+                        <p class="card-text">Heroku Master</p>
+                        <p class="card-text">City: Nairobi, Kenya</p>
+                        <p class="card-text">Website: www.abishi.com</p>
+                        <a href="#" class="btn btn-success">Follow</a>
                     </div>
-                </li>
-            </ul>
+                </div>
+            </div>
+
+            <div class="col-md-2 col-md-3 p-1">
+                <div class="card  ah-profile-card ">
+                    <div class="card-body text-center">
+                        <i class="fas fa-user-circle"></i>
+                        <p>Paul gathegu</p>
+                        <p class="card-text">Django master</p>
+                        <p class="card-text">City: Nairobi, Kenya</p>
+                        <p class="card-text">website: www.billeonair.com</p>
+                        <a href="#" class="btn btn-success">Follow</a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-2 col-lg-3 p-1">
+                <div class="card ah-profile-card">
+                    <div class="card-body text-center">
+                        <i class="fas fa-user-circle"></i>
+                        <p>David</p>
+                        <p class="card-text">Technical Team Lead</p>
+                        <p class="card-text">City: Nairobi, Kenya</p>
+                        <p class="card-text">Website: www.abishi.com</p>
+                        <a href="#" class="btn btn-success">Follow</a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-2 col-lg-3 p-1">
+                <div class="card  ah-profile-card">
+                    <div class="card-body text-center">
+                        <i class="fas fa-user-circle"></i>
+                        <p>Micah Oriaso</p>
+                        <p class="card-text">Git master</p>
+                        <p class="card-text">City: Nairobi, Kenya</p>
+                        <p class="card-text">Website: www.micah.com</p>
+                        <a href="#" class="btn btn-success">Follow</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-2 col-lg-3 pr-1 pl-1 pb-2">
+                <div class="card ah-profile-card">
+                    <div class="card-body text-center">
+                        <i class="fas fa-user-circle"></i>
+                        <p>Leon Kioko</p>
+                        <p class="card-text">Bio: Cron job master</p>
+                        <p class="card-text">City: Nairobi, Kenya</p>
+                        <p class="card-text">website: www.billeonair.com</p>
+                        <a href="#" class="btn btn-success" id="followButton">Follow</a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-2 col-lg-3 pr-1 pl-1 pb-2">
+                <div class="card  ah-profile-card ">
+                    <div class="card-body text-center">
+                        <i class="fas fa-user-circle"></i>
+                        <p>Antonny Kavoo</p>
+                        <p class="card-text">Twitter Master</p>
+                        <p class="card-text">City: Nairobi, Kenya</p>
+                        <p class="card-text">website: www.billeonair.com</p>
+                        <a href="#" class="btn btn-success">Follow</a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-2 col-lg-3 pr-1 pl-1 pb-2">
+                <div class="card  ah-profile-card ">
+                    <div class="card-body text-center">
+                        <i class="fas fa-user-circle"></i>
+                        <p>Meshak Mbuvi</p>
+                        <p class="card-text">Travis Master</p>
+                        <p class="card-text">City: Nairobi, Kenya</p>
+                        <p class="card-text">website: www.billeonair.com</p>
+                        <a href="#" class="btn btn-success">Follow</a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-2 col-lg-3 pr-1 pl-1 pb-2">
+                <div class="card  ah-profile-card ">
+                    <div class="card-body text-center">
+                        <i class="fas fa-user-circle"></i>
+                        <p>Michael Mutua</p>
+                        <p class="card-text">DevOps Master</p>
+                        <p class="card-text">City: Nairobi, Kenya</p>
+                        <p class="card-text">website: www.billeonair.com</p>
+                        <a href="#" class="btn btn-success">Follow</a>
+                    </div>
+                </div>
+            </div>
+
+
         </div>
     </div>
-</nav>
-<div class="container">
-    <div class="row">
-        <div class="col-md-2 col-md-3 p-1">
-            <div class="card ah-profile-card">
-                <div class="card-body text-center">
-                    <i class="fas fa-user-circle"></i>
-                    <p>Abishi Omar</p>
-                    <p class="card-text">Heroku Master</p>
-                    <p class="card-text">City: Nairobi, Kenya</p>
-                    <p class="card-text">Website: www.abishi.com</p>
-                    <a href="#" class="btn btn-success">Follow</a>
-                </div>
-            </div>
-        </div>
-
-        <div class="col-md-2 col-md-3 p-1">
-            <div class="card  ah-profile-card ">
-                <div class="card-body text-center">
-                    <i class="fas fa-user-circle"></i>
-                    <p>Paul gathegu</p>
-                    <p class="card-text">Django master</p>
-                    <p class="card-text">City: Nairobi, Kenya</p>
-                    <p class="card-text">website: www.billeonair.com</p>
-                    <a href="#" class="btn btn-success">Follow</a>
-                </div>
-            </div>
-        </div>
-
-         <div class="col-md-2 col-lg-3 p-1">
-            <div class="card ah-profile-card">
-                <div class="card-body text-center">
-                    <i class="fas fa-user-circle"></i>
-                    <p>David</p>
-                    <p class="card-text">Technical Team Lead</p>
-                    <p class="card-text">City: Nairobi, Kenya</p>
-                    <p class="card-text">Website: www.abishi.com</p>
-                    <a href="#" class="btn btn-success">Follow</a>
-                </div>
-            </div>
-        </div>
-
-        <div class="col-md-2 col-lg-3 p-1">
-            <div class="card  ah-profile-card">
-                <div class="card-body text-center">
-                    <i class="fas fa-user-circle"></i>
-                    <p>Micah Oriaso</p>
-                    <p class="card-text">Git master</p>
-                    <p class="card-text">City: Nairobi, Kenya</p>
-                    <p class="card-text">Website: www.micah.com</p>
-                    <a href="#" class="btn btn-success">Follow</a>
-                </div>
-            </div>
-        </div>
-    </div>
-    <div class="row">
-        <div class="col-md-2 col-lg-3 pr-1 pl-1 pb-2">
-            <div class="card ah-profile-card">
-                <div class="card-body text-center">
-                    <i class="fas fa-user-circle"></i>
-                    <p>Leon Kioko</p>
-                    <p class="card-text">Bio: Cron job master</p>
-                    <p class="card-text">City: Nairobi, Kenya</p>
-                    <p class="card-text">website: www.billeonair.com</p>
-                    <a href="#" class="btn btn-success" id="followButton">Follow</a>
-                </div>
-            </div>
-        </div>
-
-        <div class="col-md-2 col-lg-3 pr-1 pl-1 pb-2">
-            <div class="card  ah-profile-card ">
-                <div class="card-body text-center">
-                    <i class="fas fa-user-circle"></i>
-                    <p>Antonny Kavoo</p>
-                    <p class="card-text">Twitter Master</p>
-                    <p class="card-text">City: Nairobi, Kenya</p>
-                    <p class="card-text">website: www.billeonair.com</p>
-                    <a href="#" class="btn btn-success">Follow</a>
-                </div>
-            </div>
-        </div>
-
-        <div class="col-md-2 col-lg-3 pr-1 pl-1 pb-2">
-            <div class="card  ah-profile-card ">
-                <div class="card-body text-center">
-                    <i class="fas fa-user-circle"></i>
-                    <p>Meshak Mbuvi</p>
-                    <p class="card-text">Travis Master</p>
-                    <p class="card-text">City: Nairobi, Kenya</p>
-                    <p class="card-text">website: www.billeonair.com</p>
-                    <a href="#" class="btn btn-success">Follow</a>
-                </div>
-            </div>
-        </div>
-
-        <div class="col-md-2 col-lg-3 pr-1 pl-1 pb-2">
-            <div class="card  ah-profile-card ">
-                <div class="card-body text-center">
-                    <i class="fas fa-user-circle"></i>
-                    <p>Michael Mutua</p>
-                    <p class="card-text">DevOps Master</p>
-                    <p class="card-text">City: Nairobi, Kenya</p>
-                    <p class="card-text">website: www.billeonair.com</p>
-                    <a href="#" class="btn btn-success">Follow</a>
-                </div>
-            </div>
-        </div>
-
-
-    </div>
-</div>
 
 </body>
+
 </html>

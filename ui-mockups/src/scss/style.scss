@@ -66,7 +66,7 @@ small a:hover,
 // Navbar
 .ah-jumbotron h1,
 .navbar-brand {
-    font-size: 3.5rem;
+    font-size: 3rem;
     font-family: 'Vidaloka', serif;
 }
 
@@ -203,13 +203,6 @@ h1 {
     float: right;
 }
 
-//notification badge
-.badge-notify{
-    position:relative;
-    top: -10px;
-    right: 10px;
-}
-
 
 /***** CSS Magic to Highlight Stars on Hover *****/
 
@@ -342,7 +335,7 @@ h1 {
 }
 
 // Position the count notification
-.badge {
+.ah-notifications-badge {
     position: absolute;
     top: -5px;
     right: -5px;

@@ -44,11 +44,12 @@
                     <li class="nav-item dropdown">
                         <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" data-toggle="dropdown"
                             aria-haspopup="true" aria-expanded="false">
-                            user profile
+                            <i class="fas fa-user-circle"></i>
                         </a>
                         <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
                             <a class="dropdown-item" href="new-article.html">New article</a>
                             <a class="dropdown-item" href="myarticles.html">Articles</a>
+                            <a class="dropdown-item" href="myreports.html">Reports</a>
                         </div>
                     </li>
                 </ul>
@@ -146,7 +147,7 @@
         <div class="modal-dialog" role="document">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="ahSignInModalLongTitle">Report this article .</h5>
+                    <h5 class="modal-title" id="ahSignInModalLongTitle">Report this article.</h5>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
@@ -154,12 +155,12 @@
                 <div class="modal-body">
                     <div class="container">
                         <div class="row">
-                            <div class="m-auto col-sm-8">
+                            <div class="m-auto col-sm-12">
                                 <form>
                                     <div class="form-group">
                                         <label for="message-text" class="col-form-label">Help us understand the
                                             problem:</label>
-                                        <textarea class="form-control" id="message-text">This article is plagiarised</textarea>
+                                        <textarea class="form-control" id="message-text" rows="6">This article is plagiarised</textarea>
                                     </div>
                                     <button type="submit" class="btn btn-warning text-center">Update</button>
                                 </form>
