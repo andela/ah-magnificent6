@@ -8,7 +8,6 @@ from authors.apps.profiles.models import Profile
 from authors.apps.core.cron import EmailNotificationCron
 
 
-
 class ArticleDeleteUpdateTests(Base):
     """Test suite for favouriting articles."""
 
@@ -115,8 +114,7 @@ class ArticleDeleteUpdateTests(Base):
             reverse('notifications:my_notifications'), **self.headers_two)
         self.assertEqual(notification.status_code, status.HTTP_200_OK)
         response = self.client.get(
-            reverse('notifications:my_notifications'),
-            **self.headers_two)
+            reverse('notifications:my_notifications'), **self.headers_two)
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 
     def test_unsuccessfully_mark_non_existing_notification(self):
@@ -159,44 +157,31 @@ class ArticleDeleteUpdateTests(Base):
         """
         Tests that a user successfully deactivating notifications.
         """
-        user = User.objects.get(username=self.user_two_data['username'])
-        profile = Profile.objects.get(user=user)
-        profile.app_notification_enabled = False
-        profile.save()
-        res = self.client.post(
+        self.client.post(
             reverse('notifications:switch_app_notifications'),
-            **self.headers_two)
-        self.assertEqual(res.status_code, status.HTTP_200_OK)
-
+            **self.headers_one)
         response = self.client.post(
             reverse('notifications:switch_app_notifications'),
-            **self.headers_two)
+            **self.headers_one)
         self.assertEqual(response.status_code, status.HTTP_200_OK)
-
 
     def test_successfully_activate_email_notification(self):
         """
-        Tests that a user successfully activating email notifications.
+        Tests that a user successfully activating notifications.
         """
         response = self.client.post(
-            reverse('notifications:switch_app_notifications'),
+            reverse('notifications:switch_email_notifications'),
             **self.headers_two)
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 
     def test_successfully_deactivate_email_notification(self):
         """
-        Tests that a user successfully deactivating email notifications.
+        Tests that a user successfully deactivating notifications.
         """
-        user = User.objects.get(username=self.user_two_data['username'])
-        profile = Profile.objects.get(user=user)
-        profile.email_notification_enabled = False
-        profile.save()
-        res = self.client.post(
+        self.client.post(
             reverse('notifications:switch_email_notifications'),
-            **self.headers_two)
-        self.assertEqual(res.status_code, status.HTTP_200_OK)
-
+            **self.headers_one)
         response = self.client.post(
             reverse('notifications:switch_email_notifications'),
-            **self.headers_two)
+            **self.headers_one)
         self.assertEqual(response.status_code, status.HTTP_200_OK)

@@ -55,6 +55,7 @@ class NotificationDetailsView(generics.RetrieveUpdateDestroyAPIView):
         user = request.user
         if user in notification.notified.all():
             notification.notified.remove(user.id)
+            notification.save()
             message = "You have successfully deleted this notification"
             response = {"message": message}
             return Response(response, status=status.HTTP_200_OK)
@@ -82,6 +83,7 @@ class NotificationDetailsView(generics.RetrieveUpdateDestroyAPIView):
         user = request.user
         if user in notification.notified.all():
             notification.read.add(user.id)
+            notification.save()
             message = "You have successfully marked the notification as read"
             response = {"message": message}
             return Response(response, status=status.HTTP_200_OK)
@@ -125,6 +127,7 @@ class NotificationAPIView(generics.RetrieveUpdateAPIView):
         for notification in notifications:
             if user in notification.notified.all():
                 notification.read.add(user.id)
+                notification.save()
                 message = "You successfully marked all notifications as read"
                 response = {"message": message}
         return Response(response, status=status.HTTP_200_OK)
@@ -150,13 +153,13 @@ class NotificationSwitchAppAPIView(generics.CreateAPIView):
 
         if profile.app_notification_enabled is True:
             # sets notification boolean in the profile to false
-            profile.notification = False
+            profile.app_notification_enabled = False
             profile.save()
             message = "You have successfully deactivated in app notifications"
             response = {"message": message}
             return Response(response, status=status.HTTP_200_OK)
 
-        elif profile.email_notification_enabled is True:
+        elif profile.app_notification_enabled is False:
             # sets notification boolean in the profile to true
             profile.app_notification_enabled = True
             profile.save()
@@ -185,7 +188,7 @@ class NotificationSwitchEmailAPIView(generics.CreateAPIView):
 
         if profile.email_notification_enabled is True:
             # sets notification boolean in the profile to false
-            profile.notification = False
+            profile.email_notification_enabled = False
             profile.save()
             message = "You have successfully deactivated email notifications"
             response = {"message": message}
