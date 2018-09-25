@@ -1,11 +1,8 @@
 from rest_framework import serializers
 from rest_framework.validators import UniqueTogetherValidator
 
-from .models import Article, ArticleRating, Likes, ArticleTags, ArticleReport
-
-from .models import Article, ArticleRating, Likes, ArticleTags
-
-from .models import Article, ArticleRating, Likes, Comment
+from .models import (Article, ArticleRating, Likes,
+                     ArticleTags, Comment, ArticleReport, Bookmark)
 
 from ..authentication.models import User
 from ..authentication.serializers import UserSerializer
@@ -128,7 +125,6 @@ class LikesSerializer(serializers.ModelSerializer):
 
 
 class TagsSerializer(serializers.ModelSerializer):
-    # tag = serializers.CharField(read_only=True)
 
     class Meta:
         model = ArticleTags
@@ -171,3 +167,27 @@ class CommentSerializer(serializers.ModelSerializer):
         fields = ['commented_by', 'created_at', 'comment_body', 'id']
 
 
+class ArticleListingField(serializers.RelatedField):
+    def to_representation(self, value):
+        return (value.slug)
+
+    def to_internal_value(self, data):
+        return (Article.objects.get(id=data))
+
+
+class BookmarkSerializer(serializers.ModelSerializer):
+    article = ArticleListingField(queryset=Article.objects.all())
+
+    class Meta:
+        model = Bookmark
+        """
+        Declare all fields we need to be returned from ArticleRating model
+        """
+        fields = ('__all__')
+        validators = [
+            UniqueTogetherValidator(
+                queryset=Bookmark.objects.all(),
+                fields=('article', 'user'),
+                message='Sorry, you have already bookmarked this article'
+            )
+        ]

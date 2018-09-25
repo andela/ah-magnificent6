@@ -26,18 +26,13 @@ from rest_framework.pagination import PageNumberPagination
 from rest_framework.filters import SearchFilter
 from django_filters.rest_framework import DjangoFilterBackend
 
-
-from .renderers import ArticleJSONRenderer
-
+from .renderers import ArticleJSONRenderer, BookmarkJSONRenderer
 from .serializers import (
     ArticleSerializer, ArticleRatingSerializer, LikesSerializer, TagsSerializer,
-    ArticleReportSerializer, ArticleReportRetrieveSerializer
+    ArticleReportSerializer, ArticleReportRetrieveSerializer, BookmarkSerializer
 )
-from .models import Article, ArticleRating, Likes, ArticleTags, ArticleReport
-
-
-from .models import Article, ArticleRating, Likes, ArticleTags
-
+from .models import (
+    Article, ArticleRating, Likes, ArticleTags, ArticleReport, Bookmark)
 from authors.apps.notifications.models import notify_follower
 
 
@@ -411,7 +406,6 @@ class ArticleLikes(generics.ListCreateAPIView):
             elif not likes.like and like:
                 article.userLikes.add(request.user)
                 article.userDisLikes.remove(request.user)
-            # elif likes.like and like
             elif like:
                 # User can only like an article once or dislike an article once
                 msg = '{}, you already liked this article.'.format(
@@ -739,3 +733,93 @@ class RetrieveCommentAPIView(generics.RetrieveDestroyAPIView):
 
         return Response({"msg": "You have deleted the comment"})
 
+class ArticleBookmarkAPIView(generics.CreateAPIView):
+    """
+    post:
+    Bookmark an article for future reading.
+    get:
+    This endpoint is not supported
+    """
+    renderer_classes = (BookmarkJSONRenderer, )
+    permission_classes = (IsAuthenticatedOrReadOnly, )
+    serializer_class = BookmarkSerializer
+    queryset = Bookmark.objects.all()
+
+    def get(self, request, slug=None):
+        return Response(
+            {'message': 'Sorry {}, this '.format(request.user.username)
+             + 'request on this endpoint is not allowed.'
+             }, status.HTTP_403_FORBIDDEN)
+
+    def post(self, request, slug):
+        try:
+            article = Article.objects.get(slug=slug)
+            data = {
+                'article': article.id,
+                'user': request.user.id
+            }
+            serializer = self.serializer_class(data=data)
+            serializer.is_valid(raise_exception=True)
+            serializer.save()
+            bookmark = {
+                "id": serializer.data['id'],
+                "article": serializer.data['article']
+            }
+            return Response(bookmark, status.HTTP_201_CREATED)
+        except ObjectDoesNotExist:
+            return Response(
+                {
+                    'message': 'Sorry {}, '.format(request.user.username)
+                    + 'the article you have want to bookmark does not exist'
+                }, status.HTTP_404_NOT_FOUND
+            )
+
+
+class ArticleBookmarkDetailAPIView(generics.RetrieveDestroyAPIView):
+    """
+    get:
+    Retrieve a singe or all bookmarks for a logged in user
+    delete:
+    Delete a single or all bookmarks
+    """
+    permission_classes = (IsAuthenticated, )
+    serializer_class = BookmarkSerializer
+    queryset = Bookmark.objects.all()
+
+    def get(self, request, pk=None):
+        if pk:
+            bookmarks = Bookmark.objects.filter(user=request.user)
+            serializer = self.serializer_class(data=bookmarks, many=True)
+            serializer.is_valid()
+            return Response(serializer.data)
+        else:
+            bookmarks = Bookmark.objects.filter(user=request.user)
+            serializer = self.serializer_class(data=bookmarks, many=True)
+            serializer.is_valid()
+            return Response(serializer.data)
+
+    def delete(self, request, pk=None):
+        try:
+            if pk:
+                bookmark = Bookmark.objects.get(pk=pk)
+                if bookmark.user.username == request.user.username:
+                    bookmark.delete()
+                    return Response({'message': "Bookmark deleted successfully"
+                                     }, status.HTTP_200_OK)
+                else:
+                    # prevent a user from deleting a bookmark s/he does not own
+                    return Response({
+                        'error': 'Sorry {}, '.format(request.user.username)
+                        + 'you cannot delete bookmarks belonging to other users.'
+                    }, status.HTTP_403_FORBIDDEN)
+            else:
+                bookmarks = Bookmark.objects.filter(user=request.user)
+                bookmarks.delete()
+                return Response({'message': "All bookmarks deleted successfully"
+                                 }, status.HTTP_200_OK)
+        except ObjectDoesNotExist:
+            return Response({
+                'message': 'Sorry {}, '.format(request.user.username)
+                + 'the bookmark you want to delete does not exist'
+            }, status.HTTP_404_NOT_FOUND
+            )

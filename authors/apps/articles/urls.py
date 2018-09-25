@@ -1,7 +1,7 @@
 from django.urls import path
 from .views import (RetrieveCommentAPIView, ListCreateCommentAPIView,
                     ArticleAPIView, ArticleDetailsView, ArticleLikes, FavoriteArticle,
-                    ArticleRatingAPIView, ArticleReportAPIView, ArticleReportRUDAPIView, )
+                    ArticleRatingAPIView, ArticleReportAPIView, ArticleReportRUDAPIView, ArticleBookmarkAPIView, ArticleBookmarkDetailAPIView)
 
 app_name = 'articles'
 
@@ -27,11 +27,19 @@ urlpatterns = [
          name='reportRetrieveUpdateDestroy'),
 
     path('<str:slug>/comments/', ListCreateCommentAPIView.as_view(), name='comments'),
-    path('<str:slug>/comments/<pk>/', RetrieveCommentAPIView.as_view(), name='comment_detail'),
+    path('<str:slug>/comments/<pk>/',
+         RetrieveCommentAPIView.as_view(), name='comment_detail'),
 
-    path('<str:slug>/comments/<pk>/comments/', ListCreateCommentAPIView.as_view()),
+    path('<str:slug>/comments/<pk>/comments/',
+         ListCreateCommentAPIView.as_view()),
 
-    
 
 
+
+    path('<str:slug>/bookmarks/', ArticleBookmarkAPIView.as_view(),
+         name='bookmark_article'),
+    path('bookmarks/<str:pk>', ArticleBookmarkDetailAPIView.as_view(),
+         name='user_bookmarks'),
+    path('bookmarks/', ArticleBookmarkDetailAPIView.as_view(),
+         name='user_bookmarks')
 ]
