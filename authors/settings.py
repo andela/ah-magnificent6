@@ -158,8 +158,9 @@ MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
 CORS_ORIGIN_WHITELIST = (
-    '0.0.0.0:4000',
-    'localhost:4000',
+    '0.0.0.0:3000',
+    'localhost:3000',
+    'https://magnificent6-frontend.herokuapp.com/',
 )
 
 """
