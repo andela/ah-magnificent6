@@ -200,21 +200,22 @@ class ForgotPasswordAPIView(APIView):
         if user is None:
             return Response({"message": "The email you entered does not exist"})
 
-        # Capture Url of current site and generates token
-        current_site_domain = get_current_site(request).domain
+        # Get URL for client and include in the email for resetting password
+        current_site_domain = settings.CLIENT_URL
+        # generate token
         token = default_token_generator.make_token(user)
 
         # Sends mail with url, path of reset password and token
         mail_message = 'Dear ' + user.username + ',\n\n''We received a request to change your password on Authors Haven.\n\n' \
                                                  'Click the link below to set a new password' \
-                                                 ' \n http://' + current_site_domain + '/api/reset_password/' + token + '/' \
-                                                                                                                        '\n\nYours\n AuthorsHaven.'
+                                                 ' \n' + current_site_domain + '/reset-password/' + token + '/' \
+            '\n\nYours\n AuthorsHaven.'
         SendMail(subject="Reset Password",
                  message=mail_message,
                  email_from='magnificent6ah@gmail',
                  to=user.email).send()
 
-        output = {"message": "Please confirm your email for further instruction"}
+        output = {"message": "Please check your email for further instruction"}
 
         return Response(output, status=status.HTTP_200_OK)
 
