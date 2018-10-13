@@ -217,7 +217,7 @@ class UserSerializer(serializers.ModelSerializer):
             the current `User` instance one at a time.
             """
             setattr(instance, key, value)
-        
+
         for (key, value) in profile_data.items():
             """
             For the keys in `profile_data`, we will set them on
@@ -263,7 +263,6 @@ class ResetPasswordSerializer(serializers.Serializer):
         """Validates passwords and token.
         Token can only be used once"""
 
-
         # Query DB for user email
         user = User.objects.filter(email=data.get('email', None)).first()
 
@@ -271,15 +270,18 @@ class ResetPasswordSerializer(serializers.Serializer):
             raise serializers.ValidationError("Passwords do not match")
 
         # Checks token generated is valid
-        is_valid_token = default_token_generator.check_token(user, data.get('token', None))
+        is_valid_token = default_token_generator.check_token(
+            user, data.get('token', None))
         if is_valid_token is False:
-            raise serializers.ValidationError("Token is Invalid or it has already expired")
+            raise serializers.ValidationError(
+                "Token is Invalid or it has already expired")
 
         user.set_password(data.get('password'))
         user.save()
 
         return data
-        
+
+
 class SocialLoginSerializer(serializers.Serializer):
     """ Accept OAUTH access token and provider.
         Oauth produces its own access token.
@@ -287,9 +289,7 @@ class SocialLoginSerializer(serializers.Serializer):
     """
 
     provider = serializers.CharField(max_length=255, required=True)
-    access_token = serializers.CharField(max_length=4096, required=True, trim_whitespace=True)
-    access_token_secret = serializers.CharField(max_length=4096, required=False, trim_whitespace=True)
-
-
-
-
+    access_token = serializers.CharField(
+        max_length=4096, required=True, trim_whitespace=True)
+    access_token_secret = serializers.CharField(
+        max_length=4096, required=False, trim_whitespace=True)

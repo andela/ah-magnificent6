@@ -15,6 +15,7 @@ class ResetPassword(APITestCase):
             "username": "michael",
             "email": "michael.nthiwa@andela.com",
             "password": "Bit22150"}
+        self.client.defaults['HTTP_ORIGIN'] = '127.0.0.1'
 
         self.client.post(reverse('authentication:register'),
                          self.valid_user, format='json')
@@ -37,7 +38,7 @@ class ResetPassword(APITestCase):
             self.forget_password_url, email, format='json')
         self.assertIn('The email you entered does not exist',
                       str(response.data))
-        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
 
     def test_reset_password(self):
         """ Test user successfully reset password """
