@@ -15,7 +15,7 @@ class ResetPassword(APITestCase):
             "username": "michael",
             "email": "michael.nthiwa@andela.com",
             "password": "Bit22150"}
-        self.client.defaults['HTTP_ORIGIN'] = '127.0.0.1'
+        self.client.defaults['HTTP_REFERER'] = '127.0.0.1'
 
         self.client.post(reverse('authentication:register'),
                          self.valid_user, format='json')
