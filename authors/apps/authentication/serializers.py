@@ -249,6 +249,7 @@ class ForgotPasswordSerializer(serializers.Serializer):
     """Serializer for forget password"""
 
     email = serializers.CharField(max_length=255)
+    client_url = serializers.CharField(max_length=255)
 
 
 class ResetPasswordSerializer(serializers.Serializer):

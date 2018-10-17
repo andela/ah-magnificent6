@@ -15,7 +15,6 @@ class ResetPassword(APITestCase):
             "username": "michael",
             "email": "michael.nthiwa@andela.com",
             "password": "Bit22150"}
-        self.client.defaults['HTTP_REFERER'] = '127.0.0.1'
 
         self.client.post(reverse('authentication:register'),
                          self.valid_user, format='json')
@@ -23,12 +22,23 @@ class ResetPassword(APITestCase):
 
     def test_sending_successful_email(self):
         """ Test email is sent """
+        data = {"email": self.email["email"], "client_url": "someurl/login"}
 
         response = self.client.post(
-            self.forget_password_url, self.email, format='json')
+            self.forget_password_url, data, format='json')
         self.assertIn(
             'Please check your email for further instruction', str(response.data))
         self.assertEqual(response.status_code, status.HTTP_200_OK)
+
+    def test_sending_unsuccessful_email(self):
+        """ Test email is sent when client do not provide a callback url"""
+        data = {"email": self.email["email"]}
+
+        response = self.client.post(
+            self.forget_password_url, data, format='json')
+        self.assertIn(
+            'You must provide a base link for your client', str(response.data))
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
 
     def test_invalid_email(self):
         """ Test for invalid email """

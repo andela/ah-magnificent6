@@ -1,6 +1,9 @@
 import jwt
 import furl
+import os
 from requests.exceptions import HTTPError
+import sendgrid
+from sendgrid.helpers.mail import *
 
 from rest_framework import status, generics
 from rest_framework.generics import RetrieveUpdateAPIView
@@ -29,6 +32,19 @@ from social_django.utils import load_strategy, load_backend
 from social_core.exceptions import MissingBackend
 
 from social.backends.oauth import BaseOAuth1, BaseOAuth2
+
+
+def sendMail(to, subject, mail_message):
+    sg = sendgrid.SendGridAPIClient(
+        apikey=os.environ.get('SENDGRID_API_KEY'))
+
+    from_email = Email("magnificent6ah@gmail")
+    to_email = Email(to)
+    subject = subject
+    content = Content("text/plain", mail_message)
+    mail = Mail(from_email, subject, to_email, content)
+    response = sg.client.mail.send.post(request_body=mail.get())
+    return response
 
 
 class RegistrationAPIView(generics.CreateAPIView):
@@ -72,11 +88,7 @@ class RegistrationAPIView(generics.CreateAPIView):
         activation_link = protocol + '://' + domain + '/api/auth/' + token
 
         try:
-            send_mail(
-                subject,
-                message + activation_link,
-                settings.EMAIL_HOST_USER, [user['email']],
-                fail_silently=False)
+            sendMail(user["email"], subject, message)
         except:
             return Response(data={"message": "Email activation failed"})
 
@@ -182,50 +194,55 @@ class UserRetrieveUpdateAPIView(RetrieveUpdateAPIView):
         return Response(serializer.data, status=status.HTTP_200_OK)
 
 
-class ForgotPasswordAPIView(APIView):
-    """Forget password view captures email and generates token that will be.
+class ForgotPasswordAPIView(generics.GenericAPIView):
+    """
+    post:
+    Forgot password
+
+    Forget password view captures email and generates token that will be.
     used during reset password. Data that is captures in the view is send to
     the serializer class
-    Post:
-    Forgot password
     """
     permission_classes = (AllowAny,)
     serializer_class = ForgotPasswordSerializer
 
     def post(self, request):
-        """Forgot password"""
+        """
+        post:
+        """
 
         # Query for email in database
-        user = User.objects.filter(email=request.data['email']).first()
+        user = User.objects.filter(
+            email=request.data.get('email', None)).first()
         if user is None:
             return Response({"message": "The email you entered does not exist"}, status=status.HTTP_404_NOT_FOUND)
+        CLIENT_URL = request.data.get('client_url', None)
+        if not CLIENT_URL:
+            return Response({"message": "You must provide a base link for your client"}, status=status.HTTP_400_BAD_REQUEST)
+        protocol = request.META['SERVER_PROTOCOL'][:4]
 
         # Get URL for client and include in the email for resetting password
-        client_url = request.data['CLIENT_URL', ''].replace(
-            "login", "reset-password/")
+        client_url = ("{}://{}/reset-password/").format(protocol, CLIENT_URL)
         # generate token
         token = default_token_generator.make_token(user)
         # format url and send it in the reset email link
         reset_link_url = furl.furl(client_url)
-        reset_link_url.args = (('token', token), ('email', user.email))
+        reset_link_url.args = (('token', token), ('email', "mesh"))
 
         # Sends mail with url, path of reset password and token
         mail_message = 'Dear {},\n\nWe received a request to change your\
         password on Authors Haven.\n\nClick the link below to set a new\
         password.\n{}\
         \n\nYours\n AuthorsHaven. '.format(user.username, reset_link_url)
-
-        SendMail(subject="Reset Password",
-                 message=mail_message,
-                 email_from='magnificent6ah@gmail',
-                 to=user.email).send()
+        subject = "Password reset link"
+        sendMail(user.email, subject, mail_message)
 
         output = {"message": "Please check your email for further instruction"}
 
         return Response(output, status=status.HTTP_200_OK)
 
 
-class ResetPasswordAPIView(APIView):
+class ResetPasswordAPIView(generics.GenericAPIView):
     """Reset password view allows any user to access reset password endpoint
         and updates password
         put:
