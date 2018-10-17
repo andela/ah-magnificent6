@@ -660,78 +660,116 @@ class ListCreateCommentAPIView(generics.ListCreateAPIView):
     """
     Get and Post Comments
     """
-    permission_classes = (IsAuthenticated,)
-
+    permission_classes = (IsAuthenticated, )
     queryset = Comment.objects.all()
-
     serializer_class = CommentSerializer
 
-    def create(self, request, slug):
+    def create(self, request, *args, **kwargs):
         """
         Post a comment
         """
-
-        # query the database to get article with provided slug
-        article = Article.objects.get(slug=slug)
+        article = Article.objects.get(slug=kwargs["slug"])
 
         comment_data = {
+            'article': article,
             'commented_by': request.user.username,
             'comment_body': request.data.get('comment_body', None)
         }
-        created_comment = Comment.objects.create(commented_by=request.user, article=article,
-                                                 comment_body=request.data.get('comment_body', None))
+        serializer = self.serializer_class(data=comment_data)
+        serializer.is_valid(raise_exception=True)
+        serializer.save(article=article)
+        return Response(serializer.data)
 
-        serialize = self.serializer_class(data=comment_data)
-        serialize.is_valid(raise_exception=True)
-
-        created_comment.save()
-
-        return Response(serialize.data)
-
-    def get_queryset(self):
+    def get(self, request, slug, *args, **kwargs):
         """Get all comments for a particular article"""
+        article = Article.objects.get(slug=slug)
+        comments = Comment.objects.filter(article=article)
+        serializer = self.serializer_class(data=comments, many=True)
+        serializer.is_valid()
+        return Response(serializer.data, status=status.HTTP_200_OK)
 
-        comments = self.queryset.all()
 
-        if len(comments) is 0:
-            raise ValidationError("There are currently no available comments")
-        return comments
-
-
-class RetrieveCommentAPIView(generics.RetrieveDestroyAPIView):
+class RetrieveCommentAPIView(generics.RetrieveDestroyAPIView,
+                             generics.CreateAPIView):
     """
     This class contains method to retrieve and delete a comment
     """
 
-    permission_classes = (IsAuthenticated,)
+    permission_classes = (IsAuthenticated, )
     queryset = Comment.objects.all()
     serializer_class = CommentSerializer
+    renderer_classes = (ArticleJSONRenderer, )
 
+    def create(self, request, pk, *args, **kwargs):
+        """
+        This method creates child comment(thread-replies on the parent comment)
+        """
 
-    def get(self, request, *args, **kwargs):
+        try:
+            parent = Comment.objects.get(pk=pk)
+            article = parent.article
+        except ObjectDoesNotExist:
+            raise ValidationError("comment with this ID doesn't exist")
+        comment_data = {
+            'article': article.slug,
+            'commented_by': request.user.username,
+            'comment_body': request.data.get('comment_body', None)
+        }
+        serializer = self.serializer_class(data=comment_data)
+        serializer.is_valid(raise_exception=True)
+        serializer.save(
+            parent=parent, article=article, commented_by=request.user)
+
+        return Response(serializer.data, status=status.HTTP_201_CREATED)
+
+    def get(self, request, pk, *args, **kwargs):
         """Get a comment instance"""
         try:
-            comment = self.queryset.get(pk=kwargs['pk'])
-
+            comment = Comment.objects.get(pk=pk)
         except Comment.DoesNotExist:
             raise ValidationError("The comment your entered does not exist")
+        comment_data = {
+            "comment": comment.comment_body,
+            "commented_by": comment.commented_by.username,
+            "created_at": str(comment.created_at),
+            "parent": comment.parent,
+            "id": comment.id
+        }
+        return Response(comment_data, status=status.HTTP_200_OK)
 
-        data = {"comment": comment.comment_body,
-                "comment_by": request.user.username,
-                "created_at": comment.created_at}
-
-        return Response(data)
-
-    def delete(self, request, *args, **kwargs):
+    def delete(self, request, pk, *args, **kwargs):
         """Delete a comment instance"""
         try:
-            comment = Comment.objects.get(pk=kwargs['pk'])
+            comment = Comment.objects.get(pk=pk)
         except Comment.DoesNotExist:
-            raise ValidationError("The comment you are trying to delete does not exist")
+            raise ValidationError(
+                "The comment you are trying to delete does not exist")
 
         comment.delete()
 
         return Response({"msg": "You have deleted the comment"})
+
+
+class RetrieveCommentsofAPIView(generics.ListAPIView):
+    """
+    This class contains method to retrieve comments of a comment
+    """
+
+    permission_classes = (IsAuthenticated, )
+    queryset = Comment.objects.all()
+    serializer_class = CommentSerializer
+    renderer_classes = (ArticleJSONRenderer, )
+
+    def list(self, request, pk, slug):
+        """Method for listing all comments of a comment."""
+        try:
+            comment = self.queryset.get(pk=pk)
+        except Comment.DoesNotExist:
+            raise ValidationError("The comment does not exist")
+        comments = Comment.objects.filter(parent=comment)
+        serializer = self.serializer_class(data=comments, many=True)
+        serializer.is_valid()
+        return Response(serializer.data, status=status.HTTP_200_OK)
 
 class ArticleBookmarkAPIView(generics.CreateAPIView):
     """
