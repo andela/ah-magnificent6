@@ -201,32 +201,24 @@ class ForgotPasswordAPIView(APIView):
             return Response({"message": "The email you entered does not exist"}, status=status.HTTP_404_NOT_FOUND)
 
         # Get URL for client and include in the email for resetting password
-        print("1")
-        print(request._request)
-        client_url = request.META['HTTP_REFERER'].replace(
+        client_url = request.data['CLIENT_URL', ''].replace(
             "login", "reset-password/")
-        print(client_url)
-        print("2")
         # generate token
         token = default_token_generator.make_token(user)
         # format url and send it in the reset email link
         reset_link_url = furl.furl(client_url)
         reset_link_url.args = (('token', token), ('email', user.email))
-        print(reset_link_url)
-        print("3")
 
         # Sends mail with url, path of reset password and token
         mail_message = 'Dear {},\n\nWe received a request to change your\
         password on Authors Haven.\n\nClick the link below to set a new\
         password.\n{}\
         \n\nYours\n AuthorsHaven. '.format(user.username, reset_link_url)
-        print("4")
 
         SendMail(subject="Reset Password",
                  message=mail_message,
                  email_from='magnificent6ah@gmail',
                  to=user.email).send()
-        print("5")
 
         output = {"message": "Please check your email for further instruction"}
 
