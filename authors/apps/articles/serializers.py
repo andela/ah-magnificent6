@@ -163,8 +163,8 @@ class CommentSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Comment
-
-        fields = ['commented_by', 'created_at', 'comment_body', 'id']
+        
+        fields = ['commented_by', 'created_at', 'comment_body', 'id', 'parent']
 
 
 class ArticleListingField(serializers.RelatedField):

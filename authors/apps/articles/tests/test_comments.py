@@ -34,6 +34,12 @@ class CommentTest(Base):
         self.slug = self.client.post(self.article_url, self.article_data, format="json", **self.headers)
         self.comments_url = reverse('articles:comments', kwargs={"slug": self.slug.data['slug']})
         self.detail_comment = reverse('articles:comment_detail', kwargs={"slug": self.slug.data['slug'], "pk": 2})
+        self.commentsofcomment_url = reverse(
+            'articles:comments_of_comment',
+            kwargs={
+                "slug": self.slug.data['slug'],
+                "pk": 2
+            })
 
     def test_get_comments(self):
         """Test a user can get all comments"""
@@ -49,13 +55,13 @@ class CommentTest(Base):
         create_comment_response = self.client.post(self.comments_url,
                                                    {"comment_body": "Amazing"},
                                                    format='json', **self.headers)
-        self.assertEqual(len(create_comment_response.data), 2)
+        self.assertEqual(len(create_comment_response.data), 5)
 
         # get comments created
         list_comment_response = self.client.get(self.comments_url,
                                                 self.article_data, format='json',
                                                 **self.headers)
-        self.assertEqual(list_comment_response.data['count'], 1)
+        self.assertEqual(len(list_comment_response.data), 1)
         self.assertEqual(list_comment_response.status_code, status.HTTP_200_OK)
 
         # User provides invalid comment id
@@ -71,15 +77,69 @@ class CommentTest(Base):
         invalid_delete_response = self.client.delete(self.detail_comment, format='json', **self.headers)
         self.assertIn('The comment you are trying to delete does not exist', str(invalid_delete_response.data))
 
+    def test_get_comments(self):
+        """Test a user can get all comments of a comment"""
+        create_comment_response = self.client.post(
+            self.comments_url, {"comment_body": "Amazing"},
+            format='json',
+            **self.headers)
+        create_comment_of_comment = self.client.post(
+            self.detail_comment, {"comment_body": "Amazing"},
+            format='json',
+            **self.headers)
+        list_comment_response = self.client.get(
+            self.commentsofcomment_url, format='json', **self.headers)
+        self.assertEqual(list_comment_response.status_code, status.HTTP_200_OK)
 
+    def test_non_existing_commment(self):
+        """Test a user can get all comments of a comment"""
+        non_existing_comment_url = reverse(
+            'articles:comment_detail',
+            kwargs={
+                "slug": self.slug.data['slug'],
+                "pk": 50
+            })
+        get_comment = self.client.get(
+            non_existing_comment_url, format='json', **self.headers)
+        self.assertEqual(get_comment.status_code, status.HTTP_400_BAD_REQUEST)
 
+        delete_comment_response = self.client.delete(
+            non_existing_comment_url, format='json', **self.headers)
+        self.assertEqual(delete_comment_response.status_code,
+                         status.HTTP_400_BAD_REQUEST)
 
+        create_comment_response = self.client.post(
+            non_existing_comment_url, {"comment_body": "Amazing"},
+            format='json',
+            **self.headers)
+        self.assertEqual(delete_comment_response.status_code,
+                         status.HTTP_400_BAD_REQUEST)
 
+    def test_non_existing_commment_on_comment(self):
+        """Test a user can get all comments of a comment"""
+        commentsofcomment_url = reverse(
+            'articles:comments_of_comment',
+            kwargs={
+                "slug": self.slug.data['slug'],
+                "pk": 50
+            })
+        list_comment_response = self.client.get(
+            commentsofcomment_url, format='json', **self.headers)
+        self.assertEqual(list_comment_response.status_code,
+                         status.HTTP_400_BAD_REQUEST)
 
-
-
-
-
-
-
-
+    def test_get_existing_commment(self):
+        """Test a user can get all comments of a comment"""
+        create_comment = self.client.post(
+            self.comments_url, {"comment_body": "Amazing"},
+            format='json',
+            **self.headers)
+        comment_url = reverse(
+            'articles:comment_detail',
+            kwargs={
+                "slug": self.slug.data['slug'],
+                "pk": create_comment.data['id']
+            })
+        comment_response = self.client.get(
+            comment_url, format='json', **self.headers)
+        self.assertEqual(comment_response.status_code, status.HTTP_200_OK)

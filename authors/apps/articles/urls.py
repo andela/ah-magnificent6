@@ -1,7 +1,9 @@
 from django.urls import path
-from .views import (RetrieveCommentAPIView, ListCreateCommentAPIView,
-                    ArticleAPIView, ArticleDetailsView, ArticleLikes, FavoriteArticle,
-                    ArticleRatingAPIView, ArticleReportAPIView, ArticleReportRUDAPIView, ArticleBookmarkAPIView, ArticleBookmarkDetailAPIView)
+from .views import (
+    RetrieveCommentAPIView, ListCreateCommentAPIView, ArticleAPIView,
+    ArticleDetailsView, ArticleLikes, FavoriteArticle, ArticleRatingAPIView,
+    ArticleReportAPIView, ArticleReportRUDAPIView, ArticleBookmarkAPIView,
+    ArticleBookmarkDetailAPIView, RetrieveCommentsofAPIView)
 
 app_name = 'articles'
 
@@ -31,7 +33,7 @@ urlpatterns = [
          RetrieveCommentAPIView.as_view(), name='comment_detail'),
 
     path('<str:slug>/comments/<pk>/comments/',
-         ListCreateCommentAPIView.as_view()),
+         RetrieveCommentsofAPIView.as_view(), name='comments_of_comment'),
 
 
 
