@@ -202,7 +202,7 @@ class ForgotPasswordAPIView(APIView):
 
         # Get URL for client and include in the email for resetting password
         print("1")
-        print(request.META["REMOTE_ADDR"])
+        print(request._request)
         client_url = request.META['HTTP_REFERER'].replace(
             "login", "reset-password/")
         print(client_url)
