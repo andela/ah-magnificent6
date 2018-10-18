@@ -182,7 +182,7 @@ class UserRetrieveUpdateAPIView(RetrieveUpdateAPIView):
         return Response(serializer.data, status=status.HTTP_200_OK)
 
 
-class ForgotPasswordAPIView(APIView):
+class ForgotPasswordAPIView(generics.CreateAPIView):
     """Forget password view captures email and generates token that will be.
     used during reset password. Data that is captures in the view is send to
     the serializer class
@@ -201,8 +201,16 @@ class ForgotPasswordAPIView(APIView):
             return Response({"message": "The email you entered does not exist"}, status=status.HTTP_404_NOT_FOUND)
 
         # Get URL for client and include in the email for resetting password
-        client_url = request.META['HTTP_REFERER'].replace(
+        call_back_url = request.data.get('call_back_url', None)
+        if not call_back_url:
+            return Response({"message": "You must provide your callback url"}, status=status.HTTP_400_BAD_REQUEST)
+        client_url = call_back_url.replace(
             "login", "reset-password/")
+
+        protocol = request.META['SERVER_PROTOCOL'][:4]
+        # Get URL for client and include in the email for resetting password
+
+        client_url = ("{}://{}/reset-password/").format(protocol, client_url)
         # generate token
         token = default_token_generator.make_token(user)
         # format url and send it in the reset email link

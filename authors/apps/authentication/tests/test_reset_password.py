@@ -23,9 +23,11 @@ class ResetPassword(APITestCase):
 
     def test_sending_successful_email(self):
         """ Test email is sent """
+        user_data = {"email": self.email["email"],
+                     "call_back_url": "localhost/login"}
 
         response = self.client.post(
-            self.forget_password_url, self.email, format='json')
+            self.forget_password_url, user_data, format='json')
         self.assertIn(
             'Please check your email for further instruction', str(response.data))
         self.assertEqual(response.status_code, status.HTTP_200_OK)
