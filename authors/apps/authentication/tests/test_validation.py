@@ -37,7 +37,7 @@ class VerifyTestCase(TestCase):
             reverse("authentication:activate_user", args=[token]))
         user = User.objects.get(username=self.user['username'])
         self.assertTrue(user.is_active)
-        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(response.status_code, status.HTTP_302_FOUND)
 
     def test_non_existing_user_token(self):
         """Test unsuccessful token verification."""

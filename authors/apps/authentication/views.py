@@ -12,6 +12,7 @@ from django.contrib.auth.tokens import default_token_generator
 from django.conf import settings
 from django.contrib.sites.shortcuts import get_current_site
 from django.core.mail import send_mail
+from django.shortcuts import redirect
 
 from .renderers import UserJSONRenderer
 from .serializers import (
@@ -266,9 +267,7 @@ class UserActivationAPIView(APIView):
                 status=status.HTTP_400_BAD_REQUEST)
         user.is_active = True
         user.save()
-        return Response(
-            data={"message": "Account was verified successfully"},
-            status=status.HTTP_200_OK)
+        return redirect("https://magnificent6-frontend.herokuapp.com/login")
 
 
 class SocialLoginView(generics.CreateAPIView):
