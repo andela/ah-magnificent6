@@ -106,7 +106,7 @@ class ArticleAPIView(generics.ListCreateAPIView):
             'title': request.data.get('title', None),
             'body': request.data.get('body', None),
             'description': request.data.get('description', None),
-            'author': request.user.id
+            'author': request.user.username
         }
         # pass article data to the serializer class, check whether the data is
         # valid and if valid, save it.
@@ -207,7 +207,7 @@ class ArticleDetailsView(generics.RetrieveUpdateDestroyAPIView):
             }, status.HTTP_404_NOT_FOUND)
         # check whether user owns this article and proceed if they do
         if article.author.id == request.user.id:
-            request.data['author'] = request.user.id
+            request.data['author'] = request.user.username
             serializer = self.serializer_class(article, data=request.data)
             serializer.is_valid(raise_exception=True)
             serializer.save()
