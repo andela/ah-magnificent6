@@ -60,10 +60,7 @@ class Article(models.Model):
         Method to prepare and generate urls  for sharing the article to facebook,
         twitter and email.
         """
-        absolute_share_uri = api_reverse(
-            'articles:retrieveUpdateDelete',
-            kwargs={'slug': self.slug},
-            request=request)
+        absolute_share_uri = "https://magnificent6-frontend.herokuapp.com/articles/{}".format(self.slug)
 
         uri_data = {
             'twitter':
